@@ -254,7 +254,7 @@ def build_contacts(accounts):
             while name in used:
                 name = _person()
             used.add(name)
-            parts = name.translate(ASCII).lower().split()
+            parts = name.lower().translate(ASCII).split()
             local = parts[-1] + "." + "".join(p[0] for p in parts[:-1])
             email = f"{local}@{a['Domain']}" if a["Domain"] else f"{local}{rnd.randint(10, 99)}@gmail.com"
             contacts.append({
