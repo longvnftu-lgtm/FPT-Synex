@@ -464,6 +464,43 @@ svg text{font-family:var(--f-body)}
 .health{grid-template-columns:116px 1fr;padding:10px 12px}
 .why{font-size:12px;gap:3px}
 .acc-detail{gap:10px;padding:14px 18px}
+
+/* ---------- player (demo trên ảnh chụp thật) ---------- */
+.slide.ps{padding:34px 40px 66px;gap:14px}
+.ps h2{font-size:28px;max-width:none}
+.player{display:grid;grid-template-columns:1fr 300px;gap:16px;flex:1;min-height:0}
+.pv{position:relative;background:#e9edf3;border-radius:12px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)}
+.cam{position:absolute;left:0;top:0;transform-origin:0 0;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.cam.cut{transition:none}
+.cam img{display:block;max-width:none;width:100%;height:100%;transition:opacity .25s}
+.cam img.fade{opacity:.15}
+.ov{position:absolute;inset:0}
+.spot{position:absolute;border:3px solid var(--amber);border-radius:8px;box-shadow:0 0 0 4000px rgba(10,19,34,.5);transition:all .9s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.mark{position:absolute;border:2.5px dashed var(--amber);border-radius:6px;background:rgba(245,165,36,.12);pointer-events:none;animation:pop .5s both .5s}
+.hot{position:absolute;border:3px solid var(--blue);border-radius:8px;cursor:pointer;background:rgba(47,123,246,.12);animation:hotp 1.4s infinite}
+.hot:hover{background:rgba(47,123,246,.25)}
+@keyframes hotp{0%{box-shadow:0 0 0 0 rgba(47,123,246,.7)}100%{box-shadow:0 0 0 18px rgba(47,123,246,0)}}
+.hot span{position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);white-space:nowrap;background:var(--blue);color:#fff;font-size:13px;font-weight:700;padding:5px 10px;border-radius:8px;pointer-events:none}
+.hot.up span{top:auto;bottom:calc(100% + 8px)}
+.hot.left span{left:auto;right:calc(100% + 10px);top:50%;transform:translateY(-50%)}
+.cover{position:absolute;background:#fff;transition:top 1.8s steps(14,end),height 1.8s steps(14,end)}
+.pn{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.pn .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.pn .src{font-size:11px;color:var(--muted);font-family:var(--f-mono)}
+.pn h3{margin:0;font-size:18px;line-height:1.3;text-wrap:balance}
+.pn p{margin:0;font-size:13.5px;line-height:1.58;color:#cbd6ea;flex:1;overflow:auto}
+.pn .actb{background:var(--blue);border:0;color:#fff;border-radius:10px;padding:10px 12px;font-weight:700;font-size:13.5px;text-align:left}
+.pn .actb:hover{filter:brightness(1.1)}
+.pn .ctl{display:flex;gap:6px}
+.pn .ctl button{flex:1;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;padding:7px 6px;font-size:12.5px}
+.pn .ctl button.on{border-color:var(--amber);color:var(--amber)}
+.sdots{display:flex;flex-wrap:wrap;gap:5px}
+.sdots button{width:24px;height:22px;border-radius:6px;border:1px solid var(--line);background:var(--ink-2);font-family:var(--f-mono);font-size:10.5px;padding:0;color:var(--muted)}
+.sdots button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.sdots button.seen{color:var(--fg)}
+.pbar{height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--amber)}
+.pbar i.run{transition:width linear}
 </style>
 
 <div id="viewport"><div id="stage">
@@ -521,285 +558,32 @@ svg text{font-family:var(--f-body)}
   <p class="note a" style="--d:6">Không tạo đơn trên CRM để tránh trùng với hệ thống PO. Trên tenant demo, số doanh số và công nợ được nhập vào trường dữ liệu của account; khi triển khai sẽ lấy từ PO/ERP qua tích hợp.</p>
 </section>
 
-<!-- UC1 · ACCOUNT -->
-<section class="slide" id="a1" data-title="UC1 · Account Farming">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 1 · Account Farming</span> Quản lý account</div>
-  <h2 class="a" style="--d:1">Chọn một đại lý: thấy hồ sơ, <em>điểm sức khoẻ</em> và ngành hàng chưa khai thác</h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Đại lý &amp; Khách hàng › Công ty · 25 bản ghi</span><button class="shot" data-shots="4,5,6">Xem màn hình thật</button></div>
-    <div class="acc-wrap">
-      <div class="acc-list">
-        <div class="acc-filter" id="accFilter"></div>
-        <div class="acc-items" id="accItems"></div>
-      </div>
-      <div class="acc-detail" id="accDetail" style="position:relative"></div>
-    </div>
-  </div>
+<!-- UC1 -->
+<section class="slide ps" id="u1" data-title="UC1 · Account Farming">
+  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 1 · Account Farming</span> Quản lý account · kế hoạch hoạt động · AI hỏi đáp</div>
+  <h2 class="a" style="--d:1">Từ danh bạ đại lý đến <em>3 việc cần làm</em> do Copilot đề xuất, trên tenant thật</h2>
+  <div class="player a" style="--d:2" data-flow="uc1"></div>
 </section>
 
-<!-- UC1 · ACTIVITIES -->
-<section class="slide" id="a2" data-title="UC1 · Kế hoạch hoạt động">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 1 · Account Farming</span> Activities planning</div>
-  <h2 class="a" style="--d:1">Mọi hoạt động với Sao Việt nằm một chỗ: <em>to do, gọi, mail, báo giá, đơn hàng, fieldwork</em></h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Đại lý &amp; Khách hàng › Chuỗi Điện máy Sao Việt · Thương vụ 1 · Liên hệ 3</span><button class="shot" data-shots="5,7">Xem màn hình thật</button></div>
-    <div class="actw">
-      <div class="act-left">
-        <div style="display:flex;gap:10px;align-items:center"><span class="av" style="background:#2f7bf6;width:38px;height:38px">CĐ</span><div><b style="font-size:16px">Chuỗi Điện máy Sao Việt</b><div style="font-size:12px;color:var(--paper-muted)">saovietmart.vn · TP. Hồ Chí Minh · [2/3] Đang chăm sóc</div></div></div>
-        <div class="chips"><span class="chip red">Chiến lược</span><span class="chip blue">Bán chéo</span><span class="chip">Key Account</span><span class="chip">Chủ sở hữu: Long Nguyễn</span></div>
-        <div style="font-size:12px;font-weight:700;margin-top:4px">Kế hoạch hành động</div>
-        <div id="planList"></div>
-        <div class="plan"><select id="planType" aria-label="Loại hoạt động"><option>Việc cần làm</option><option>Cuộc gọi</option><option>Email</option><option>Cuộc họp</option><option>Fieldwork</option></select><input id="planText" value="Gọi anh Quân chốt lịch demo 3 bên Cisco" aria-label="Nội dung"><select id="planDue" aria-label="Hạn"><option>Hôm nay</option><option>Ngày mai</option><option>Thứ 6</option></select><button class="pbtn" id="planAdd" style="padding:6px 12px">Thêm</button></div>
-        <div class="note" style="color:var(--paper-muted)">Thêm thử một hoạt động: nó xuất hiện ngay trong kế hoạch và trong dòng công việc. <span class="sim">Mô phỏng trên slide</span></div>
-      </div>
-      <div class="act-right">
-        <div style="font-size:12px;font-weight:700">Dòng công việc</div>
-        <div class="tabs" id="actTabs"></div>
-        <div class="alist" id="actList"></div>
-      </div>
-    </div>
-  </div>
+<!-- UC2 -->
+<section class="slide ps" id="u2" data-title="UC2 · Quy trình bán hàng B2G">
+  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 2 · Quy trình bán hàng B2G</span> Theo giai đoạn · theo team dự án · AI phân tích</div>
+  <h2 class="a" style="--d:1">Pipeline 18 deal, deal IOC 42 tỷ và <em>dashboard có AI đọc số</em></h2>
+  <div class="player a" style="--d:2" data-flow="uc2"></div>
 </section>
 
-<!-- UC1 · COPILOT -->
-<section class="slide" id="a3" data-title="UC1 · AI hỏi đáp">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 1 · Account Farming</span> AI hỏi đáp trên deal</div>
-  <h2 class="a" style="--d:1">Hỏi Copilot bằng tiếng Việt: <em>tóm tắt và 3 việc cần làm</em>, sau 18 giây suy nghĩ</h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Phát triển Đại lý &amp; Bán chéo › Chuỗi Điện máy Sao Việt – Mở ngành Thiết bị mạng Cisco</span><button class="shot" data-shots="7,8,9,10">Xem màn hình thật</button></div>
-    <div class="deal">
-      <div class="deal-main">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-          <div><div style="font-size:18px;font-weight:700">Chuỗi Điện máy Sao Việt – Mở ngành Thiết bị mạng Cisco</div><div style="font-size:12px;color:var(--paper-muted);margin-top:3px">Ngô Quốc Quân · Giám đốc ngành hàng · Dự kiến chốt 28/12/2026</div></div>
-          <div style="text-align:right"><div class="big-val num" data-count="10800000000" data-fmt="dot">0</div><div style="font-size:11px;color:var(--paper-muted)">VND · xác suất 15%</div></div>
-        </div>
-        <div class="stages"><span class="cur">Phát hiện cơ hội</span><span>Tư vấn ngành hàng</span><span>Đại lý đặt thử</span><span>Đặt hàng định kỳ</span></div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip violet">Nguồn: AI gợi ý từ dữ liệu PO</span><span class="chip blue">Ngành: Thiết bị mạng</span><span class="chip">Hãng: Cisco</span><span class="chip">Sản lượng 1.800.000.000 / tháng</span></div>
-        <div style="font-size:12px;font-weight:700;margin-top:4px">Dòng công việc · 4</div>
-        <div class="stream">
-          <div class="ev ai" style="--d:0">AI phát hiện: Sao Việt mua Máy tính đều 12 tháng nhưng chưa phát sinh PO Thiết bị mạng. 34 cửa hàng đang dùng router dân dụng.<small>Ghi chú · 02:16 15/10/2026 · Long Nguyễn</small></div>
-          <div class="ev" style="--d:1">Anh Huy (CNTT) xác nhận 34 cửa hàng cần thay router; muốn chạy thử 5 cửa hàng trước khi triển khai toàn chuỗi. Chị Mai Anh (Kế toán) đề nghị giữ kỳ hạn Net 30 như ngành Máy tính.<small>Ghi chú · 02:31 15/10/2026 · Long Nguyễn</small></div>
-          <div class="ev" style="--d:2"><span class="chip blue">QUOTE SFO-0001</span> Báo giá trial Cisco SMB cho 5 cửa hàng Sao Việt · <b class="num">₫204.500.000</b> · hết hạn 14/11/2026<small>Báo giá · 02:43 15/10/2026 · Long Nguyễn</small></div>
-        </div>
-      </div>
-      <div class="cop">
-        <div class="cop-h">✦ Copilot <span class="beta">BETA</span></div>
-        <div class="cop-body" id="copBody">
-          <div style="margin:auto;text-align:center;color:var(--paper-muted);display:flex;flex-direction:column;gap:10px;align-items:center">
-            <div>Copilot đọc deal, công ty, liên hệ và hoạt động trước khi trả lời.</div>
-            <button class="pbtn" id="copGo">Tóm tắt deal và 3 việc cần làm</button>
-          </div>
-        </div>
-        <div class="cop-in"><div class="fake">Ask a follow-up…</div></div>
-      </div>
-    </div>
-  </div>
+<!-- UC3 -->
+<section class="slide ps" id="u3" data-title="UC3 · AI chat cho SMEs GTM">
+  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 3 · AI chat tự động cho SMEs GTM</span> AI chăm sóc · phân về Sales · kịch bản nuôi dưỡng</div>
+  <h2 class="a" style="--d:1">5 câu hỏi của đại lý, <em>2 Phiếu chuyển Sales</em> và kịch bản 30 ngày cho Trưởng kênh</h2>
+  <div class="player a" style="--d:2" data-flow="uc3"></div>
 </section>
 
-<!-- UC1 · AUTOMATION -->
-<section class="slide" id="a4" data-title="UC1 · Nhắc nhở tự động">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 1 · Account Farming</span> Tự động nhắc chăm sóc theo kịch bản</div>
-  <h2 class="a" style="--d:1">Bật một kịch bản: hệ thống <em>quét danh bạ</em> và tạo nhắc việc cho đúng đại lý</h2>
-  <div class="auto">
-    <div class="col">
-      <div class="rules a" style="--d:2" id="rules"></div>
-      <p class="note a" style="--d:3">Điều kiện dựa trên trường dữ liệu đang có trên account: Sức khoẻ Account, Hạn mức tín dụng, Công nợ hiện tại, Tăng trưởng so cùng kỳ, Hạng đại lý. <span class="sim dark">Kịch bản đề xuất · cấu hình ở mục Quy trình tự động khi triển khai</span></p>
-    </div>
-    <div class="col a" style="--d:3">
-      <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:15px">Nhắc việc được tạo</b><span class="num" id="remN" style="color:var(--muted);font-size:13px">0</span></div>
-      <div class="remind" id="remList"></div>
-    </div>
-  </div>
-</section>
-
-<!-- UC2 · KANBAN -->
-<section class="slide" id="b1" data-title="UC2 · Quy trình B2G">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 2 · Quy trình bán hàng B2G</span> Bán hàng theo giai đoạn</div>
-  <h2 class="a" style="--d:1">5 giai đoạn của một deal B2G. Kéo thử thẻ: <em>dự báo cập nhật ngay</em></h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Dự án B2G &amp; Enterprise › Pipeline</span><button class="gbtn" id="kbReset" style="padding:3px 9px;font-size:11.5px">Đặt lại</button><button class="shot" data-shots="2">Xem màn hình thật</button></div>
-    <div class="kb-head"><span><b class="num" id="kbN">18</b> thương vụ</span><span>Tổng <b class="num" id="kbT">₫0</b></span><span>Dự kiến <b class="num" id="kbF" style="color:#0f8a5f">₫0</b></span><span style="margin-left:auto;font-size:12px;color:var(--paper-muted)">Kéo thả thẻ, hoặc rê chuột lên thẻ và bấm ◀ ▶</span></div>
-    <div class="kb" id="kb"></div>
-  </div>
-</section>
-
-<!-- UC2 · TEAM -->
-<section class="slide" id="b2" data-title="UC2 · Team dự án">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 2 · Quy trình bán hàng B2G</span> Quản lý theo team dự án</div>
-  <h2 class="a" style="--d:1">Deal 42 tỷ có <em>đội, việc, hạn và thảo luận</em> ngay trên một màn hình</h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Dự án B2G &amp; Enterprise › Ban QLDA Chuyển đổi số tỉnh Đông Hải – Trung tâm IOC tỉnh giai đoạn 2</span><button class="shot" data-shots="11">Xem màn hình thật</button></div>
-    <div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:8px">
-      <div class="stages"><span class="done">Lead dự án</span><span class="done">Khảo sát &amp; Tư vấn</span><span class="done">Đăng ký Deal Hãng</span><span class="cur">Báo giá &amp; Hồ sơ thầu</span><span>Đàm phán HĐ 3 bên</span></div>
-    </div>
-    <div class="team">
-      <div class="card">
-        <h6>Tổng quan</h6>
-        <div class="big-val num" data-count="42000000000" data-fmt="dot">0</div>
-        <div class="kv"><span>Xác suất</span><span>60% · có trọng số <b class="num">25.200.000.000</b></span><span>Hãng chính</span><span>Dell</span><span>SI triển khai</span><span>Công ty CP Giải pháp Tích hợp Thăng Long Tech</span><span>Nguồn vốn</span><span>Ngân sách nhà nước</span><span>Bảo vệ dự án</span><span><span class="chip green">Đã được bảo vệ</span></span><span>Giá đặc biệt</span><span><span class="chip amber">Đang chờ duyệt</span></span></div>
-      </div>
-      <div class="card">
-        <h6>Kế hoạch hành động · đã xong 0/2</h6>
-        <div class="task"><i></i><span>Gửi tờ trình giá đặc biệt cho Dell</span><span class="late">quá hạn 1 ngày</span></div>
-        <div class="task"><i></i><span>Hoàn thiện hồ sơ năng lực</span><span class="today">Hôm nay</span></div>
-        <h6 style="margin-top:6px">SLA giai đoạn Báo giá &amp; Hồ sơ thầu</h6>
-        <div class="sla"><div class="sla-bar"><i id="slaBar"></i></div><div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--paper-muted)"><span>Vào giai đoạn 15/10 02:16</span><span id="slaTxt" class="num">Đúng tiến độ · 0 trên 1 ngày</span></div></div>
-        <h6 style="margin-top:6px">Dòng công việc · 3 ghi chú</h6>
-        <div class="ev" style="--d:0">Họp với Trưởng ban QLDA: hồ sơ mời thầu phát hành, yêu cầu bảo hành 5 năm tại chỗ, Dell cần duyệt giá đặc biệt trước ngày mở thầu.</div>
-        <div class="ev" style="--d:1">Thăng Long Tech đề nghị Synnex FPT hỗ trợ bảo lãnh dự thầu 2% giá trị.</div>
-      </div>
-      <div class="card">
-        <h6>Chủ sở hữu và đội ngũ</h6>
-        <div class="person"><span class="av" style="background:#2f7bf6">LN</span><div><b>Long Nguyễn</b><small>Chủ sở hữu thương vụ</small></div></div>
-        <div class="person"><span class="av" style="background:#21b37f">LN</span><div><b>Long Nguyễn</b><small>Người cộng tác · không có vai trò</small></div></div>
-        <div class="person"><span class="av" style="background:#94a5c3">+</span><div><b>Người theo dõi</b><small>Chưa có người theo dõi</small></div></div>
-        <h6 style="margin-top:6px">Thảo luận</h6>
-        <div class="ev" style="--d:2"><b>Long Nguyễn</b> · 12 giờ trước<br><span style="color:#1959c9">@Trưởng kênh</span> cần anh/chị hỗ trợ đẩy Dell duyệt giá tuần này.</div>
-        <div class="note" style="color:var(--paper-muted)">Khi triển khai: thêm Presales, SI và Trưởng kênh làm người cộng tác, người theo dõi để cả team cùng nhận việc và thông báo.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- UC2 · REVIEW -->
-<section class="slide" id="b3" data-title="UC2 · AI review kế hoạch">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 2 · Quy trình bán hàng B2G</span> AI chấm điểm và review phương án</div>
-  <h2 class="a" style="--d:1">AI soát deal IOC theo <em>tiêu chí của pipeline B2G</em> và chỉ ra việc còn thiếu</h2>
-  <div class="rev">
-    <div class="col a" style="--d:2">
-      <div style="display:flex;gap:10px;align-items:center"><button class="pbtn" id="revGo">Chạy review deal IOC</button><span class="sim dark">Mô phỏng theo rule AI Copilot của pipeline · dữ liệu lấy từ deal trên tenant</span></div>
-      <div class="crit-list" id="critList"></div>
-    </div>
-    <div class="verdict a" style="--d:3" id="verdict">
-      <div style="font-size:12px;color:var(--paper-muted)">Kết quả review</div>
-      <div style="font-size:15px;color:var(--paper-muted)">Bấm "Chạy review" để AI đối chiếu từng tiêu chí với dữ liệu deal.</div>
-    </div>
-  </div>
-</section>
-
-<!-- UC2 · DASHBOARD -->
-<section class="slide" id="b4" data-title="UC2 · Dashboard">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 2 · Quy trình bán hàng B2G</span> Dashboard và Phân tích AI</div>
-  <h2 class="a" style="--d:1">Quản lý mở dashboard, <em>AI đọc 4 biểu đồ</em> và tóm tắt</h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">Báo cáo › [FPT Synnex] Tổng quan kinh doanh · 4 biểu đồ</span><button class="gbtn" id="aiGo" style="padding:3px 10px;font-size:11.5px">✦ Phân tích AI</button><button class="shot" data-shots="12,13">Xem màn hình thật</button></div>
-    <div class="dash" id="dash">
-      <div class="card"><h6># Tổng quan pipeline dự án</h6><div style="display:flex;align-items:center;justify-content:center;gap:28px;flex:1"><div style="text-align:center"><div class="num" style="font-size:52px;font-weight:700" data-count="18">0</div><small style="color:var(--paper-muted)">Deals</small></div><div style="width:1px;height:60px;background:var(--paper-line)"></div><div style="text-align:center"><div class="num" style="font-size:40px;font-weight:700" data-count="193900000000" data-fmt="dot">0</div><small style="color:var(--paper-muted)">Deal value</small></div></div></div>
-      <div class="card"><h6>Phễu dự án theo giai đoạn</h6><svg id="funnel" viewBox="0 0 520 170" style="flex:1;width:100%"></svg></div>
-      <div class="card"><h6>Cơ hội bán chéo theo nhân viên</h6><svg id="bars" viewBox="0 0 520 170" style="flex:1;width:100%"></svg></div>
-      <div class="card"><h6>Cơ hội bán chéo theo nguồn</h6><svg id="pie" viewBox="0 0 520 170" style="flex:1;width:100%"></svg></div>
-      <div class="aiPanel" id="aiPanel">
-        <h6>✦ Phân tích AI</h6>
-        <div style="font-size:11.5px;color:var(--paper-muted)">4 biểu đồ · không có bộ lọc · bản dịch tiếng Việt</div>
-        <div style="font-weight:700;font-size:14px;line-height:1.45">Tổng giá trị pipeline đạt 193,9 tỷ trên 18 deal, một chủ sở hữu nắm 70,8 tỷ cơ hội bán chéo.</div>
-        <div class="ins"><i style="background:#fff3dd;color:#97600a">!</i><span>Chỉ một Sales xuất hiện trong biểu đồ bán chéo theo nhân viên, nắm 70,8 tỷ.</span></div>
-        <div class="ins"><i style="background:#e5efff;color:#1959c9">↗</i><span>18 deal dự án trải trên 5 giai đoạn; giai đoạn lớn nhất có 5 deal, các giai đoạn còn lại 3 hoặc 4 deal.</span></div>
-        <div class="ins"><i style="background:#e2f6ee;color:#11734f">↗</i><span>Cơ hội bán chéo theo nguồn có 12 deal thuộc 4 nguồn; nguồn lớn nhất 5 deal, nhỏ nhất 1 deal.</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- UC3 · CHANNELS -->
-<section class="slide" id="c1" data-title="UC3 · Chat đa kênh">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 3 · AI chat tự động cho SMEs GTM</span> Tích hợp chat đa kênh</div>
-  <h2 class="a" style="--d:1">Tin nhắn từ mọi kênh về một trợ lý. <em>Bấm một kênh</em> để xem AI xử lý</h2>
-  <div class="chan">
-    <div class="chan-in a" style="--d:2" id="chanIn"></div>
-    <div class="brain a" style="--d:3" id="brain"><div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">Trợ lý Chăm sóc Đại lý SME</div><div style="color:var(--muted);font-size:14px;margin:auto;text-align:center">Chọn một kênh bên trái để gửi tin nhắn mẫu.</div></div>
-    <div class="out a" style="--d:4">
-      <div id="out1"><b>Trả lời ngay</b>Câu hỏi chính sách, công nợ, bảo hành: trả lời 24/7 theo tài liệu SFD-CS, có mã tài liệu.</div>
-      <div id="out2"><b>Phân về Sales phụ trách</b>Có nhu cầu mua, xin giá, xin hạn mức: lập Phiếu chuyển Sales, hạn 4 giờ hoặc 1 ngày làm việc.</div>
-      <p class="note">Trên tenant demo, trợ lý chạy trong khung chat AgentHub. Kết nối Zalo OA, Facebook, web chat là phần cấu hình khi triển khai. <span class="sim dark">Kênh gắn với câu hỏi mẫu chỉ để minh hoạ</span></p>
-    </div>
-  </div>
-</section>
-
-<!-- UC3 · CHAT -->
-<section class="slide" id="c2" data-title="UC3 · AI chăm sóc">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 3 · AI chat tự động cho SMEs GTM</span> AI chăm sóc bằng ngôn ngữ tự nhiên</div>
-  <h2 class="a" style="--d:1">Đóng vai đại lý: bấm một câu hỏi và <em>xem trợ lý trả lời</em></h2>
-  <div class="win grow a" style="--d:2">
-    <div class="win-top"><span class="logo"><i></i>AgentHub</span><span class="crumb">Kinh doanh Kênh Đại lý › Trợ lý Chăm sóc Đại lý SME</span><button class="gbtn" id="chatReset" style="padding:3px 9px;font-size:11.5px">Cuộc trò chuyện mới</button><button class="shot" data-shots="15,16,17,18,19,20,21">Xem màn hình thật</button></div>
-    <div class="hub">
-      <div class="hub-side"><div class="it">New chat</div><div class="it">Agents</div><div class="it">Knowledge</div><div style="font-size:10.5px;letter-spacing:.1em;color:var(--paper-muted);margin-top:8px">FOLDERS</div><div class="it on">Kinh doanh Kênh Đại lý</div><div style="font-size:11.5px;color:var(--paper-muted);line-height:1.5;margin-top:auto">Chính sách SFD-CS-01 đến 06 trong Instruction<br>Kỹ năng: Chấm điểm tín hiệu mua và chuyển Sales<br>Công cụ: Tính toán chính sách</div></div>
-      <div class="chat">
-        <div class="chat-body" id="chatBody"></div>
-        <div class="chat-in"><div class="fake" id="chatFake">Ask anything…</div></div>
-      </div>
-      <div class="ask" id="ask"><h6>Đại lý hỏi</h6></div>
-    </div>
-  </div>
-</section>
-
-<!-- UC3 · SCORE -->
-<section class="slide" id="c3" data-title="UC3 · Phân về Sales">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 3 · AI chat tự động cho SMEs GTM</span> Phân về Sales khi khách có nhu cầu</div>
-  <h2 class="a" style="--d:1">Kéo thanh trượt: trợ lý <em>quyết định khi nào gọi Sales</em>, đúng theo kỹ năng đã cấu hình</h2>
-  <div class="score">
-    <div class="ctrl a" style="--d:2">
-      <div><label for="scVal">Giá trị đơn ước tính <b id="scValT">680 triệu</b></label><input id="scVal" type="range" min="5" max="1200" step="5" value="680"></div>
-      <div><label>Mức khẩn</label><div class="seg" id="scUrg"><button data-u="1" class="on">Trong 7 ngày</button><button data-u="2">Trong 30 ngày</button><button data-u="3">Trong quý</button><button data-u="4">Chưa có thời điểm</button></div></div>
-      <div class="flags"><label><input type="checkbox" id="fPrice"> Đại lý xin giá đặc biệt</label><label><input type="checkbox" id="fCredit"> Xin tăng hạn mức</label><label><input type="checkbox" id="fCompl"> Khiếu nại giao hàng</label></div>
-      <div class="grid4" id="scGrid" aria-label="Ma trận điểm"></div>
-      <div class="note">A từ 500 triệu · B 100 đến dưới 500 · C 30 đến dưới 100 · D dưới 30 hoặc chưa rõ. Ô vàng: lập phiếu, hạn 4 giờ. Ô cam: lập phiếu, hạn 1 ngày.</div>
-    </div>
-    <div class="result a" style="--d:3">
-      <div class="res-card" id="scCard"></div>
-      <div class="handoff"><span class="node">Trợ lý lập Phiếu chuyển Sales</span><span class="wire"><i></i></span><span class="node">Sales khu vực nhận phiếu</span><span class="wire"><i></i></span><span class="node">Tạo deal trên Base Sales</span></div>
-      <div class="note">Gợi ý người nhận theo kỹ năng: đại lý Miền Bắc hoặc Miền Trung về Sales kênh Miền Bắc, Miền Nam về Sales kênh Miền Nam. AgentHub hiện chưa ghi thẳng vào Base Sales, Sales tạo deal từ phiếu. <button class="shot" data-shots="28" style="margin-left:6px">Xem kỹ năng thật</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- UC3 · COORDINATOR -->
-<section class="slide" id="c4" data-title="UC3 · Trợ lý điều phối">
-  <div class="eyebrow a" style="--d:0"><span class="uc-tag">Use case 3 · AI chat tự động cho SMEs GTM</span> Trợ lý Điều phối Chăm sóc SME</div>
-  <h2 class="a" style="--d:1">Kịch bản 30 ngày cho nhóm SME chưa mua Thiết bị mạng, <em>do trợ lý soạn cho Trưởng kênh</em></h2>
-  <div class="tl a" style="--d:2" id="tl"><div class="fill" id="tlFill"></div></div>
-  <div class="msg">
-    <div class="phone a" style="--d:3" id="tlMsg"></div>
-    <div class="col a" style="--d:4">
-      <div style="font-size:13px;color:var(--muted)">Mục tiêu: đơn Thiết bị mạng đầu tiên từ 30 triệu (chạm quà Cisco), lý tưởng từ 50 triệu (chạm thưởng mở ngành). Khung thời gian đề xuất D0 = 20/10/2026 đến D30 = 19/11/2026.</div>
-      <table class="combo"><thead><tr><th>Combo mẫu</th><th>Cấu hình</th><th>Giá trị</th><th>Quyền lợi</th></tr></thead>
-        <tbody><tr><td><b>A · Khởi động</b></td><td>2 switch 24 cổng + 3 switch 8 cổng + 1 Wifi văn phòng</td><td class="num">30 triệu</td><td>4% + tặng 1 Wifi</td></tr>
-        <tr><td><b>B · Tối ưu</b></td><td>4 switch 24 cổng + 5 switch 8 cổng</td><td class="num">51,2 triệu</td><td>4% + 1% mở ngành = 2,56 triệu, cộng quà Wifi và buổi đào tạo</td></tr></tbody></table>
-      <div class="note">Trợ lý chỉ soạn bản nháp để Trưởng kênh duyệt, không tự gửi; không đưa công nợ hay số điện thoại của đại lý khác vào nội dung.</div>
-      <button class="shot" data-shots="22,23,24,25" style="align-self:flex-start">Xem màn hình thật</button>
-    </div>
-  </div>
-</section>
-
-<!-- GOVERNANCE -->
-<section class="slide" id="g1" data-title="Quản trị AI">
-  <div class="eyebrow a" style="--d:0"><b>Quản trị AI</b> Cấu hình, giới hạn và đo lường</div>
+<!-- GOV -->
+<section class="slide ps" id="u4" data-title="Quản trị AI">
+  <div class="eyebrow a" style="--d:0"><b>Quản trị AI</b> Cấu hình · skill · đo lường</div>
   <h2 class="a" style="--d:1">AI làm theo <em>chính sách của Synnex FPT</em>, có giới hạn và có số đo</h2>
-  <div class="gov">
-    <div class="col">
-      <div class="map a" style="--d:2" id="map">
-        <svg viewBox="0 0 640 300" preserveAspectRatio="none"><path d="M150 150 C 220 150, 220 90, 270 90"/><path d="M150 150 C 220 150, 220 210, 270 210"/><path d="M410 90 C 440 90, 440 150, 450 150"/><path d="M410 210 C 440 210, 440 150, 450 150"/></svg>
-        <div class="mnode" style="left:2%;top:42%">Chat input<small>What the person asks</small></div>
-        <div class="mnode" style="left:42%;top:22%">Memory<small>Remembers across chats</small></div>
-        <div class="mnode" style="left:42%;top:62%">Chấm điểm tín hiệu mua…<small>Custom skill</small></div>
-        <div class="mnode core" style="left:70%;top:34%"><b>Agent · CORE</b><small>claude-opus-5 · Toolsets 1 attached · Skills 1 enabled · 3 starters</small></div>
-      </div>
-      <div class="guard a" style="--d:3">
-        <div><i>✕</i>Không tự hứa giá đặc biệt hay chiết khấu ngoài chính sách</div>
-        <div><i>✕</i>Không xác nhận tăng hạn mức, tồn kho hay ngày giao chính xác</div>
-        <div><i>✕</i>Không kết luận lỗi bảo hành thay Trung tâm bảo hành ủy quyền</div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="mon a" style="--d:4">
-        <div><b data-count="100" data-suf="%">0</b><span>Helpful, 5 trên 5 câu được chấm</span></div>
-        <div><b data-count="100" data-suf="%">0</b><span>Tool success, 6 bước gọi công cụ</span></div>
-        <div><b data-count="17" data-suf=" giây">0</b><span>Avg response time</span></div>
-        <div><b data-count="0" data-suf="%">0</b><span>Errors</span></div>
-      </div>
-      <p class="note a" style="--d:5">Màn Monitoring của Trợ lý Chăm sóc Đại lý SME, 30 ngày gần nhất: 5 tin nhắn, 1 cuộc trò chuyện, 10,1k token, prompt cache hit 76,2%.</p>
-      <div class="a" style="--d:6;display:flex;gap:8px"><button class="shot" data-shots="26,27,28">Cấu hình agent</button><button class="shot" data-shots="29,30">Monitoring và Logs</button></div>
-    </div>
-  </div>
+  <div class="player a" style="--d:2" data-flow="gov"></div>
 </section>
 
 <!-- SHOWCASE -->
@@ -816,10 +600,9 @@ svg text{font-family:var(--f-body)}
 
 </div></div>
 
-
 <div id="bar">
   <button class="navb" id="prev" aria-label="Slide trước">←</button>
-  <span id="count">1 / 18</span>
+  <span id="count">1 / 9</span>
   <button class="navb" id="next" aria-label="Slide sau">→</button>
   <div id="dots"></div>
   <div id="prog"><i></i></div>
@@ -834,6 +617,7 @@ svg text{font-family:var(--f-body)}
 </div>
 
 <script>
+
 
 const DATA = {"acc": [{"n": "Chuỗi Điện máy Sao Việt", "code": "SFD-N0001", "loai": "Chuỗi bán lẻ", "t": "Key Account", "kv": "Miền Nam", "r": "TP. Hồ Chí Minh", "ds": 276427000000, "g": 13.8, "hm": 27000000000, "cn": 18783000000, "h": "Ổn định", "dm": ["Máy tính", "Smart Device", "Linh kiện & Ngoại vi"], "cm": ["Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Hệ thống Bán lẻ Công nghệ Nhật Minh", "code": "SFD-B0002", "loai": "Chuỗi bán lẻ", "t": "Key Account", "kv": "Miền Bắc", "r": "Hà Nội", "ds": 96184000000, "g": 17.5, "hm": 53500000000, "cn": 35700000000, "h": "Ổn định", "dm": ["Máy tính", "Smart Device", "Linh kiện & Ngoại vi", "Thiết bị mạng"], "cm": ["Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Chuỗi Laptop An Phát Digital", "code": "SFD-B0003", "loai": "Chuỗi bán lẻ", "t": "Key Account", "kv": "Miền Bắc", "r": "Hà Nội", "ds": 106390000000, "g": 2.1, "hm": 54000000000, "cn": 20068000000, "h": "Ổn định", "dm": ["Máy tính", "Linh kiện & Ngoại vi"], "cm": ["Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Siêu thị Điện tử Hoàng Long", "code": "SFD-T0004", "loai": "Chuỗi bán lẻ", "t": "Key Account", "kv": "Miền Trung", "r": "Đà Nẵng", "ds": 220131000000, "g": 1.9, "hm": 20000000000, "cn": 15941000000, "h": "Ổn định", "dm": ["Máy tính", "Smart Device"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Chuỗi Di động Thế Hệ Mới", "code": "SFD-N0005", "loai": "Chuỗi bán lẻ", "t": "Key Account", "kv": "Miền Nam", "r": "TP. Hồ Chí Minh", "ds": 137686000000, "g": 8.2, "hm": 53500000000, "cn": 22743000000, "h": "Ổn định", "dm": ["Smart Device", "Linh kiện & Ngoại vi"], "cm": ["Máy tính", "Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Tin học Minh Khang", "code": "SFD-N0007", "loai": "Đại lý bán lẻ", "t": "Gold", "kv": "Miền Nam", "r": "Cần Thơ", "ds": 19305000000, "g": 13.6, "hm": 8500000000, "cn": 8160000000, "h": "Cần theo dõi", "dm": ["Máy tính", "Linh kiện & Ngoại vi"], "cm": ["Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Công ty TNHH Tin học Thành Đạt", "code": "SFD-T0009", "loai": "Đại lý bán lẻ", "t": "Gold", "kv": "Miền Trung", "r": "Nghệ An", "ds": 19776000000, "g": 8.2, "hm": 6000000000, "cn": 2298000000, "h": "Ổn định", "dm": ["Máy tính", "Smart Device"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Tin học Ngọc Thịnh", "code": "SFD-N0010", "loai": "Đại lý bán lẻ", "t": "Gold", "kv": "Miền Nam", "r": "Đồng Nai", "ds": 43393000000, "g": 9.8, "hm": 5500000000, "cn": 2106000000, "h": "Ổn định", "dm": ["Máy tính", "Linh kiện & Ngoại vi"], "cm": ["Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Máy tính Trường Sơn", "code": "SFD-T0012", "loai": "Đại lý bán lẻ", "t": "Gold", "kv": "Miền Trung", "r": "Thừa Thiên Huế", "ds": 30325000000, "g": 7.3, "hm": 3500000000, "cn": 1919000000, "h": "Ổn định", "dm": ["Máy tính", "Linh kiện & Ngoại vi"], "cm": ["Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Tin học Hải Âu", "code": "SFD-T0013", "loai": "Đại lý bán lẻ", "t": "Gold", "kv": "Miền Trung", "r": "Khánh Hòa", "ds": 41551000000, "g": -2.8, "hm": 4000000000, "cn": 1813000000, "h": "Ổn định", "dm": ["Máy tính", "Smart Device"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Laptop Tâm An", "code": "SFD-B0015", "loai": "Đại lý bán lẻ", "t": "Gold", "kv": "Miền Bắc", "r": "Hà Nội", "ds": 33893000000, "g": 7.4, "hm": 6000000000, "cn": 2483000000, "h": "Ổn định", "dm": ["Máy tính", "Linh kiện & Ngoại vi"], "cm": ["Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Vi tính Bảo An", "code": "SFD-N0022", "loai": "Đại lý bán lẻ", "t": "SME", "kv": "Miền Nam", "r": "Vĩnh Long", "ds": 1842000000, "g": -25.7, "hm": 1000000000, "cn": 472000000, "h": "Rủi ro sụt doanh số", "dm": ["Máy tính"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Tin học Đức Trí", "code": "SFD-T0023", "loai": "Đại lý bán lẻ", "t": "SME", "kv": "Miền Trung", "r": "Đắk Lắk", "ds": 3615000000, "g": 12.5, "hm": 1000000000, "cn": 404000000, "h": "Ổn định", "dm": ["Máy tính", "Smart Device"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Tin học Ánh Dương", "code": "SFD-T0025", "loai": "Đại lý bán lẻ", "t": "SME", "kv": "Miền Trung", "r": "Quảng Ngãi", "ds": 3138000000, "g": -22.5, "hm": 1000000000, "cn": 700000000, "h": "Rủi ro sụt doanh số", "dm": ["Máy tính"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]}, {"n": "Máy tính Hồng Phát", "code": "SFD-B0036", "loai": "Đại lý bán lẻ", "t": "SME", "kv": "Miền Bắc", "r": "Bắc Giang", "ds": 5927000000, "g": -35.8, "hm": 1000000000, "cn": 531000000, "h": "Rủi ro sụt doanh số", "dm": ["Máy tính", "Smart Device"], "cm": ["Linh kiện & Ngoại vi", "Thiết bị mạng", "Phần mềm & Cloud", "Giải pháp CNTT"]}], "b2g": [{"n": "Máy trạm điều tra viên 120 bộ", "a": "Cục Thống kê tỉnh Bắc Sơn", "c": "Nguyễn Thanh Mai", "s": 0, "v": 2.4, "h": "HP"}, {"n": "Switch truy nhập 300 trạm", "a": "Sao Mai Telecom", "c": "Bùi Ngọc Đạt", "s": 0, "v": 6.8, "h": "Cisco"}, {"n": "Bản quyền Microsoft 365 1.500 user", "a": "Tập đoàn Bảo hiểm An Bình Thịnh", "c": "Bùi Bảo Linh", "s": 0, "v": 9.5, "h": "Microsoft"}, {"n": "Phòng lab AI 60 máy trạm GPU", "a": "Đại học Kỹ thuật Hồng Lam", "c": "Bùi Thu Dũng", "s": 1, "v": 11.2, "h": "Dell"}, {"n": "Hạ tầng máy chủ HIS/PACS", "a": "Bệnh viện Đa khoa Quốc tế Tâm Đức", "c": "Trần Thu Tuấn", "s": 1, "v": 14.6, "h": "HP"}, {"n": "Wifi kho bãi 5 trung tâm", "a": "Công ty CP Logistics Đông Dương", "c": "Bùi Thanh Nam", "s": 1, "v": 3.9, "h": "Cisco"}, {"n": "Máy tính trạm y tế xã 220 bộ", "a": "Sở Y tế tỉnh Đông Hải", "c": "Đỗ Minh Lan", "s": 1, "v": 4.4, "h": "Lenovo"}, {"n": "Máy chủ & SAN cho DR site", "a": "Ngân hàng TMCP Sao Bắc Á", "c": "Trần Ngọc Quân", "s": 2, "v": 28.5, "h": "Dell"}, {"n": "Firewall & SOC cảng", "a": "Tổng Công ty Cảng biển Đông Hải", "c": "Trần Thị Hùng", "s": 2, "v": 7.2, "h": "Cisco"}, {"n": "Laptop cho đại lý bảo hiểm 800 máy", "a": "Tập đoàn Bảo hiểm An Bình Thịnh", "c": "Bùi Bảo Linh", "s": 2, "v": 15.6, "h": "Lenovo"}, {"n": "Trung tâm IOC tỉnh giai đoạn 2", "a": "Ban QLDA Chuyển đổi số tỉnh Đông Hải", "c": "Đỗ Hoàng Phong", "s": 3, "v": 42.0, "h": "Dell"}, {"n": "Hạ tầng mạng ký túc xá", "a": "Đại học Kỹ thuật Hồng Lam", "c": "Bùi Thu Dũng", "s": 3, "v": 5.3, "h": "Cisco"}, {"n": "Máy chủ bệnh án điện tử tuyến tỉnh", "a": "Sở Y tế tỉnh Đông Hải", "c": "Đỗ Minh Lan", "s": 3, "v": 9.8, "h": "HP"}, {"n": "Thiết bị cầm tay & máy in nhãn", "a": "Công ty CP Logistics Đông Dương", "c": "Bùi Thanh Nam", "s": 3, "v": 2.1, "h": "HP"}, {"n": "Máy tính phòng khám 150 bộ", "a": "Bệnh viện Đa khoa Quốc tế Tâm Đức", "c": "Trần Thu Tuấn", "s": 3, "v": 3.6, "h": "Dell"}, {"n": "Máy tính giao dịch viên 600 bộ", "a": "Ngân hàng TMCP Sao Bắc Á", "c": "Trần Ngọc Quân", "s": 4, "v": 13.4, "h": "HP"}, {"n": "Máy chủ hệ thống điều hành cảng", "a": "Tổng Công ty Cảng biển Đông Hải", "c": "Trần Thị Hùng", "s": 4, "v": 8.7, "h": "Dell"}, {"n": "Bản quyền ảo hoá trung tâm dữ liệu", "a": "Sao Mai Telecom", "c": "Bùi Ngọc Đạt", "s": 4, "v": 4.9, "h": "Microsoft"}], "xs": [{"n": "Mở ngành Thiết bị mạng Cisco", "a": "Chuỗi Điện máy Sao Việt", "s": 0, "v": 10.8, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Máy tính Dell", "a": "Tin học Đức Trí", "s": 0, "v": 3.9, "src": "Đại lý hỏi qua Zalo OA"}, {"n": "Mở ngành Máy tính HP", "a": "Máy tính Hồng Phát", "s": 0, "v": 1.8, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Smart Device Xiaomi", "a": "Chuỗi Laptop An Phát Digital", "s": 1, "v": 7.2, "src": "Chương trình của Hãng"}, {"n": "Mở ngành Linh kiện & Ngoại vi Intel", "a": "Siêu thị Điện tử Hoàng Long", "s": 1, "v": 5.4, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Phần mềm & Cloud Microsoft", "a": "Công ty TNHH Tin học Thành Đạt", "s": 1, "v": 1.5, "src": "Sales phát hiện khi thăm"}, {"n": "Mở ngành Thiết bị mạng Cisco", "a": "Tin học Hải Âu", "s": 1, "v": 2.4, "src": "Sales phát hiện khi thăm"}, {"n": "Mở ngành Máy tính Apple", "a": "Chuỗi Di động Thế Hệ Mới", "s": 2, "v": 19.2, "src": "Chương trình của Hãng"}, {"n": "Mở ngành Thiết bị mạng Cisco", "a": "Tin học Ngọc Thịnh", "s": 2, "v": 3.12, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Smart Device Xiaomi", "a": "Máy tính Trường Sơn", "s": 2, "v": 2.28, "src": "Sales phát hiện khi thăm"}, {"n": "Mở ngành Phần mềm & Cloud Microsoft", "a": "Hệ thống Bán lẻ Công nghệ Nhật Minh", "s": 3, "v": 9.0, "src": "Chương trình của Hãng"}, {"n": "Mở ngành Linh kiện & Ngoại vi Intel", "a": "Laptop Tâm An", "s": 3, "v": 4.2, "src": "AI gợi ý từ dữ liệu PO"}]};
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -905,15 +689,16 @@ function go(i) {
   $$('#dots button').forEach((b, j) => b.classList.toggle('on', j === cur));
   $$('[data-count]', s).forEach(countUp);
   (ENTER[s.id] || (() => {}))(!entered[s.id]); entered[s.id] = true;
-  try { localStorage.setItem('sfpt-slide2', cur); } catch (e) {}
+  try { localStorage.setItem('sfpt-slide3', cur); } catch (e) {}
   try { if (location.hash !== '#' + s.id) history.replaceState(null, '', '#' + s.id); } catch (e) {}
 }
 $('#prev').onclick = () => go(cur - 1); $('#next').onclick = () => go(cur + 1);
 addEventListener('keydown', e => {
   if (!$('#lb').hidden) { if (e.key === 'Escape') $('#lb').hidden = true; if (e.key === 'ArrowRight') $('#lbNext').click(); if (e.key === 'ArrowLeft') $('#lbPrev').click(); return; }
   if (e.target.matches('input,textarea')) return;
-  if (e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && !e.target.closest('button'))) { e.preventDefault(); go(cur + 1); }
-  if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1);
+  const PL = (typeof PLAYERS !== 'undefined') && PLAYERS[slides[cur].id];
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && !e.target.closest('button'))) { e.preventDefault(); if (!(PL && PL.step(1))) go(cur + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { if (!(PL && PL.step(-1))) go(cur - 1); }
   if (e.key === 'g' || e.key === 'G') $('#galBtn').click();
 });
 let tx = null; $('#stage').addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
@@ -949,75 +734,6 @@ function countUp(el) {
   frame();
 })();
 
-/* ---------- kanban ---------- */
-const STG = ['Lead dự án', 'Khảo sát &amp; Tư vấn', 'Đăng ký Deal Hãng', 'Báo giá &amp; Hồ sơ thầu', 'Đàm phán HĐ 3 bên'], PR = [.1, .25, .4, .6, .85];
-let kbDeals = [];
-function kbInit() { kbDeals = DATA.b2g.map((d, i) => ({ ...d, id: i })); }
-function drawKB(fly) {
-  $('#kb').innerHTML = STG.map((s, si) => {
-    const ds = kbDeals.filter(d => d.s === si), sum = ds.reduce((a, d) => a + d.v, 0);
-    return `<div class="kcol" data-s="${si}"><h5>${s}<small>${ds.length}</small></h5><div class="sum">₫${dot(sum * 1e9)} · ${Math.round(PR[si] * 100)}%</div><div class="kcards">${ds.map((d, j) =>
-      `<div class="kcard ${fly ? 'fly' : ''} ${d.n.includes('IOC') ? 'hot' : ''}" draggable="true" data-id="${d.id}" style="animation-delay:${fly ? (si * 120 + j * 70) : 0}ms" tabindex="0"><b>${d.a} – ${d.n}</b><small>${d.c} · ${d.h}</small><div class="v"><span>₫${dot(d.v * 1e9)}</span><span class="mv"><button data-m="-1" aria-label="Lùi giai đoạn">◀</button><button data-m="1" aria-label="Sang giai đoạn sau">▶</button></span></div></div>`).join('')}</div></div>`;
-  }).join('');
-  const tot = kbDeals.reduce((a, d) => a + d.v, 0), fc = kbDeals.reduce((a, d) => a + d.v * PR[d.s], 0);
-  $('#kbT').textContent = '₫' + dot(tot * 1e9); $('#kbF').textContent = '₫' + dot(fc * 1e9);
-}
-function moveDeal(id, s) { const d = kbDeals.find(x => x.id === id); if (!d) return; const old = $('#kbF').textContent; d.s = Math.max(0, Math.min(4, s)); drawKB(false); const f = $('#kbF'); if (f.textContent !== old) { f.animate([{ background: '#d9f5e9' }, { background: 'transparent' }], 900); } const c = $(`.kcard[data-id="${id}"]`); if (c) c.animate([{ transform: 'scale(1.06)' }, { transform: 'none' }], 400); }
-$('#kb').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; const id = +b.closest('.kcard').dataset.id; moveDeal(id, kbDeals.find(x => x.id === id).s + +b.dataset.m); });
-$('#kb').addEventListener('dragstart', e => { const c = e.target.closest('.kcard'); if (!c) return; e.dataTransfer.setData('text/plain', c.dataset.id); c.classList.add('dragging'); });
-$('#kb').addEventListener('dragend', e => { $$('.kcol').forEach(c => c.classList.remove('over')); });
-$('#kb').addEventListener('dragover', e => { const c = e.target.closest('.kcol'); if (!c) return; e.preventDefault(); $$('.kcol').forEach(k => k.classList.toggle('over', k === c)); });
-$('#kb').addEventListener('drop', e => { const c = e.target.closest('.kcol'); if (!c) return; e.preventDefault(); moveDeal(+e.dataTransfer.getData('text/plain'), +c.dataset.s); });
-$('#kbReset').onclick = () => { kbInit(); drawKB(true); };
-
-/* ---------- dashboard charts ---------- */
-function drawCharts() {
-  const st = STG.map((s, i) => ({ s, n: DATA.b2g.filter(d => d.s === i).length, v: DATA.b2g.filter(d => d.s === i).reduce((a, d) => a + d.v, 0) }));
-  const order = [...st].sort((a, b) => b.v - a.v), maxV = order[0].v, cols = ['#2f7bf6', '#5b95f8', '#86b1fa', '#a9c6fb', '#cbdcfd'];
-  $('#funnel').innerHTML = order.map((o, i) => { const w = 60 + 240 * o.v / maxV, y = 6 + i * 31; return `<rect x="${170 - w / 2}" y="${y}" width="0" height="27" rx="4" fill="${cols[i]}"><animate attributeName="width" from="0" to="${w}" dur=".8s" begin="${i * .12}s" fill="freeze"/><animate attributeName="x" from="170" to="${170 - w / 2}" dur=".8s" begin="${i * .12}s" fill="freeze"/></rect><text x="330" y="${y + 18}" font-size="12.5" fill="#1b2333">${o.s} · ${o.n} deal · ${ty(o.v)}</text>`; }).join('');
-  const totX = DATA.xs.reduce((s, d) => s + d.v, 0), mx = 80; let bars = '';
-  [0, 20, 40, 60, 80].forEach(t => { const y = 140 - t / mx * 120; bars += `<line x1="60" x2="510" y1="${y}" y2="${y}" stroke="#e4e8ef"/><text x="52" y="${y + 4}" font-size="11" fill="#687389" text-anchor="end">${t}B</text>`; });
-  const h = totX / mx * 120; bars += `<rect x="120" y="140" width="320" height="0" rx="4" fill="#2f7bf6"><animate attributeName="height" from="0" to="${h}" dur=".9s" fill="freeze"/><animate attributeName="y" from="140" to="${140 - h}" dur=".9s" fill="freeze"/></rect><text x="280" y="${132 - h}" font-size="12.5" font-weight="700" fill="#1b2333" text-anchor="middle">70,8 tỷ · 12 deal</text><text x="280" y="158" font-size="11.5" fill="#687389" text-anchor="middle">Long Nguyễn</text>`;
-  $('#bars').innerHTML = bars;
-  const src = [['AI gợi ý từ dữ liệu PO', 5, '#2f7bf6'], ['Chương trình của Hãng', 3, '#e2852b'], ['Sales phát hiện khi thăm', 3, '#21b37f'], ['Đại lý hỏi qua Zalo OA', 1, '#8b7cf6']];
-  let a0 = -Math.PI / 2, pie = ''; const tot = 12, cx = 95, cy = 85, r = 70;
-  src.forEach(([l, n, c], i) => { const a1 = a0 + n / tot * Math.PI * 2, large = a1 - a0 > Math.PI ? 1 : 0;
-    pie += `<path d="M${cx} ${cy} L${cx + r * Math.cos(a0)} ${cy + r * Math.sin(a0)} A${r} ${r} 0 ${large} 1 ${cx + r * Math.cos(a1)} ${cy + r * Math.sin(a1)} Z" fill="${c}" stroke="#fff" stroke-width="2" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".4s" begin="${i * .18}s" fill="freeze"/></path>`;
-    pie += `<rect x="200" y="${30 + i * 30}" width="12" height="12" rx="3" fill="${c}"/><text x="220" y="${41 + i * 30}" font-size="12.5" fill="#1b2333">${l} · <tspan font-weight="700">${n}</tspan></text>`; a0 = a1; });
-  pie += `<circle cx="${cx}" cy="${cy}" r="34" fill="#fff"/><text x="${cx}" y="${cy + 6}" text-anchor="middle" font-size="18" font-weight="700" fill="#1b2333">12</text>`;
-  $('#pie').innerHTML = pie;
-}
-async function aiPanel() { const p = $('#aiPanel'); p.classList.add('open'); const ins = $$('.ins', p); ins.forEach(i => i.classList.remove('on')); for (const i of ins) { await sleep(450); i.classList.add('on'); } }
-$('#aiGo').onclick = () => { const p = $('#aiPanel'); if (p.classList.contains('open')) p.classList.remove('open'); else aiPanel(); };
-
-/* ---------- scoring ---------- */
-let urg = 1;
-function letter(v) { return v >= 500 ? 'A' : v >= 100 ? 'B' : v >= 30 ? 'C' : 'D'; }
-function rule(L, u, flags) {
-  const code = L + u;
-  if (['A1', 'A2', 'B1', 'B2'].includes(code)) return { act: 'Lập Phiếu chuyển Sales ngay', h: '4 giờ làm việc', cls: 'f1' };
-  if (['A3', 'B3', 'C1', 'C2'].includes(code)) return { act: 'Lập Phiếu chuyển Sales', h: '1 ngày làm việc', cls: 'f4' };
-  if (flags) return { act: 'Lập phiếu do có yêu cầu đặc biệt', h: '1 ngày làm việc', cls: 'f4' };
-  return { act: 'Trợ lý tiếp tục tư vấn, chưa lập phiếu', h: '—', cls: '' };
-}
-function drawScore() {
-  const v = +$('#scVal').value, L = letter(v), flags = $('#fPrice').checked || $('#fCredit').checked || $('#fCompl').checked;
-  $('#scValT').textContent = v >= 1000 ? (v / 1000).toLocaleString('vi-VN') + ' tỷ' : v + ' triệu';
-  let g = '<div></div>' + ['7 ngày', '30 ngày', 'Trong quý', 'Chưa rõ'].map(x => `<div class="h">${x}</div>`).join('');
-  ['A', 'B', 'C', 'D'].forEach(l => { g += `<div class="h">${l}</div>`; [1, 2, 3, 4].forEach(u => { const r = rule(l, u, false); g += `<div class="c ${r.cls} ${l === L && u === urg ? 'sel' : ''}">${l}${u}</div>`; }); });
-  $('#scGrid').innerHTML = g;
-  const r = rule(L, urg, flags), go = r.h !== '—';
-  $('#scCard').innerHTML = `<div style="display:flex;align-items:center;gap:18px"><div class="res-big" style="color:${go ? (r.h.startsWith('4') ? '#c27a06' : '#b3263a') : '#687389'}">${L}${urg}</div><div><div style="font-size:18px;font-weight:700">${r.act}</div><div style="color:var(--paper-muted);font-size:13px;margin-top:3px">Hạn xử lý: <b>${r.h}</b></div></div></div>
-   ${go ? `<div style="border-top:1px dashed var(--paper-line);padding-top:10px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:12.5px;color:var(--paper-muted)">Đồng hồ SLA khi phiếu đến Sales</div><div class="timer" id="scTimer">${r.h.startsWith('4') ? '04:00:00' : '08:00:00'}</div></div>` : '<div style="font-size:12.5px;color:var(--paper-muted)">Đại lý vẫn được trả lời đầy đủ theo kho chính sách; khi có thời điểm hoặc số lượng cụ thể, điểm được chấm lại.</div>'}`;
-  startTimer(go ? (r.h.startsWith('4') ? 4 : 8) * 3600 : 0);
-}
-let tmr = null;
-function startTimer(sec) { clearInterval(tmr); if (!sec) return; let s = sec; tmr = setInterval(() => { s -= 1; const el = $('#scTimer'); if (!el || s < 0) return clearInterval(tmr); const h = s / 3600 | 0, m = s % 3600 / 60 | 0, ss = s % 60; el.textContent = [h, m, ss].map(n => String(n).padStart(2, '0')).join(':'); }, 1000); }
-$('#scVal').addEventListener('input', drawScore);
-['#fPrice', '#fCredit', '#fCompl'].forEach(s => $(s).addEventListener('change', drawScore));
-$('#scUrg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; urg = +b.dataset.u; $$('#scUrg button').forEach(x => x.classList.toggle('on', x === b)); drawScore(); });
-
-
 /* ---------- value chain ---------- */
 const VC = [
  { k: 'Thượng nguồn', t: 'Hãng và nhập kho', s: 'Dell · HP · Cisco · Microsoft…', pain: ['Đối soát sell-out, Rebate, MDF với Hãng làm thủ công', 'Dự báo nhập hàng tách rời nhu cầu đại lý'], kpi: 'Ngày đối soát mỗi quý', mod: ['Ngoài phạm vi showcase lần này'] },
@@ -1036,283 +752,808 @@ function drawVC() {
 $('#vc').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { vcI = +b.dataset.i; drawVC(); } });
 drawVC();
 
-/* ---------- UC1 account ---------- */
-const COLORS = ['#2f7bf6', '#21b37f', '#e2852b', '#8b7cf6', '#d9468f', '#14a3b8'];
-const tyv = v => ty(v / 1e9);
-let accTier = 'Tất cả', accSel = 'Chuỗi Điện máy Sao Việt'; const made = new Set();
-function health(a) {
-  const use = a.cn / a.hm * 100, parts = [];
-  const g = a.g >= 10 ? 0 : a.g >= 0 ? -5 : a.g > -20 ? -15 : -35;
-  parts.push(['Tăng trưởng so cùng kỳ ' + String(a.g).replace('.', ',') + '%', g]);
-  const c = use > 90 ? -25 : use > 75 ? -10 : 0;
-  parts.push(['Công nợ ' + Math.round(use) + '% hạn mức', c]);
-  parts.push([a.cm.length + ' ngành chưa khai thác × 3', -3 * a.cm.length]);
-  const sc = Math.max(0, 100 + parts.reduce((s, p) => s + p[1], 0));
-  return { sc, parts, band: sc >= 80 ? ['Tốt', '#21b37f'] : sc >= 60 ? ['Theo dõi', '#f5a524'] : ['Rủi ro', '#ef4a5a'] };
-}
-function initials(n) { return n.split(' ').filter(w => w[0] && w[0] === w[0].toUpperCase()).slice(-2).map(w => w[0]).join(''); }
-function drawAccList() {
-  const tiers = ['Tất cả', 'Key Account', 'Gold', 'SME'];
-  $('#accFilter').innerHTML = tiers.map(t => `<button class="${t === accTier ? 'on' : ''}" data-t="${t}">${t}</button>`).join('');
-  const list = DATA.acc.filter(a => accTier === 'Tất cả' || a.t === accTier);
-  $('#accItems').innerHTML = list.map((a, i) => { const h = health(a); return `<button class="acc-item ${a.n === accSel ? 'on' : ''}" data-n="${a.n}"><span class="av" style="background:${COLORS[i % 6]}">${initials(a.n)}</span><span style="min-width:0;flex:1"><b>${a.n}</b><small>${a.t} · ${a.r}</small></span><span class="num" style="font-size:12px;font-weight:700;color:${h.band[1]}">${h.sc}</span></button>`; }).join('');
-}
-function drawAccDetail() {
-  const a = DATA.acc.find(x => x.n === accSel); if (!a) return;
-  const h = health(a), use = Math.round(a.cn / a.hm * 100), hc = a.h === 'Ổn định' ? 'green' : a.h === 'Cần theo dõi' ? 'amber' : 'red';
-  const C = 2 * Math.PI * 52;
-  $('#accDetail').innerHTML = `
-   <div class="acc-head"><h3>${a.n}</h3><span class="chip blue">${a.t}</span><span class="chip">${a.code}</span><span style="margin-left:auto;font-size:12px;color:var(--paper-muted)">${a.loai} · ${a.kv} · ${a.r}</span></div>
-   <div class="facts">
-     <div class="fact"><small>Doanh số 12 tháng (VND)</small><b>${tyv(a.ds)}</b></div>
-     <div class="fact"><small>Tăng trưởng so cùng kỳ</small><b style="color:${a.g < 0 ? '#b3263a' : '#11734f'}">${a.g > 0 ? '+' : ''}${String(a.g).replace('.', ',')}%</b></div>
-     <div class="fact"><small>Công nợ / hạn mức tín dụng</small><b>${tyv(a.cn)} / ${tyv(a.hm)}</b><div class="meter"><i style="background:${use > 90 ? 'var(--bad)' : use > 75 ? 'var(--amber)' : 'var(--ok)'}" data-w="${use}"></i></div></div>
-     <div class="fact"><small>Sức khoẻ Account (trường trên Base)</small><b><span class="chip ${hc}" style="font-size:13px">${a.h}</span></b></div>
-   </div>
-   <div class="health">
-     <div class="gauge"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#e4e8ef" stroke-width="12"/><circle id="gArc" cx="60" cy="60" r="52" fill="none" stroke="${h.band[1]}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}" style="transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)"/></svg><b>${h.sc}</b><small>${h.band[0]}</small></div>
-     <div class="why"><div style="border:0;font-weight:700"><span>AI chấm điểm sức khoẻ khách hàng</span><span class="sim">Mô phỏng · công thức đề xuất</span></div>
-       <div><span>Điểm khởi đầu</span><span class="m">100</span></div>
-       ${h.parts.map(p => `<div><span>${p[0]}</span><span class="m" style="color:${p[1] < 0 ? '#b3263a' : '#11734f'}">${p[1] === 0 ? '±0' : p[1]}</span></div>`).join('')}
-       <div style="color:var(--paper-muted);border:0">Tính từ trường dữ liệu có trên account. Khi triển khai, công thức đưa vào rule AI Copilot của danh bạ.</div></div>
-   </div>
-   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-     <div><div style="font-size:12px;font-weight:700;margin-bottom:6px">Ngành hàng đang mua</div><div class="chips">${a.dm.map(n => `<span class="chip blue">${n}</span>`).join('')}</div></div>
-     <div><div style="font-size:12px;font-weight:700;margin-bottom:6px">Ngành hàng chưa khai thác <span style="font-weight:500;color:var(--paper-muted)">· bấm để tạo cơ hội</span></div><div class="chips">${a.cm.map(n => made.has(a.n + '|' + n) ? `<span class="chip made">✓ ${n}</span>` : `<button class="chip gapc" data-k="${a.n}|${n}">+ ${n}</button>`).join('')}</div></div>
-   </div>`;
-  requestAnimationFrame(() => { $$('#accDetail .meter i').forEach(m => m.style.width = Math.min(100, m.dataset.w) + '%'); const g = $('#gArc'); if (g) g.style.strokeDashoffset = C * (1 - h.sc / 100); });
-}
-$('#accFilter').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; accTier = b.dataset.t; drawAccList(); });
-$('#accItems').addEventListener('click', e => { const b = e.target.closest('.acc-item'); if (!b) return; accSel = b.dataset.n; drawAccList(); drawAccDetail(); });
-$('#accDetail').addEventListener('click', e => {
-  const b = e.target.closest('.gapc'); if (!b) return;
-  made.add(b.dataset.k); const [acc, n] = b.dataset.k.split('|'); drawAccDetail();
-  const t = document.createElement('div'); t.className = 'toast';
-  t.innerHTML = `Mô phỏng: tạo deal <b>${acc} – Mở ngành ${n}</b> trong pipeline Phát triển Đại lý &amp; Bán chéo, giai đoạn Phát hiện cơ hội.`;
-  $('#accDetail').appendChild(t); setTimeout(() => t.remove(), 3600);
-});
 
-/* ---------- UC1 activities ---------- */
-const PLAN = [
- { t: 'Thẩm định kỳ chuỗi Sao Việt – review doanh số Q4 và công…', d: 'CN 18/10', src: 'Account' },
- { t: 'Hẹn chủ chuỗi giới thiệu Cisco SMB Partner Q4', d: 'Ngày mai', src: 'Deal mở ngành Cisco' },
- { t: 'Gửi báo giá trial Cisco SMB cho 5 cửa hàng', d: 'T3 20/10', src: 'Deal mở ngành Cisco' }];
-const ACT = {
- 'Việc cần làm': () => PLAN.map(p => ({ h: `☐ ${p.t}`, s: `${p.d} · ${p.src}` })),
- 'Ghi chú': () => [
-   { h: 'Nhật ký thị sát 10/10: thăm 3 cửa hàng Quận 1, Quận 7, Thủ Đức. Laptop Dell/HP bán tốt, khu trưng bày Smart Device đông khách. Kho mỗi cửa hàng vẫn dùng router dân dụng, wifi chập chờn giờ cao điểm.', s: 'Ghi chú · 02:31 15/10/2026 · Long Nguyễn · Account' },
-   { h: 'Công nợ hiện tại 18,78 tỷ / hạn mức 27 tỷ (≈70%). Kỳ hạn thanh toán Net 30, 6 tháng gần nhất thanh toán đúng hạn. Doanh số 12 tháng 276,4 tỷ, tăng 13,8% so cùng kỳ.', s: 'Ghi chú · 02:31 15/10/2026 · Long Nguyễn · Account' },
-   { h: 'AI phát hiện: Sao Việt mua Máy tính đều 12 tháng nhưng chưa phát sinh PO Thiết bị mạng. 34 cửa hàng đang dùng router dân dụng.', s: 'Ghi chú · 02:16 15/10/2026 · Deal mở ngành Cisco' },
-   { h: 'Anh Huy (CNTT) xác nhận 34 cửa hàng cần thay router; muốn chạy thử 5 cửa hàng trước khi triển khai toàn chuỗi. Chị Mai Anh (Kế toán) đề nghị giữ kỳ hạn Net 30 như ngành Máy tính.', s: 'Ghi chú · 02:31 15/10/2026 · Deal mở ngành Cisco' }],
- 'Cuộc gọi': () => [],
- 'Email': () => [],
- 'Cuộc họp': () => [],
- 'Báo giá': () => [{ h: '<span class="chip blue">QUOTE SFO-0001</span> Báo giá trial Cisco SMB cho 5 cửa hàng Sao Việt · <b class="num">₫204.500.000</b> · hết hạn 14/11/2026 · Published', s: 'Báo giá · 02:43 15/10/2026 · Long Nguyễn · Deal mở ngành Cisco' }],
- 'Đơn hàng': () => [],
- 'Fieldwork': () => [{ h: 'Nhật ký thị sát 10/10: thăm 3 cửa hàng Quận 1, Quận 7, Thủ Đức. Laptop Dell/HP bán tốt, khu trưng bày Smart Device đông khách…', s: 'Đang lưu dạng ghi chú · account có sẵn mục Công việc hiện trường để ghi check-in tại điểm bán' }]};
-const EMPTY = { 'Cuộc gọi': 'Chưa có cuộc gọi trên tenant demo. Ghi bằng nút Cuộc gọi trong dòng công việc.', 'Email': 'Chưa có email. Email hiện ở đây khi hộp thư được kết nối ở app Mail.', 'Cuộc họp': 'Chưa có cuộc họp nào được ghi.', 'Đơn hàng': 'Chưa có đơn hàng. Đơn vẫn đặt trên hệ thống PO; tab Đơn hàng có sẵn trên deal để hiển thị khi tích hợp.' };
-const added = {}; let actTab = 'Việc cần làm';
-function drawPlan() { $('#planList').innerHTML = PLAN.map(p => `<div class="task"><i></i><span>${p.t}</span><span style="font-size:11.5px;color:var(--paper-muted)">${p.d}</span></div>`).join(''); }
-function drawAct() {
-  const tabs = Object.keys(ACT);
-  $('#actTabs').innerHTML = tabs.map(t => `<button class="${t === actTab ? 'on' : ''}" data-t="${t}">${t}<span class="n">${ACT[t]().length + (added[t] || []).length}</span></button>`).join('');
-  const items = [...(added[actTab] || []), ...ACT[actTab]()];
-  $('#actList').innerHTML = items.length ? items.map((x, i) => `<div class="aitem" style="animation-delay:${i * 80}ms">${x.h}<small>${x.s}</small></div>`).join('') : `<div class="aitem empty">${EMPTY[actTab]}</div>`;
-}
-$('#actTabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; actTab = b.dataset.t; drawAct(); });
-$('#planAdd').onclick = () => {
-  const ty0 = $('#planType').value, tx = $('#planText').value.trim() || 'Hoạt động mới', due = $('#planDue').value;
-  PLAN.unshift({ t: tx, d: due, src: ty0 });
-  const key = ty0 === 'Việc cần làm' ? null : ty0;
-  if (key) (added[key] = added[key] || []).unshift({ h: `${tx}`, s: `${ty0} · lên lịch ${due} · vừa thêm` });
-  actTab = key || 'Việc cần làm'; drawPlan(); drawAct();
-};
-
-/* ---------- UC1 copilot ---------- */
-const COP_STEPS = ['Tra cứu thương vụ', 'Tra cứu công ty', 'Tra cứu liên hệ', 'Tra cứu hoạt động'];
-const COP_HTML = [
- '<div>Dưới đây là tóm tắt tình hình thương vụ và 3 việc cần thực hiện tiếp theo:</div>',
- '<div><b>1. Tóm tắt Deal</b><ul><li><b>Khách hàng:</b> Chuỗi Điện máy Sao Việt (khách hàng hiện hữu mua máy tính đều đặn trong 12 tháng, doanh số tích lũy lớn).</li><li><b>Đại diện liên hệ:</b> Anh Ngô Quốc Quân – Giám đốc ngành hàng.</li><li><b>Giá trị deal: 10,800,000,000 VND</b> (dự kiến 1.8 tỷ VND/tháng).</li><li><b>Bối cảnh:</b> 34 cửa hàng đang dùng router dân dụng; anh Huy (CNTT) đồng ý chạy thử tại 5 cửa hàng trước khi triển khai 34 điểm; báo giá trial Cisco SMB cho 5 cửa hàng đã được chuẩn bị; chị Mai Anh (Kế toán) yêu cầu kỳ hạn công nợ Net 30 tương tự ngành Máy tính.</li></ul></div>',
- '<div><b>2. Ba việc cần làm</b><ol><li><b>Phê duyệt chính sách công nợ Net 30 cho ngành hàng Cisco:</b> làm việc nội bộ với phòng Tài chính, dựa trên lịch sử thanh toán tốt 12 tháng qua của ngành Máy tính.</li><li><b>Chốt kế hoạch và tiêu chí đo lường (PoC/Trial) cho 5 cửa hàng:</b> phối hợp Pre-sales Cisco và anh Huy để thống nhất kịch bản kiểm thử, thời gian chạy thử và tiêu chí nghiệm thu trước khi chuyển sang PO chính thức cho 34 cửa hàng.</li><li><b>Gửi báo giá trial và sắp xếp buổi demo 3 bên (FPT Synnex – Cisco – Sao Việt):</b> gửi báo giá cho anh Quân và anh Huy, mời đại diện Cisco giới thiệu chính sách đối tác Q4.</li></ol></div>'];
-const COP_SUG = ['Soạn giúp tôi email gửi báo giá trial cho anh Quân?', 'Tạo task phê duyệt hạn mức Net 30 với phòng tài chính?', 'Chi tiết báo giá trial 5 cửa hàng gồm những hạng mục nào?'];
-let copRun = false;
-async function copilot() {
-  if (copRun) return; copRun = true;
-  const b = $('#copBody');
-  b.innerHTML = `<div class="ubub">Tóm tắt deal và 3 việc cần làm</div><div style="font-size:12px;font-weight:700">✦ Copilot <span style="color:var(--paper-muted);font-weight:500" id="copT">đang suy nghĩ…</span></div><div class="steps">${COP_STEPS.map(s => `<div><i></i>${s}</div>`).join('')}</div>`;
-  for (const s of $$('.steps div', b)) { await sleep(520); s.classList.add('ok'); }
-  $('#copT').textContent = 'Thought for 18s';
-  for (const h of COP_HTML) { await sleep(300); await typeHTML(b, h, 7); }
-  const sg = document.createElement('div'); sg.className = 'sugg'; sg.innerHTML = COP_SUG.map((s, i) => `<button style="animation-delay:${i * 120}ms">↳ ${s}</button>`).join(''); b.appendChild(sg); b.scrollTop = b.scrollHeight;
-  copRun = false;
-}
-$('#copGo').onclick = copilot;
-async function typeHTML(container, html, speed = 6) {
-  const wrap = document.createElement('div'); wrap.innerHTML = html; const node = wrap.firstElementChild || wrap;
-  const texts = []; (function walk(n) { n.childNodes.forEach(c => { if (c.nodeType === 3) { texts.push([c, c.textContent]); c.textContent = ''; } else walk(c); }); })(node);
-  container.appendChild(node);
-  if (RM) { texts.forEach(([n, t]) => n.textContent = t); return; }
-  for (const [n, t] of texts) for (let i = 0; i < t.length; i += 3) { n.textContent = t.slice(0, i + 3); container.scrollTop = container.scrollHeight; if (i % 9 === 0) await new Promise(r => setTimeout(r, speed)); }
-  container.scrollTop = container.scrollHeight;
-}
-
-/* ---------- UC1 automation ---------- */
-const RULES = [
- { id: 'r1', t: 'Account chuyển sang "Rủi ro sụt doanh số"', a: 'Giao Sales phụ trách gọi tìm nguyên nhân trong 2 ngày', f: a => a.h === 'Rủi ro sụt doanh số', why: a => `Tăng trưởng ${String(a.g).replace('.', ',')}% so cùng kỳ`, due: '2 ngày' },
- { id: 'r2', t: 'Công nợ vượt 90% hạn mức tín dụng', a: 'Nhắc Sales và Kế toán công nợ trước khi nhận đơn mới', f: a => a.cn / a.hm > .9, why: a => `Công nợ ${tyv(a.cn)} / ${tyv(a.hm)} (${Math.round(a.cn / a.hm * 100)}%)`, due: 'Hôm nay' },
- { id: 'r3', t: 'Key Account', a: 'Lên lịch thẩm định định kỳ: review doanh số và công nợ mỗi tháng', f: a => a.t === 'Key Account', why: a => `Doanh số 12 tháng ${tyv(a.ds)}`, due: 'Hàng tháng' },
- { id: 'r4', t: 'Gold còn từ 3 ngành chưa khai thác', a: 'Gợi ý Sales mở cơ hội bán chéo theo chương trình Hãng quý này', f: a => a.t === 'Gold' && a.cm.length >= 3, why: a => `Chưa mua: ${a.cm.slice(0, 3).join(', ')}${a.cm.length > 3 ? '…' : ''}`, due: '7 ngày' }];
-const ron = new Set(['r1']);
-function drawRules() {
-  $('#rules').innerHTML = RULES.map(r => `<label class="rule ${ron.has(r.id) ? 'on' : ''}"><input type="checkbox" data-r="${r.id}" ${ron.has(r.id) ? 'checked' : ''}><div><b>Khi: ${r.t}</b><span>Thì: ${r.a}</span></div></label>`).join('');
-  const rem = []; RULES.filter(r => ron.has(r.id)).forEach(r => DATA.acc.filter(r.f).forEach(a => rem.push({ a, r })));
-  $('#remN').textContent = rem.length + ' nhắc việc';
-  $('#remList').innerHTML = rem.length ? rem.map((x, i) => `<div class="rem" style="animation-delay:${i * 60}ms"><b>${x.a.n}</b><span class="chip ${x.r.due === 'Hôm nay' ? 'red' : 'amber'}">${x.r.due}</span><small>${x.r.a} · ${x.r.why(x.a)}</small></div>`).join('') : '<div class="note">Bật một kịch bản bên trái.</div>';
-}
-$('#rules').addEventListener('change', e => { const c = e.target.closest('input'); if (!c) return; c.checked ? ron.add(c.dataset.r) : ron.delete(c.dataset.r); drawRules(); });
-
-/* ---------- UC2 review ---------- */
-const CRIT = [
- ['Chủ đầu tư rõ ràng (Primary account)', true, 'Ban QLDA Chuyển đổi số tỉnh Đông Hải'],
- ['Có liên hệ chính', true, 'Đỗ Hoàng Phong · Giám đốc kinh doanh'],
- ['Có đơn vị SI triển khai', true, 'Thăng Long Tech'],
- ['Hãng đã bảo vệ dự án', true, 'Đã được bảo vệ'],
- ['Giá đặc biệt đã duyệt ở Báo giá & Hồ sơ thầu', false, 'Đang chờ duyệt'],
- ['Có người quyết định và quy trình phê duyệt', false, 'Trường đang trống'],
- ['Không có việc quá hạn', false, 'Tờ trình giá đặc biệt cho Dell quá hạn 1 ngày'],
- ['Trong ngưỡng SLA của giai đoạn', true, 'Đúng tiến độ · 0 trên 1 ngày']];
-let revRun = false;
-function drawCrit(n) { $('#critList').innerHTML = CRIT.map((c, i) => `<div class="crit-it ${i < n ? 'done ' + (c[1] ? 'pass' : 'fail') : ''}"><i>${i < n ? (c[1] ? '✓' : '!') : i + 1}</i><span>${c[0]}</span><small>${i < n ? c[2] : ''}</small></div>`).join(''); }
-async function review() {
-  if (revRun) return; revRun = true;
-  for (let i = 1; i <= CRIT.length; i++) { drawCrit(i); await sleep(380); }
-  const ok = CRIT.filter(c => c[1]).length;
-  $('#verdict').innerHTML = `<div style="font-size:12px;color:var(--paper-muted)">Kết quả review · deal Trung tâm IOC tỉnh giai đoạn 2</div>
-   <div style="display:flex;align-items:center;gap:16px"><div class="res-big" style="color:#c27a06">${ok}/${CRIT.length}</div><div><b style="font-size:17px">Chưa đủ điều kiện sang Đàm phán HĐ 3 bên</b><div style="font-size:12.5px;color:var(--paper-muted);margin-top:3px">3 tiêu chí chưa đạt, đều nằm ở khâu duyệt giá với Dell</div></div></div>
-   <div style="font-size:12px;font-weight:700">3 hành động đề xuất</div>
-   <ol><li><b>Gửi tờ trình giá đặc biệt cho Dell</b> · Long Nguyễn · hôm nay; nhờ Trưởng kênh đẩy duyệt như đã nêu trong Thảo luận.</li><li><b>Bổ sung người quyết định và quy trình phê duyệt</b> của Ban QLDA vào trường dữ liệu · Long Nguyễn · trước khi nộp hồ sơ.</li><li><b>Chốt phương án bảo lãnh dự thầu 2%</b> mà Thăng Long Tech đề nghị · Long Nguyễn cùng Tài chính · trong tuần.</li></ol>
-   <div class="sim" style="align-self:flex-start">Mô phỏng: tiêu chí lấy từ rule AI Copilot của pipeline, dữ liệu từ deal trên tenant</div>`;
-  revRun = false;
-}
-$('#revGo').onclick = review;
-
-/* ---------- UC3 channels ---------- */
-const CHN = [
- { c: 'Zalo OA', s: 'Đại lý nhắn trang Zalo', q: 0, out: 1, code: 'C4', res: 'Trả lời chiết khấu 4% + thưởng mở ngành 1% = 3.000.000đ, hỏi thời điểm nhập hàng. Chưa lập phiếu.' },
- { c: 'Facebook Messenger', s: 'Fanpage kênh đại lý', q: 3, out: 1, code: '—', res: 'Trả lời hạn đổi mới Xiaomi 15 ngày và hướng dẫn tạo phiếu RMA.' },
- { c: 'Website chat', s: 'Cổng thông tin đại lý', q: 2, out: 2, code: 'A1', res: 'Lập Phiếu chuyển Sales A1, hạn 4 giờ làm việc, gợi ý Sales kênh Miền Bắc và Miền Trung.' },
- { c: 'Email', s: 'Hộp thư kênh đại lý', q: 1, out: 2, code: 'B2', res: 'Lập Phiếu chuyển Sales B2 kèm đề nghị tăng hạn mức tạm thời, hạn 4 giờ làm việc.' }];
-let chBusy = false;
-$('#chanIn').innerHTML = CHN.map((c, i) => `<button data-i="${i}"><b>${c.c}</b><span>${c.s}</span></button>`).join('');
-$('#chanIn').addEventListener('click', async e => {
-  const b = e.target.closest('button'); if (!b || chBusy) return; chBusy = true;
-  const c = CHN[+b.dataset.i]; $$('#chanIn button').forEach(x => x.classList.toggle('on', x === b));
-  $('#out1').className = ''; $('#out2').className = '';
-  const steps = ['Nhận tin nhắn từ ' + c.c, 'Hiểu ý định bằng ngôn ngữ tự nhiên', 'Đối chiếu chính sách SFD-CS, tính bằng công cụ', 'Chấm điểm tín hiệu mua: ' + c.code, 'Kết quả'];
-  $('#brain').innerHTML = `<div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">Trợ lý Chăm sóc Đại lý SME</div><div class="q">${QA[c.q].q}</div>${steps.map((s, i) => `<div class="step"><i>${i + 1}</i>${s}</div>`).join('')}<div class="q" id="chRes" style="opacity:0"></div>`;
-  for (const s of $$('#brain .step')) { await sleep(420); s.classList.add('on'); }
-  const r = $('#chRes'); r.textContent = c.res; r.style.opacity = 1;
-  $('#out' + c.out).className = c.out === 2 ? 'on' : 'on2'; chBusy = false;
-});
-
-/* ---------- UC3 chatbot (nội dung theo ảnh chụp tenant) ---------- */
-const RECV = 'Sales kênh Miền Bắc và Miền Trung';
-const QA = [
- { l: 'Thưởng mở ngành mới', q: 'Cửa hàng em ở Quảng Ngãi chưa bán thiết bị mạng bao giờ, nếu nhập đơn đầu 60 triệu thì được thưởng gì?', ran: 'Tính chiết khấu 4% thiết bị mạng',
-   a: ['<div>Dạ đơn đầu 60 triệu ngành Thiết bị mạng của anh/chị được cộng dồn mấy khoản sau:</div>',
-       { table: [['Khoản', 'Căn cứ', 'Số tiền'], ['Chiết khấu trên hoá đơn 4%', 'SFD-CS-01', '60.000.000 × 4% = <b>2.400.000đ</b>'], ['Thưởng mở ngành hàng mới 1% (đơn đầu ≥ 50 triệu, tối đa 2 ngành/quý)', 'SFD-CS-01', '60.000.000 × 1% = <b>600.000đ</b>'], ['<b>Tổng</b>', '', '<b>3.000.000đ</b>']] },
-       '<div>Nếu là hàng Cisco, đơn từ 30 triệu còn được tặng 1 bộ phát Wifi văn phòng và 1 buổi đào tạo kỹ thuật miễn phí cho đại lý mới bán Cisco (SFD-CS-06), cộng được với chính sách trên. Ngoài ra đơn từ 20 triệu được miễn phí giao hàng, Quảng Ngãi giao trong 48–72 giờ (SFD-CS-03), và nếu tổng doanh số thanh toán cả quý đạt từ 300 triệu thì có thêm thưởng quý 0,5% trở lên, thưởng được cấn trừ công nợ trong 45 ngày sau khi kết thúc quý.</div>',
-       '<div>Anh/chị dự định lấy switch/wifi Cisco hay hãng khác, và cần hàng trong khoảng thời gian nào để em ước tính giúp đơn cụ thể?</div>'] },
- { l: 'Công nợ và hạn mức', q: 'Hạn mức của em 1 tỷ, đang nợ 700 triệu, cuối tháng cần nhập thêm 450 triệu hàng Tết thì làm sao?', ran: 'Ran 2 calculations',
-   a: ['<div>Dạ em tính giúp anh/chị: 700 triệu + 450 triệu = 1,15 tỷ, <b>vượt hạn mức 1 tỷ đúng 150 triệu</b>, nên đơn sẽ không qua được nếu giữ nguyên tình trạng hiện tại (SFD-CS-02 mục 5).</div>',
-       '<div><b>Hai hướng xử lý:</b><ol><li><b>Thanh toán bớt ít nhất 150 triệu</b> công nợ trước khi đặt đơn, nhanh và chắc nhất.</li><li><b>Xin tăng hạn mức tạm thời:</b> tối đa 30% × 1 tỷ = <b>300 triệu</b> (lên 1,3 tỷ), hiệu lực 30 ngày, điều kiện là 6 tháng gần nhất không có khoản quá hạn trên 15 ngày. Đề nghị gửi qua nhân viên kinh doanh, Trưởng kênh Đại lý và Kế toán công nợ duyệt trong 1 ngày làm việc (SFD-CS-02 mục 4).</li></ol></div>',
-       '<div>Em lưu ý thêm: kỳ hạn SME là Net 15 từ ngày xuất hoá đơn, quá hạn trên 15 ngày sẽ bị tạm khoá đơn mới. Em không xác nhận được việc tăng hạn mức, quyền này thuộc Trưởng kênh Đại lý và Kế toán công nợ. Em đã chuyển yêu cầu cho nhân viên kinh doanh khu vực, anh/chị sẽ được liên hệ trong 4 giờ làm việc.</div>',
-       { phieu: { s: 'B2', h: '4 giờ', rows: ['Đại lý: Cửa hàng của anh/chị Long Nguyễn, Quảng Ngãi, mã đại lý: chưa cung cấp', 'Nhu cầu: Nhập hàng Tết 450 triệu, cần cuối tháng 10/2026; kèm đề nghị tăng hạn mức tạm thời', 'Giá trị ước tính: 450.000.000đ; công nợ 700.000.000 + 450.000.000 − hạn mức 1.000.000.000 = vượt 150.000.000đ', 'Điểm: B2, đơn 100–500 triệu, cần trong vòng 30 ngày', 'Ngành hàng mới: Có thể có, Thiết bị mạng (đại lý chưa từng mua), cần xác nhận cơ cấu đơn', 'Việc Sales cần làm: 1) Lập đề nghị tăng hạn mức tạm thời 30% trình Trưởng kênh và Kế toán công nợ; 2) Kiểm tra lịch sử quá hạn 6 tháng gần nhất; 3) Chốt cơ cấu đơn hàng Tết và chương trình Hãng áp dụng được'] } }] },
- { l: 'Báo giá đơn lớn', q: 'Bên em cần báo giá 50 laptop Dell Vostro cho một trường học, giao trong tuần sau được không?', ran: 'Ran 2 calculations',
-   a: ['<div>Dạ đơn này lớn, em ước tính và lưu ý vài điểm quan trọng:</div>',
-       '<div><b>Giá trị ước tính:</b> 50 × 13,6 triệu = <b>680 triệu</b> (giá tham khảo chưa VAT, SFD-CS-04). Giá chính thức xem trên cổng đặt hàng PO.</div>',
-       '<div><b>Về chương trình:</b> Dell Back to School mở rộng đang chạy đến 30/11/2026, giảm thêm 3% cho Vostro/Inspiron với đơn từ 10 máy (SFD-CS-06), cộng được với chiết khấu máy tính 2% (680tr × 2% = 13,6 triệu). <b>Nhưng</b> đơn trường học thường được chào theo giá đặc biệt dự án, mà giá dự án thì không cộng chiết khấu chung và không cộng chương trình Hãng (SFD-CS-01 mục 4, SFD-CS-06). Sales sẽ chốt giúp anh/chị phương án nào có lợi hơn.</div>',
-       '<div><b>Hai rủi ro cần xử lý ngay:</b><ul><li><b>Hạn mức:</b> 700 triệu đang nợ + 680 triệu = 1,38 tỷ, vượt cả mức đã tăng tạm thời tối đa 1,3 tỷ (SFD-CS-02). Cần phương án thanh toán bớt hoặc tách đơn.</li><li><b>Giao tuần sau:</b> em không xác nhận được tồn kho và ngày giao; 50 máy cùng model cần Sales kiểm tra hàng thực tế trên hệ thống PO (SFD-CS-03 mục 5).</li></ul></div>',
-       '<div>Em đã chuyển yêu cầu cho nhân viên kinh doanh khu vực, anh/chị sẽ được liên hệ trong 4 giờ làm việc.</div>',
-       { phieu: { s: 'A1', h: '4 giờ', rows: ['Đại lý: Cửa hàng của anh/chị Long Nguyễn, Quảng Ngãi, mã đại lý: chưa cung cấp', 'Nhu cầu: Báo giá 50 Dell Vostro 14 cho khách trường học, giao trong tuần sau', 'Giá trị ước tính: 680.000.000đ = 50 × 13.600.000đ (SFD-CS-04, chưa VAT)', 'Điểm: A1, đơn trên 500 triệu và cần báo giá/giao hàng trong 7 ngày', 'Ngành hàng mới: Không (Máy tính)', 'Việc Sales cần làm: 1) Kiểm tra tồn kho 50 Vostro 14 và cam kết ngày giao về Quảng Ngãi; 2) So sánh giá dự án trường học với phương án chiết khấu + Dell BTS, ra báo giá; 3) Phối hợp Trưởng kênh và Kế toán công nợ xử lý vượt hạn mức 1,38 tỷ/1 tỷ (tách đơn hoặc thu nợ trước)'] } }] },
- { l: 'Bảo hành Xiaomi', q: 'Máy Xiaomi khách mua 10 ngày bị lỗi màn hình, em đổi mới được không?', ran: 'Tra cứu chính sách bảo hành',
-   a: ['<div>Dạ 10 ngày là <b>vẫn còn trong hạn đổi mới của Xiaomi, 15 ngày</b> tính từ ngày anh/chị bán cho người dùng cuối (SFD-CS-05 mục 1). Anh/chị còn khoảng 5 ngày nên làm hồ sơ ngay, vì Synnex FPT phản hồi phiếu RMA trong 3 ngày làm việc.</div>',
-       '<div><b>Cần chuẩn bị:</b><ul><li>Hoá đơn bán lẻ cho người dùng cuối (bắt buộc, để xác định mốc ngày)</li><li>Ảnh tem bảo hành còn nguyên, số serial, mô tả/ảnh lỗi màn hình</li><li>Tạo phiếu RMA trên cổng đặt hàng PO (SFD-CS-05 mục 3)</li></ul></div>',
-       '<div><b>Lưu ý:</b> máy sẽ không được đổi trả nếu có dấu hiệu rơi vỡ, vào nước, tự sửa chữa hoặc mất tem (mục 4). Em không kết luận được lỗi này thuộc diện nhà sản xuất hay không, việc đó do Trung tâm bảo hành ủy quyền của Hãng xác định (mục 5).</div>',
-       '<div>Anh/chị đã có hoá đơn bán lẻ của khách chưa, hay cần em hướng dẫn các bước tạo phiếu RMA trên cổng PO ạ?</div>'] },
- { l: 'Xin thêm chiết khấu', q: 'Anh chị cho em thêm 2 phần trăm chiết khấu riêng nhé, bên kia đang chào rẻ hơn', ran: 'Đối chiếu chính sách',
-   a: ['<div>Dạ em hiểu áp lực cạnh tranh, nhưng em xin nói thẳng: em không có quyền duyệt thêm 2% ngoài chính sách. Mọi mức khác SFD-CS-01 phải do <b>Trưởng kênh Đại lý phê duyệt bằng văn bản</b> (SFD-CS-01 mục 4), và giá đặc biệt dự án thuộc Sales kênh.</div>',
-       '<div>Trong khung chính sách hiện tại, đơn Vostro của anh/chị đã có thể cộng dồn: chiết khấu máy tính 2% + Dell Back to School giảm thêm 3% cho đơn từ 10 máy (SFD-CS-06) + thưởng doanh số quý 1% nếu tổng thanh toán quý đạt từ 1 tỷ, tức khoảng 6% tổng, chưa kể phần Sales có thể xin thêm theo giá dự án trường học.</div>',
-       '<div>Em đã chuyển yêu cầu cho nhân viên kinh doanh khu vực, anh/chị sẽ được liên hệ trong 4 giờ làm việc.</div>',
-       { phieu: { s: 'A1', h: '4 giờ', rows: ['Nhu cầu: Xin thêm 2% chiết khấu ngoài chính sách cho đơn 50 Dell Vostro 14 (khách trường học), lý do đối thủ chào giá thấp hơn', 'Giá trị ước tính: 680.000.000đ = 50 × 13.600.000đ (SFD-CS-04); 2% xin thêm ≈ 13.600.000đ', 'Điểm: A1, đơn trên 500 triệu, cần báo giá trong 7 ngày, kèm đề nghị giá đặc biệt', 'Việc Sales cần làm: 1) Thu thập thông tin giá đối thủ, trình Trưởng kênh Đại lý xin duyệt mức ngoài chính sách bằng văn bản; 2) So sánh phương án giá dự án Dell cho khối giáo dục với phương án chiết khấu + BTS; 3) Chốt tồn kho, ngày giao và phương án hạn mức trước khi phát hành báo giá'] } },
-       '<div>Anh/chị gửi em mức giá và cấu hình đối thủ đang chào để em bổ sung vào phiếu, giúp Sales có cơ sở đàm phán nhanh hơn nhé?</div>'] }];
-let chatBusy = false;
-function chatWelcome() {
-  $('#chatBody').innerHTML = `<div class="welcome"><div class="bot">SF</div><h4>Chào anh/chị, em là trợ lý chăm sóc đại lý Synnex FPT. Anh/chị cần hỏi về chính sách, công nợ, đặt hàng hay bảo hành ạ?</h4><p>Trả lời 24/7 · Chuyển nhân viên kinh doanh trong 4 giờ</p></div>`;
-  $('#ask').innerHTML = '<h6>Đại lý hỏi</h6>' + QA.map((x, i) => `<button data-i="${i}"><b>${x.l}</b>${x.q}</button>`).join('');
-}
-async function ask(i) {
-  if (chatBusy) return; chatBusy = true;
-  const x = QA[i], b = $('#chatBody'); $(`#ask button[data-i="${i}"]`).classList.add('done');
-  if ($('.welcome', b)) b.innerHTML = '';
-  const fake = $('#chatFake');
-  for (let k = 0; k < x.q.length; k += 2) { fake.textContent = x.q.slice(0, k + 2); if (!RM) await new Promise(r => setTimeout(r, 8)); }
-  await sleep(200); fake.textContent = 'Ask anything…';
-  const u = document.createElement('div'); u.className = 'ubub'; u.style.maxWidth = '78%'; u.textContent = x.q; b.appendChild(u);
-  const r = document.createElement('div'); r.className = 'ran'; r.innerHTML = `<i></i>${x.ran}`; b.appendChild(r); b.scrollTop = b.scrollHeight;
-  await sleep(1100); r.classList.add('ok');
-  for (const part of x.a) {
-    await sleep(220);
-    if (typeof part === 'string') await typeHTML(b, part, 6);
-    else if (part.table) {
-      const t = document.createElement('table'); t.innerHTML = part.table.map((row, k) => `<tr class="${k ? 'r' : ''}" style="animation-delay:${k * 260}ms">${row.map(c => k ? `<td>${c}</td>` : `<th>${c}</th>`).join('')}</tr>`).join(''); b.appendChild(t); b.scrollTop = b.scrollHeight; await sleep(part.table.length * 260);
-    } else if (part.phieu) {
-      const p = part.phieu, d = document.createElement('div'); d.className = 'phieu';
-      d.innerHTML = `<h5>PHIẾU CHUYỂN SALES</h5><span class="stamp">${p.s}<small>HẠN ${p.h.toUpperCase()}</small></span><ul>${p.rows.map(x => `<li>${x}</li>`).join('')}<li>Hạn xử lý: ${p.h} làm việc</li><li>Gợi ý người nhận: ${RECV}</li></ul>`;
-      b.appendChild(d); b.scrollTop = b.scrollHeight; await sleep(700);
-    }
+/* ---------- player: demo trên ảnh chụp thật ---------- */
+const FLOWS = {
+ "uc1": [
+  {
+   "img": 1,
+   "f": [
+    248,
+    173,
+    187,
+    72
+   ],
+   "c": [
+    62,
+    116,
+    162,
+    20
+   ],
+   "t": "Trang chủ Base Sales",
+   "d": "Long Nguyễn đang sở hữu 31 thương vụ trên 2 pipeline [FPT Synnex]: Phát triển Đại lý & Bán chéo và Dự án B2G & Enterprise.",
+   "act": "Bấm Công ty để mở danh bạ đại lý"
+  },
+  {
+   "img": 4,
+   "f": [
+    52,
+    148,
+    146,
+    86
+   ],
+   "c": [
+    240,
+    120,
+    175,
+    20
+   ],
+   "t": "Danh bạ Đại lý & Khách hàng",
+   "d": "25 bản ghi. Bộ lọc bên trái theo Phân hạng đại lý: Key Account, Gold, Silver, SME. Cột Giai đoạn cho biết account đang ở Đang chăm sóc hay Tiềm năng.",
+   "act": "Bấm Chuỗi Điện máy Sao Việt"
+  },
+  {
+   "img": 5,
+   "f": [
+    742,
+    80,
+    484,
+    182
+   ],
+   "t": "Kế hoạch hành động của account",
+   "d": "Công việc đang mở: \"Thẩm định kỳ chuỗi Sao Việt – review doanh số Q4 và công…\", hạn Sun, Oct 18. Việc cần làm cá nhân ở ngay bên dưới.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 5,
+   "f": [
+    742,
+    296,
+    484,
+    62
+   ],
+   "m": [
+    [
+     56,
+     77,
+     150,
+     234
+    ]
+   ],
+   "t": "Ghi mọi loại hoạt động",
+   "d": "Dòng công việc nhận Ghi chú, Email, Cuộc gọi, Cuộc họp, Log activity. Menu trái của account có thêm Công việc hiện trường cho fieldwork và Quy trình tự động.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 5,
+   "f": [
+    773,
+    404,
+    452,
+    76
+   ],
+   "t": "Nhật ký thị sát (fieldwork)",
+   "d": "\"Nhật ký thị sát 10/10: thăm 3 cửa hàng Quận 1, Quận 7, Thủ Đức. Laptop Dell/HP bán tốt, khu trưng bày Smart Device đông khách. Kho mỗi cửa hàng vẫn dùng router dân dụng, wifi chập chờn giờ cao điểm.\"",
+   "act": "Tiếp"
+  },
+  {
+   "img": 5,
+   "f": [
+    773,
+    492,
+    452,
+    70
+   ],
+   "m": [
+    [
+     322,
+     590,
+     98,
+     14
+    ]
+   ],
+   "t": "Công nợ và nhãn chăm sóc",
+   "d": "\"Công nợ hiện tại 18,78 tỷ / hạn mức 27 tỷ (≈70%). Kỳ hạn thanh toán Net 30, 6 tháng gần nhất thanh toán đúng hạn. Doanh số 12 tháng 276,4 tỷ, tăng 13,8% so cùng kỳ.\" Account gắn nhãn Chiến lược và Bán chéo.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 6,
+   "f": [
+    222,
+    143,
+    490,
+    386
+   ],
+   "m": [
+    [
+     226,
+     328,
+     484,
+     26
+    ],
+    [
+     226,
+     507,
+     484,
+     20
+    ]
+   ],
+   "t": "Trường dữ liệu 12/12",
+   "d": "Mã đại lý SFD-N0001, Key Account, Miền Nam. Ngành hàng đang mua: Máy tính, Smart Device, Linh kiện & Ngoại vi. Chưa khai thác: Thiết bị mạng, Phần mềm & Cloud, Giải pháp CNTT. Sức khoẻ Account: Ổn định.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 6,
+   "f": [
+    222,
+    543,
+    490,
+    350
+   ],
+   "t": "Tổng quan hoạt động",
+   "d": "Base tự đếm tương tác theo loại: 2 ghi chú, chưa có email, cuộc họp, cuộc gọi. Phân tích: giá trị vòng đời ước tính ₫276.427.000.000, 1 thương vụ đang mở, 3 liên hệ.",
+   "act": "Mở thương vụ bán chéo của Sao Việt"
+  },
+  {
+   "img": 7,
+   "f": [
+    455,
+    205,
+    515,
+    205
+   ],
+   "t": "Deal bán chéo: Mở ngành Thiết bị mạng Cisco",
+   "d": "₫10.800.000.000, giai đoạn Phát hiện cơ hội, xác suất 15%. Kế hoạch 2 công việc: \"Hẹn chủ chuỗi giới thiệu Cisco SMB Partner Q4\" (Ngày mai) và \"Gửi báo giá trial Cisco SMB cho 5 cửa hàng\" (Tue, Oct 20).",
+   "act": "Tiếp"
+  },
+  {
+   "img": 7,
+   "f": [
+    486,
+    553,
+    484,
+    256
+   ],
+   "m": [
+    [
+     455,
+     447,
+     515,
+     24
+    ]
+   ],
+   "t": "Báo giá ngay trong dòng công việc",
+   "d": "Báo giá SFO-0001 \"Báo giá trial Cisco SMB cho 5 cửa hàng Sao Việt\" ₫204.500.000, hết hạn Nov 14, 2026. Ghi chú gốc của cơ hội: \"AI phát hiện: Sao Việt mua Máy tính đều 12 tháng nhưng chưa phát sinh PO Thiết bị mạng.\"",
+   "act": "Tiếp"
+  },
+  {
+   "img": 7,
+   "f": [
+    56,
+    408,
+    152,
+    106
+   ],
+   "m": [
+    [
+     226,
+     505,
+     218,
+     226
+    ]
+   ],
+   "c": [
+    1043,
+    6,
+    22,
+    22
+   ],
+   "t": "Vận hành thông minh",
+   "d": "Deal có nhóm Quy trình tự động, Sequence, SLA, Luồng agent. Trường tuỳ chỉnh ghi nguồn cơ hội \"AI gợi ý từ dữ liệu PO\", sản lượng 1.800.000.000/tháng.",
+   "act": "Bấm biểu tượng Copilot để hỏi AI"
+  },
+  {
+   "img": 8,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    930,
+    470,
+    295,
+    160
+   ],
+   "t": "Copilot đang tra cứu",
+   "d": "Câu hỏi: \"Tóm tắt deal và 3 việc cần làm\". Copilot lần lượt tra thương vụ, 4 hoạt động gần nhất, 2 công việc, 0 việc cần làm, công ty Chuỗi Điện máy Sao Việt, liên hệ Ngô Quốc Quân.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 9,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    914,
+    470,
+    312,
+    320
+   ],
+   "t": "Copilot tóm tắt deal",
+   "d": "Sau 18 giây: khách hàng hiện hữu mua máy tính đều 12 tháng; 34 cửa hàng dùng router dân dụng; CNTT đồng ý chạy thử 5 cửa hàng; Kế toán đề nghị kỳ hạn Net 30.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 10,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    914,
+    400,
+    312,
+    370
+   ],
+   "t": "3 việc cần làm",
+   "d": "1) Phê duyệt chính sách công nợ Net 30 cho ngành hàng Cisco. 2) Chốt kế hoạch và tiêu chí PoC/Trial cho 5 cửa hàng. 3) Gửi báo giá trial và sắp xếp buổi demo 3 bên FPT Synnex – Cisco – Sao Việt. Kèm 3 câu hỏi gợi ý tiếp.",
+   "act": "Xem lại từ đầu"
   }
-  b.scrollTop = b.scrollHeight; chatBusy = false;
+ ],
+ "uc2": [
+  {
+   "img": 2,
+   "f": [
+    205,
+    40,
+    440,
+    20
+   ],
+   "t": "Pipeline Dự án B2G & Enterprise",
+   "d": "18 thương vụ · Tổng ₫193.900.000.000 · Dự kiến ₫91.545.000.000 (giá trị nhân xác suất từng giai đoạn).",
+   "act": "Tiếp"
+  },
+  {
+   "img": 2,
+   "f": [
+    205,
+    70,
+    1035,
+    32
+   ],
+   "t": "5 giai đoạn bán hàng B2G",
+   "d": "Lead dự án 3 deal · Khảo sát & Tư vấn 4 · Đăng ký Deal Hãng 3 · Báo giá & Hồ sơ thầu 5 · Đàm phán HĐ 3 bên 3. Mỗi cột hiện tổng giá trị và % của pipeline.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 2,
+   "f": [
+    52,
+    796,
+    142,
+    110
+   ],
+   "t": "SLA và kiểm soát dữ liệu",
+   "d": "Ngay trên pipeline: SLA theo giai đoạn, Trùng lặp, Lịch sử nhập & xuất, Sửa pipeline, Cài đặt.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 2,
+   "f": [
+    829,
+    320,
+    198,
+    103
+   ],
+   "c": [
+    829,
+    320,
+    198,
+    103
+   ],
+   "t": "Deal chủ lực trong cột Báo giá & Hồ sơ thầu",
+   "d": "Ban QLDA Chuyển đổi số tỉnh Đông Hải – Trung tâm IOC tỉnh giai đoạn 2, ₫42.000.000.000.",
+   "act": "Bấm thẻ deal IOC"
+  },
+  {
+   "img": 11,
+   "f": [
+    226,
+    136,
+    1000,
+    17
+   ],
+   "m": [
+    [
+     953,
+     85,
+     135,
+     17
+    ]
+   ],
+   "t": "Bán hàng theo giai đoạn",
+   "d": "Deal đã qua Lead dự án, Khảo sát & Tư vấn, Đăng ký Deal Hãng và đang ở Báo giá & Hồ sơ thầu (4/5), xác suất 60%. SLA giai đoạn: Đúng tiến độ · 0 trên 1 ngày.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    455,
+    205,
+    515,
+    205
+   ],
+   "m": [
+    [
+     856,
+     262,
+     66,
+     16
+    ]
+   ],
+   "t": "Kế hoạch làm việc của deal",
+   "d": "\"Gửi tờ trình giá đặc biệt cho Dell\" đang quá hạn 1 ngày. \"Hoàn thiện hồ sơ năng lực\" hạn hôm nay. Đã xong 0/2.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    226,
+    505,
+    218,
+    286
+   ],
+   "t": "Trường tuỳ chỉnh của deal B2G",
+   "d": "Hãng chính Dell · SI: Công ty CP Giải pháp Tích hợp Thăng Long Tech · Nguồn vốn Ngân sách nhà nước · Tình trạng bảo vệ dự án: Đã được bảo vệ · Giá đặc biệt: Đang chờ duyệt · Bước tiếp theo: Hoàn thiện hồ sơ năng lực và bảo lãnh dự thầu.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    980,
+    205,
+    246,
+    380
+   ],
+   "t": "Team dự án trên deal",
+   "d": "Chủ sở hữu và đội ngũ: chủ sở hữu, người cộng tác, người theo dõi. Thảo luận: \"@Trưởng kênh cần anh/chị hỗ trợ đẩy Dell duyệt giá tuần này.\"",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    455,
+    553,
+    515,
+    230
+   ],
+   "c": [
+    6,
+    286,
+    36,
+    34
+   ],
+   "t": "Dòng công việc của deal",
+   "d": "Họp với Trưởng ban QLDA về hồ sơ mời thầu và yêu cầu bảo hành 5 năm; Thăng Long Tech đề nghị hỗ trợ bảo lãnh dự thầu 2%; ghi chú deal chủ lực chờ Dell duyệt giá.",
+   "act": "Bấm Báo cáo"
+  },
+  {
+   "img": 12,
+   "f": [
+    213,
+    82,
+    1017,
+    238
+   ],
+   "t": "Dashboard Tổng quan kinh doanh",
+   "d": "18 Deals · 193,900,000,000 Deal value. Phễu dự án theo giai đoạn: Báo giá & Hồ sơ thầu 5, Khảo sát & Tư vấn 4, Lead dự án 3, Đăng ký Deal Hãng 3, Đàm phán HĐ 3 bên 3.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 12,
+   "f": [
+    213,
+    327,
+    1017,
+    240
+   ],
+   "c": [
+    991,
+    39,
+    77,
+    21
+   ],
+   "t": "Biểu đồ bán chéo",
+   "d": "Cơ hội bán chéo theo nhân viên và theo nguồn: AI gợi ý từ dữ liệu PO, Chương trình của Hãng, Sales phát hiện khi thăm, Đại lý hỏi qua Zalo OA.",
+   "act": "Bấm Phân tích AI"
+  },
+  {
+   "img": 13,
+   "f": [
+    1004,
+    70,
+    243,
+    630
+   ],
+   "t": "Phân tích AI đọc dashboard",
+   "d": "Bản dịch: \"Tổng giá trị pipeline đạt 193,9 tỷ trên 18 deal, một chủ sở hữu nắm 70,8 tỷ cơ hội bán chéo.\" · Một Sales duy nhất nắm 70,8 tỷ bán chéo · 18 deal trải 5 giai đoạn, giai đoạn lớn nhất 5 deal · 12 deal bán chéo thuộc 4 nguồn, lớn nhất 5, nhỏ nhất 1.",
+   "act": "Xem lại từ đầu"
+  }
+ ],
+ "uc3": [
+  {
+   "img": 14,
+   "f": [
+    178,
+    116,
+    817,
+    153
+   ],
+   "c": [
+    383,
+    238,
+    189,
+    21
+   ],
+   "t": "Folder Kinh doanh Kênh Đại lý",
+   "d": "2 trợ lý trên AgentHub: Trợ lý Chăm sóc Đại lý SME (trả lời đại lý 24/7, chuyển cơ hội lớn cho Sales trong 4 giờ) và Trợ lý Điều phối Chăm sóc SME (cho Trưởng kênh).",
+   "act": "Bấm Chat của Trợ lý Chăm sóc Đại lý SME"
+  },
+  {
+   "img": 15,
+   "f": [
+    688,
+    278,
+    374,
+    150
+   ],
+   "c": [
+    691,
+    401,
+    131,
+    20
+   ],
+   "t": "Màn hình chào",
+   "d": "\"Chào anh/chị, em là trợ lý chăm sóc đại lý Synnex FPT. Anh/chị cần hỏi về chính sách, công nợ, đặt hàng hay bảo hành ạ?\" · Trả lời 24/7 · Chuyển nhân viên kinh doanh trong 4 giờ.",
+   "act": "Bấm câu gợi ý Thưởng mở ngành mới"
+  },
+  {
+   "img": 16,
+   "f": [
+    586,
+    85,
+    572,
+    224
+   ],
+   "m": [
+    [
+     586,
+     161,
+     152,
+     14
+    ]
+   ],
+   "r": [
+    586,
+    186,
+    572,
+    123
+   ],
+   "t": "Câu 1 · Thưởng mở ngành mới",
+   "d": "Đơn đầu 60 triệu Thiết bị mạng: chiết khấu 4% = 2.400.000đ + thưởng mở ngành 1% = 600.000đ, tổng 3.000.000đ, căn cứ SFD-CS-01.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 16,
+   "f": [
+    586,
+    312,
+    572,
+    110
+   ],
+   "c": [
+    1191,
+    361,
+    224,
+    15
+   ],
+   "t": "Cộng dồn chương trình Hãng",
+   "d": "Hàng Cisco từ 30 triệu được tặng 1 bộ phát Wifi văn phòng và 1 buổi đào tạo (SFD-CS-06); từ 20 triệu miễn phí giao, Quảng Ngãi 48–72 giờ (SFD-CS-03). Trợ lý hỏi lại hãng và thời điểm nhập.",
+   "act": "Bấm câu 2 ở thanh bên phải"
+  },
+  {
+   "img": 17,
+   "f": [
+    586,
+    245,
+    572,
+    190
+   ],
+   "t": "Câu 2 · Hạn mức và công nợ",
+   "d": "Ran 2 calculations: 700 triệu + 450 triệu = 1,15 tỷ, vượt hạn mức 1 tỷ đúng 150 triệu (SFD-CS-02). Hai hướng: thanh toán bớt 150 triệu, hoặc xin tăng hạn mức tạm thời tối đa 30% = 300 triệu.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 17,
+   "f": [
+    586,
+    466,
+    572,
+    245
+   ],
+   "m": [
+    [
+     600,
+     578,
+     280,
+     15
+    ]
+   ],
+   "c": [
+    1191,
+    383,
+    224,
+    15
+   ],
+   "t": "Phiếu chuyển Sales B2",
+   "d": "Trợ lý không tự duyệt hạn mức, lập PHIẾU CHUYỂN SALES: nhu cầu nhập hàng Tết 450 triệu, điểm B2 (đơn 100–500 triệu, cần trong 30 ngày), hạn xử lý 4 giờ làm việc.",
+   "act": "Bấm câu 3"
+  },
+  {
+   "img": 18,
+   "f": [
+    586,
+    318,
+    572,
+    244
+   ],
+   "t": "Câu 3 · Báo giá 50 Dell Vostro",
+   "d": "50 × 13,6 triệu = 680 triệu (SFD-CS-04). Dell Back to School giảm thêm 3% đến 30/11. Cảnh báo 2 rủi ro: 700 triệu nợ + 680 triệu = 1,38 tỷ vượt cả mức tạm thời 1,3 tỷ; chưa xác nhận được tồn kho và ngày giao.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 19,
+   "f": [
+    586,
+    70,
+    572,
+    170
+   ],
+   "m": [
+    [
+     600,
+     88,
+     345,
+     15
+    ]
+   ],
+   "c": [
+    1191,
+    404,
+    224,
+    15
+   ],
+   "t": "Phiếu chuyển Sales A1",
+   "d": "Điểm A1: đơn trên 500 triệu và cần báo giá/giao hàng trong 7 ngày. Việc Sales cần làm: kiểm tra tồn kho 50 Vostro 14, so sánh giá dự án trường học, phối hợp xử lý vượt hạn mức. Hạn 4 giờ làm việc.",
+   "act": "Bấm câu 4"
+  },
+  {
+   "img": 20,
+   "f": [
+    586,
+    176,
+    572,
+    212
+   ],
+   "c": [
+    1191,
+    425,
+    224,
+    15
+   ],
+   "t": "Câu 4 · Bảo hành Xiaomi",
+   "d": "10 ngày vẫn trong hạn đổi mới 15 ngày của Xiaomi (SFD-CS-05). Hướng dẫn chuẩn bị hoá đơn bán lẻ, ảnh tem, serial và tạo phiếu RMA. Trợ lý không tự kết luận lỗi.",
+   "act": "Bấm câu 5"
+  },
+  {
+   "img": 21,
+   "f": [
+    586,
+    200,
+    572,
+    445
+   ],
+   "t": "Câu 5 · Xin thêm 2% chiết khấu",
+   "d": "Trợ lý từ chối lịch sự: mức ngoài SFD-CS-01 phải do Trưởng kênh Đại lý duyệt bằng văn bản. Gợi ý mức cộng dồn khoảng 6% trong chính sách và lập phiếu chuyển Sales A1 kèm đề nghị giá đặc biệt.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 22,
+   "f": [
+    790,
+    120,
+    570,
+    580
+   ],
+   "t": "Trợ lý Điều phối Chăm sóc SME",
+   "d": "Trưởng kênh yêu cầu: \"Soạn kịch bản chăm sóc 30 ngày cho nhóm đại lý SME chưa mua thiết bị mạng\". Trợ lý nêu mục tiêu, khung D0 = 20/10 → D30 = 19/11/2026, cơ sở chính sách và 2 combo 30 triệu / 51,2 triệu.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 23,
+   "f": [
+    790,
+    112,
+    568,
+    268
+   ],
+   "t": "Lịch chạm 8 mốc",
+   "d": "D0 Zalo OA · D3 Email · D7 Gọi điện · D12 Zalo OA · D18 Email · D22 Gọi điện · D26 Zalo OA · D30 Gọi điện + Email, mỗi mốc có người làm và mục tiêu. Bên dưới là nội dung tin D0 (286 ký tự).",
+   "act": "Tiếp"
+  },
+  {
+   "img": 24,
+   "f": [
+    790,
+    115,
+    568,
+    580
+   ],
+   "t": "Email D3 và khung gọi D7",
+   "d": "Email combo thiết bị mạng: 4% chiết khấu, tặng Wifi từ đơn 30 triệu, bảng combo A/B. Khung gọi D7 5–7 phút với 3 câu hỏi dò nhu cầu bắt buộc và cách xử lý từ chối.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 25,
+   "f": [
+    790,
+    130,
+    568,
+    520
+   ],
+   "t": "Chốt D26, D30 và lưu ý triển khai",
+   "d": "D26 Zalo nhắc hạn (265 ký tự); D30 gọi chốt một trong ba kết quả. Lưu ý: tin dưới 400 ký tự, không tự thêm chiết khấu, nội dung là bản nháp để Trưởng kênh duyệt.",
+   "act": "Xem lại từ đầu"
+  }
+ ],
+ "gov": [
+  {
+   "img": 26,
+   "f": [
+    334,
+    80,
+    384,
+    670
+   ],
+   "t": "Cấu hình Trợ lý Chăm sóc Đại lý SME",
+   "d": "Model claude-opus-5 · Instruction mô tả vai trò, việc được làm, giới hạn · Skill \"Chấm điểm tín hiệu mua\" · Tool group \"Tính toán chính sách\".",
+   "act": "Tiếp"
+  },
+  {
+   "img": 27,
+   "f": [
+    372,
+    372,
+    1006,
+    172
+   ],
+   "t": "Sơ đồ luồng của agent",
+   "d": "Chat input → Memory và skill Chấm điểm tín hiệu mua → Agent (claude-opus-5, Toolsets 1 attached, Skills 1 enabled, 3 starters) → Reply.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 28,
+   "f": [
+    348,
+    66,
+    592,
+    548
+   ],
+   "t": "Skill Chấm điểm tín hiệu mua và chuyển Sales",
+   "d": "Trục chữ theo giá trị đơn: A từ 500 triệu, B 100–500, C 30–100, D dưới 30. Trục số theo mức khẩn: 1 trong 7 ngày, 2 trong 30 ngày, 3 trong quý, 4 chưa có thời điểm. A1, A2, B1, B2: lập phiếu ngay, hạn 4 giờ.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 29,
+   "f": [
+    340,
+    84,
+    1064,
+    140
+   ],
+   "t": "Monitoring 30 ngày",
+   "d": "5 tin nhắn · 1 cuộc trò chuyện · 10,1k token · 17s phản hồi trung bình · 100% Helpful (5/5) · 100% Tool success (6 bước) · 76,2% prompt cache · 0% lỗi.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 30,
+   "f": [
+    325,
+    105,
+    1100,
+    250
+   ],
+   "t": "Logs từng câu hỏi",
+   "d": "5 câu hỏi của đại lý, model claude-opus-5, nguồn CONSOLE, cả 5 đều được đánh giá tốt, có token và độ trễ từng lượt.",
+   "act": "Xem lại từ đầu"
+  }
+ ]
+};
+const SIZE = { sales: [1247, 912], hub: [1426, 840], skill: [1288, 942] };
+const sz = n => n <= 13 ? SIZE.sales : n === 28 ? SIZE.skill : SIZE.hub;
+const PLAYERS = {};
+function makePlayer(root) {
+  const flow = FLOWS[root.dataset.flow];
+  root.innerHTML = `<div class="pv"><div class="cam"><img alt=""><div class="ov"></div></div></div>
+   <aside class="pn"><div class="cnt"><span class="k"></span><span class="src"></span></div><div class="pbar"><i></i></div><h3></h3><p></p>
+   <button class="actb"></button><div class="sdots">${flow.map((s, i) => `<button data-i="${i}" title="${s.t.replace(/"/g, '&quot;')}">${i + 1}</button>`).join('')}</div>
+   <div class="ctl"><button data-a="prev">◀ Trước</button><button data-a="auto">▶ Tự chạy</button><button data-a="next">Tiếp ▶</button></div></aside>`;
+  const pv = $('.pv', root), cam = $('.cam', root), img = $('img', cam), ov = $('.ov', cam);
+  let i = 0, curImg = 0, auto = null; const seen = new Set();
+  flow.forEach(s => { const im = new Image(); im.src = shotSrc(s.img); });
+  function view(s, instant) {
+    const [W, H] = sz(s.img), PW = pv.clientWidth, PH = pv.clientHeight;
+    const f = Math.min(PW / W, PH / H);
+    let [fx, fy, fw, fh] = s.f;
+    if (s.c) { const [cx, cy, cw, ch] = s.c, x2 = Math.max(fx + fw, cx + cw), y2 = Math.max(fy + fh, cy + ch + 40); fx = Math.min(fx, cx); fy = Math.min(fy, cy); fw = x2 - fx; fh = y2 - fy; }
+    let z = Math.min(PW / (fw * 1.2), PH / (fh * 1.25));
+    z = Math.max(f, Math.min(z, f * 2.3));
+    const clampT = (t, span, P) => span <= P ? (P - span) / 2 : Math.min(0, Math.max(P - span, t));
+    const tx = clampT(PW / 2 - (fx + fw / 2) * z, W * z, PW), ty = clampT(PH / 2 - (fy + fh / 2) * z, H * z, PH);
+    cam.style.width = W + 'px'; cam.style.height = H + 'px';
+    if (instant) { cam.classList.add('cut'); cam.style.transform = `translate(${(PW - W * f) / 2}px,${(PH - H * f) / 2}px) scale(${f})`; void cam.offsetWidth; cam.classList.remove('cut'); }
+    requestAnimationFrame(() => cam.style.transform = `translate(${tx}px,${ty}px) scale(${z})`);
+  }
+  const R = (r, cls, extra = '') => `<div class="${cls}" style="left:${r[0]}px;top:${r[1]}px;width:${r[2]}px;height:${r[3]}px;${extra}">`;
+  function draw(n) {
+    i = Math.max(0, Math.min(flow.length - 1, n)); const s = flow[i]; seen.add(i);
+    const swap = s.img !== curImg; curImg = s.img;
+    const paint = () => {
+      ov.innerHTML = R(s.f, 'spot') + '</div>' + (s.m || []).map(m => R(m, 'mark') + '</div>').join('') +
+        (s.r ? R(s.r, 'cover', '') + '</div>' : '') +
+        (s.c ? R(s.c, 'hot' + (s.c[1] > sz(s.img)[1] * .8 ? ' up' : '') + (s.c[0] > sz(s.img)[0] * .75 ? ' left' : '')) + `<span>${s.act}</span></div>` : '');
+      if (s.r) { const c = $('.cover', ov); requestAnimationFrame(() => requestAnimationFrame(() => { c.style.top = (s.r[1] + s.r[3]) + 'px'; c.style.height = '0px'; })); }
+      const h = $('.hot', ov); if (h) h.onclick = () => next();
+    };
+    if (swap) { img.classList.add('fade'); setTimeout(() => { img.src = shotSrc(s.img); img.onload = () => { img.classList.remove('fade'); }; view(s, true); paint(); }, RM ? 0 : 200); }
+    else { view(s, false); paint(); }
+    $('.k', root).textContent = `Bước ${i + 1} / ${flow.length}`;
+    $('.src', root).textContent = 'Ảnh ' + String(s.img).padStart(2, '0');
+    $('h3', root).textContent = s.t; $('p', root).textContent = s.d;
+    $('.actb', root).textContent = s.act + (s.c ? '' : ' →');
+    $$('.sdots button', root).forEach((b, j) => { b.classList.toggle('on', j === i); b.classList.toggle('seen', seen.has(j)); });
+    if (auto) tick();
+  }
+  function next() { if (i >= flow.length - 1) { draw(0); return true; } draw(i + 1); return true; }
+  function tick() { const bar = $('.pbar i', root); bar.classList.remove('run'); bar.style.width = '0'; void bar.offsetWidth; bar.style.transitionDuration = '6000ms'; bar.classList.add('run'); bar.style.width = '100%'; clearTimeout(auto); auto = setTimeout(() => { if (i >= flow.length - 1) return stop(); draw(i + 1); }, 6000); }
+  function stop() { clearTimeout(auto); auto = null; $('[data-a="auto"]', root).classList.remove('on'); $('[data-a="auto"]', root).textContent = '▶ Tự chạy'; const bar = $('.pbar i', root); bar.classList.remove('run'); bar.style.width = '0'; }
+  root.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.classList.contains('actb')) { stop(); next(); }
+    else if (b.dataset.i) { stop(); draw(+b.dataset.i); }
+    else if (b.dataset.a === 'prev') { stop(); draw(i - 1); }
+    else if (b.dataset.a === 'next') { stop(); next(); }
+    else if (b.dataset.a === 'auto') { if (auto) stop(); else { b.classList.add('on'); b.textContent = '❚❚ Dừng'; tick(); } }
+  });
+  addEventListener('resize', () => view(flow[i], true));
+  return { enter() { draw(i); }, step(d) { stop(); if (d > 0) { if (i >= flow.length - 1) return false; draw(i + 1); } else { if (i <= 0) return false; draw(i - 1); } return true; }, stop };
 }
-$('#ask').addEventListener('click', e => { const bt = e.target.closest('button'); if (bt) ask(+bt.dataset.i); });
-$('#chatReset').onclick = () => { if (!chatBusy) chatWelcome(); };
-
-/* ---------- UC3 timeline (theo ảnh 22–25) ---------- */
-const TL = [
- ['D0', 'Zalo OA', 'Hệ thống', 'Mở nhận biết: ngành mạng có 4% + quà Cisco', 'Chào anh/chị, Synnex FPT thông tin tới quý đại lý: ngành Thiết bị mạng quý 4 có chiết khấu 4% trên hoá đơn, cộng chương trình Cisco SMB Partner, đơn Cisco từ 30 triệu được tặng 1 bộ phát Wifi văn phòng, áp dụng đến 31/12/2026. Anh/chị nhắn lại số lượng cửa hàng đang cần, em gửi combo giá trong hôm nay.', '286 ký tự'],
- ['D3', 'Email', 'Sales khu vực', 'Gửi combo giá + bài toán lợi nhuận', '<b>Tiêu đề: Combo thiết bị mạng cho đại lý · 4% chiết khấu, tặng Wifi từ đơn 30 triệu</b><br>Kính gửi anh/chị [Tên đại lý], theo dữ liệu mua hàng, đại lý mình chưa khai thác ngành Thiết bị mạng. Đây là ngành có chiết khấu cao nhất trong nhóm phần cứng của quý này. Quyền lợi đến 31/12/2026: chiết khấu 4% (SFD-CS-01), đơn Cisco từ 30 triệu tặng 1 Wifi văn phòng, đơn đầu tiên của ngành từ 50 triệu thưởng thêm 1%. Kèm 2 combo gợi ý. Em xin 10 phút gọi vào [thứ, giờ] để chốt cấu hình phù hợp với khách của mình.', ''],
- ['D7', 'Gọi điện', 'Sales khu vực', 'Dò nhu cầu thật, chốt hẹn khảo sát', '<b>Khung gọi điện 5–7 phút.</b> Mở (20 giây): "Em [tên], phụ trách đại lý mình ở kênh Đại lý Synnex FPT. Em gọi tiếp email hôm [ngày] về ngành thiết bị mạng. Anh/chị cho em 5 phút được không ạ?" Ba câu bắt buộc hỏi: khách chủ yếu là hộ kinh doanh, văn phòng nhỏ hay trường học; khi khách hỏi lắp mạng cho văn phòng 10–20 máy thì đang lấy hàng ở đâu; mỗi tháng có bao nhiêu khách phải từ chối vì không có hàng mạng.', ''],
- ['D12', 'Zalo OA', 'Sales khu vực', 'Gỡ rào cản "chưa biết lắp đặt", mời đào tạo', null, ''],
- ['D18', 'Email', 'Sales khu vực', 'Case bán kèm: khách mua máy tính → bán switch/Wifi', null, ''],
- ['D22', 'Gọi điện', 'Sales khu vực', 'Chốt đơn thử, xử lý từ chối', null, ''],
- ['D26', 'Zalo OA', 'Sales khu vực', 'Nhắc hạn: còn hàng, còn chương trình', 'Anh/chị ơi, chương trình Cisco SMB Partner quý 4 kết thúc ngày 31/12/2026, nhưng hàng switch thường căng vào cuối quý. Nếu mình chốt đơn trong tuần này, đơn từ 20 triệu được miễn phí giao, nội thành nhận trong 24 giờ. Anh/chị xác nhận giúp em cấu hình để em giữ hàng nhé.', '265 ký tự'],
- ['D30', 'Gọi điện + Email', 'Sales khu vực', 'Chốt hoặc phân loại lại để nuôi quý sau', '<b>Gọi 3 phút, chốt một trong ba kết quả, không để trạng thái lửng:</b><br>· Đã đặt đơn → chuyển sang theo dõi giao hàng, nhắc mốc Net 15 và hẹn khảo sát bán ra sau 2 tuần.<br>· Quan tâm nhưng chưa chốt → hẹn mốc cụ thể trong tháng 12, giữ trong danh sách nuôi, lặp lại rút gọn D18 + D26.<br>· Không có nhu cầu ngành mạng → ghi lý do, chuyển sang kịch bản ngành khác (Phần mềm và Cloud có chiết khấu 5% theo SFD-CS-01).', '']];
-let tlI = 0, tlAuto = null;
-function drawTL() {
-  $('#tl').innerHTML = '<div class="fill" id="tlFill"></div>' + TL.map((t, i) => `<button class="${i <= tlI ? 'on' : ''}" data-i="${i}"><i>${t[0]}</i><span>${t[1]}</span></button>`).join('');
-  requestAnimationFrame(() => $('#tlFill').style.width = `calc(${tlI / (TL.length - 1)} * (100% - 44px))`);
-  const t = TL[tlI], cc = t[1].startsWith('Zalo') ? 'blue' : t[1].startsWith('Email') ? 'violet' : 'green';
-  $('#tlMsg').innerHTML = `<div class="who"><span class="chip ${cc}">${t[0]} · ${t[1]}</span><span>Người làm: ${t[2]}</span></div><div style="font-size:12.5px"><b>Mục tiêu:</b> ${t[3]}</div>` +
-    (t[4] ? `<div class="bubble">${t[4]}</div>${t[5] ? `<div style="font-size:11.5px;color:var(--paper-muted)">${t[5]}</div>` : ''}` : `<div class="bubble" style="background:#f5f7fb;color:var(--paper-muted)">Nội dung chi tiết của mốc này nằm trong cuộc trò chuyện với trợ lý; slide chỉ trích mục tiêu. Bấm "Xem màn hình thật" để xem bản đầy đủ.</div>`);
-}
-$('#tl').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; clearInterval(tlAuto); tlI = +b.dataset.i; drawTL(); });
+function shotSrc(n) { return 'screens/' + SHOTS[n - 1][0] + '.jpg'; }
+$$('.player').forEach(p => PLAYERS[p.closest('.slide').id] = makePlayer(p));
 
 /* ---------- per-slide enter ---------- */
-const ENTER = {
-  a1: () => { drawAccList(); drawAccDetail(); },
-  a2: first => { if (first) { drawPlan(); } drawAct(); },
-  a4: () => drawRules(),
-  b1: first => { if (first) kbInit(); drawKB(true); },
-  b2: () => { const b = $('#slaBar'); b.style.width = '0'; setTimeout(() => { b.style.width = '4%'; }, RM ? 0 : 400); },
-  b3: first => { if (first) drawCrit(0); },
-  b4: () => { drawCharts(); $('#aiPanel').classList.remove('open'); setTimeout(aiPanel, RM ? 0 : 1600); },
-  c2: first => { if (first) chatWelcome(); },
-  c3: () => drawScore(),
-  c4: () => { tlI = 0; drawTL(); clearInterval(tlAuto); if (!RM) tlAuto = setInterval(() => { if (tlI >= TL.length - 1) return clearInterval(tlAuto); tlI++; drawTL(); }, 2600); },
-};
+const ENTER = {};
+Object.keys(PLAYERS).forEach(id => ENTER[id] = () => { Object.values(PLAYERS).forEach(p => p.stop()); PLAYERS[id].enter(); });
 let start = 0;
 const hsh = location.hash.slice(1), hi = slides.findIndex(s => s.id === hsh);
-if (hi >= 0) start = hi; else { try { start = +localStorage.getItem('sfpt-slide2') || 0; } catch (e) {} }
+if (hi >= 0) start = hi; else { try { start = +localStorage.getItem('sfpt-slide3') || 0; } catch (e) {} }
 slides[0].classList.add('active'); cur = 0; go(start || 0);
 
 </script>

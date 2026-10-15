@@ -1,0 +1,732 @@
+{
+ "uc1": [
+  {
+   "img": 1,
+   "f": [
+    248,
+    173,
+    187,
+    72
+   ],
+   "c": [
+    62,
+    116,
+    162,
+    20
+   ],
+   "t": "Trang chủ Base Sales",
+   "d": "Long Nguyễn đang sở hữu 31 thương vụ trên 2 pipeline [FPT Synnex]: Phát triển Đại lý & Bán chéo và Dự án B2G & Enterprise.",
+   "act": "Bấm Công ty để mở danh bạ đại lý"
+  },
+  {
+   "img": 4,
+   "f": [
+    52,
+    148,
+    146,
+    86
+   ],
+   "c": [
+    240,
+    120,
+    175,
+    20
+   ],
+   "t": "Danh bạ Đại lý & Khách hàng",
+   "d": "25 bản ghi. Bộ lọc bên trái theo Phân hạng đại lý: Key Account, Gold, Silver, SME. Cột Giai đoạn cho biết account đang ở Đang chăm sóc hay Tiềm năng.",
+   "act": "Bấm Chuỗi Điện máy Sao Việt"
+  },
+  {
+   "img": 5,
+   "f": [
+    742,
+    80,
+    484,
+    182
+   ],
+   "t": "Kế hoạch hành động của account",
+   "d": "Công việc đang mở: \"Thẩm định kỳ chuỗi Sao Việt – review doanh số Q4 và công…\", hạn Sun, Oct 18. Việc cần làm cá nhân ở ngay bên dưới.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 5,
+   "f": [
+    742,
+    296,
+    484,
+    62
+   ],
+   "m": [
+    [
+     56,
+     77,
+     150,
+     234
+    ]
+   ],
+   "t": "Ghi mọi loại hoạt động",
+   "d": "Dòng công việc nhận Ghi chú, Email, Cuộc gọi, Cuộc họp, Log activity. Menu trái của account có thêm Công việc hiện trường cho fieldwork và Quy trình tự động.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 5,
+   "f": [
+    773,
+    404,
+    452,
+    76
+   ],
+   "t": "Nhật ký thị sát (fieldwork)",
+   "d": "\"Nhật ký thị sát 10/10: thăm 3 cửa hàng Quận 1, Quận 7, Thủ Đức. Laptop Dell/HP bán tốt, khu trưng bày Smart Device đông khách. Kho mỗi cửa hàng vẫn dùng router dân dụng, wifi chập chờn giờ cao điểm.\"",
+   "act": "Tiếp"
+  },
+  {
+   "img": 5,
+   "f": [
+    773,
+    492,
+    452,
+    70
+   ],
+   "m": [
+    [
+     322,
+     590,
+     98,
+     14
+    ]
+   ],
+   "t": "Công nợ và nhãn chăm sóc",
+   "d": "\"Công nợ hiện tại 18,78 tỷ / hạn mức 27 tỷ (≈70%). Kỳ hạn thanh toán Net 30, 6 tháng gần nhất thanh toán đúng hạn. Doanh số 12 tháng 276,4 tỷ, tăng 13,8% so cùng kỳ.\" Account gắn nhãn Chiến lược và Bán chéo.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 6,
+   "f": [
+    222,
+    143,
+    490,
+    386
+   ],
+   "m": [
+    [
+     226,
+     328,
+     484,
+     26
+    ],
+    [
+     226,
+     507,
+     484,
+     20
+    ]
+   ],
+   "t": "Trường dữ liệu 12/12",
+   "d": "Mã đại lý SFD-N0001, Key Account, Miền Nam. Ngành hàng đang mua: Máy tính, Smart Device, Linh kiện & Ngoại vi. Chưa khai thác: Thiết bị mạng, Phần mềm & Cloud, Giải pháp CNTT. Sức khoẻ Account: Ổn định.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 6,
+   "f": [
+    222,
+    543,
+    490,
+    350
+   ],
+   "t": "Tổng quan hoạt động",
+   "d": "Base tự đếm tương tác theo loại: 2 ghi chú, chưa có email, cuộc họp, cuộc gọi. Phân tích: giá trị vòng đời ước tính ₫276.427.000.000, 1 thương vụ đang mở, 3 liên hệ.",
+   "act": "Mở thương vụ bán chéo của Sao Việt"
+  },
+  {
+   "img": 7,
+   "f": [
+    455,
+    205,
+    515,
+    205
+   ],
+   "t": "Deal bán chéo: Mở ngành Thiết bị mạng Cisco",
+   "d": "₫10.800.000.000, giai đoạn Phát hiện cơ hội, xác suất 15%. Kế hoạch 2 công việc: \"Hẹn chủ chuỗi giới thiệu Cisco SMB Partner Q4\" (Ngày mai) và \"Gửi báo giá trial Cisco SMB cho 5 cửa hàng\" (Tue, Oct 20).",
+   "act": "Tiếp"
+  },
+  {
+   "img": 7,
+   "f": [
+    486,
+    553,
+    484,
+    256
+   ],
+   "m": [
+    [
+     455,
+     447,
+     515,
+     24
+    ]
+   ],
+   "t": "Báo giá ngay trong dòng công việc",
+   "d": "Báo giá SFO-0001 \"Báo giá trial Cisco SMB cho 5 cửa hàng Sao Việt\" ₫204.500.000, hết hạn Nov 14, 2026. Ghi chú gốc của cơ hội: \"AI phát hiện: Sao Việt mua Máy tính đều 12 tháng nhưng chưa phát sinh PO Thiết bị mạng.\"",
+   "act": "Tiếp"
+  },
+  {
+   "img": 7,
+   "f": [
+    56,
+    408,
+    152,
+    106
+   ],
+   "m": [
+    [
+     226,
+     505,
+     218,
+     226
+    ]
+   ],
+   "c": [
+    1043,
+    6,
+    22,
+    22
+   ],
+   "t": "Vận hành thông minh",
+   "d": "Deal có nhóm Quy trình tự động, Sequence, SLA, Luồng agent. Trường tuỳ chỉnh ghi nguồn cơ hội \"AI gợi ý từ dữ liệu PO\", sản lượng 1.800.000.000/tháng.",
+   "act": "Bấm biểu tượng Copilot để hỏi AI"
+  },
+  {
+   "img": 8,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    930,
+    470,
+    295,
+    160
+   ],
+   "t": "Copilot đang tra cứu",
+   "d": "Câu hỏi: \"Tóm tắt deal và 3 việc cần làm\". Copilot lần lượt tra thương vụ, 4 hoạt động gần nhất, 2 công việc, 0 việc cần làm, công ty Chuỗi Điện máy Sao Việt, liên hệ Ngô Quốc Quân.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 9,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    914,
+    470,
+    312,
+    320
+   ],
+   "t": "Copilot tóm tắt deal",
+   "d": "Sau 18 giây: khách hàng hiện hữu mua máy tính đều 12 tháng; 34 cửa hàng dùng router dân dụng; CNTT đồng ý chạy thử 5 cửa hàng; Kế toán đề nghị kỳ hạn Net 30.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 10,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    914,
+    400,
+    312,
+    370
+   ],
+   "t": "3 việc cần làm",
+   "d": "1) Phê duyệt chính sách công nợ Net 30 cho ngành hàng Cisco. 2) Chốt kế hoạch và tiêu chí PoC/Trial cho 5 cửa hàng. 3) Gửi báo giá trial và sắp xếp buổi demo 3 bên FPT Synnex – Cisco – Sao Việt. Kèm 3 câu hỏi gợi ý tiếp.",
+   "act": "Xem lại từ đầu"
+  }
+ ],
+ "uc2": [
+  {
+   "img": 2,
+   "f": [
+    205,
+    40,
+    440,
+    20
+   ],
+   "t": "Pipeline Dự án B2G & Enterprise",
+   "d": "18 thương vụ · Tổng ₫193.900.000.000 · Dự kiến ₫91.545.000.000 (giá trị nhân xác suất từng giai đoạn).",
+   "act": "Tiếp"
+  },
+  {
+   "img": 2,
+   "f": [
+    205,
+    70,
+    1035,
+    32
+   ],
+   "t": "5 giai đoạn bán hàng B2G",
+   "d": "Lead dự án 3 deal · Khảo sát & Tư vấn 4 · Đăng ký Deal Hãng 3 · Báo giá & Hồ sơ thầu 5 · Đàm phán HĐ 3 bên 3. Mỗi cột hiện tổng giá trị và % của pipeline.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 2,
+   "f": [
+    52,
+    796,
+    142,
+    110
+   ],
+   "t": "SLA và kiểm soát dữ liệu",
+   "d": "Ngay trên pipeline: SLA theo giai đoạn, Trùng lặp, Lịch sử nhập & xuất, Sửa pipeline, Cài đặt.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 2,
+   "f": [
+    829,
+    320,
+    198,
+    103
+   ],
+   "c": [
+    829,
+    320,
+    198,
+    103
+   ],
+   "t": "Deal chủ lực trong cột Báo giá & Hồ sơ thầu",
+   "d": "Ban QLDA Chuyển đổi số tỉnh Đông Hải – Trung tâm IOC tỉnh giai đoạn 2, ₫42.000.000.000.",
+   "act": "Bấm thẻ deal IOC"
+  },
+  {
+   "img": 11,
+   "f": [
+    226,
+    136,
+    1000,
+    17
+   ],
+   "m": [
+    [
+     953,
+     85,
+     135,
+     17
+    ]
+   ],
+   "t": "Bán hàng theo giai đoạn",
+   "d": "Deal đã qua Lead dự án, Khảo sát & Tư vấn, Đăng ký Deal Hãng và đang ở Báo giá & Hồ sơ thầu (4/5), xác suất 60%. SLA giai đoạn: Đúng tiến độ · 0 trên 1 ngày.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    455,
+    205,
+    515,
+    205
+   ],
+   "m": [
+    [
+     856,
+     262,
+     66,
+     16
+    ]
+   ],
+   "t": "Kế hoạch làm việc của deal",
+   "d": "\"Gửi tờ trình giá đặc biệt cho Dell\" đang quá hạn 1 ngày. \"Hoàn thiện hồ sơ năng lực\" hạn hôm nay. Đã xong 0/2.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    226,
+    505,
+    218,
+    286
+   ],
+   "t": "Trường tuỳ chỉnh của deal B2G",
+   "d": "Hãng chính Dell · SI: Công ty CP Giải pháp Tích hợp Thăng Long Tech · Nguồn vốn Ngân sách nhà nước · Tình trạng bảo vệ dự án: Đã được bảo vệ · Giá đặc biệt: Đang chờ duyệt · Bước tiếp theo: Hoàn thiện hồ sơ năng lực và bảo lãnh dự thầu.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    980,
+    205,
+    246,
+    380
+   ],
+   "t": "Team dự án trên deal",
+   "d": "Chủ sở hữu và đội ngũ: chủ sở hữu, người cộng tác, người theo dõi. Thảo luận: \"@Trưởng kênh cần anh/chị hỗ trợ đẩy Dell duyệt giá tuần này.\"",
+   "act": "Tiếp"
+  },
+  {
+   "img": 11,
+   "f": [
+    455,
+    553,
+    515,
+    230
+   ],
+   "c": [
+    6,
+    286,
+    36,
+    34
+   ],
+   "t": "Dòng công việc của deal",
+   "d": "Họp với Trưởng ban QLDA về hồ sơ mời thầu và yêu cầu bảo hành 5 năm; Thăng Long Tech đề nghị hỗ trợ bảo lãnh dự thầu 2%; ghi chú deal chủ lực chờ Dell duyệt giá.",
+   "act": "Bấm Báo cáo"
+  },
+  {
+   "img": 12,
+   "f": [
+    213,
+    82,
+    1017,
+    238
+   ],
+   "t": "Dashboard Tổng quan kinh doanh",
+   "d": "18 Deals · 193,900,000,000 Deal value. Phễu dự án theo giai đoạn: Báo giá & Hồ sơ thầu 5, Khảo sát & Tư vấn 4, Lead dự án 3, Đăng ký Deal Hãng 3, Đàm phán HĐ 3 bên 3.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 12,
+   "f": [
+    213,
+    327,
+    1017,
+    240
+   ],
+   "c": [
+    991,
+    39,
+    77,
+    21
+   ],
+   "t": "Biểu đồ bán chéo",
+   "d": "Cơ hội bán chéo theo nhân viên và theo nguồn: AI gợi ý từ dữ liệu PO, Chương trình của Hãng, Sales phát hiện khi thăm, Đại lý hỏi qua Zalo OA.",
+   "act": "Bấm Phân tích AI"
+  },
+  {
+   "img": 13,
+   "f": [
+    1004,
+    70,
+    243,
+    630
+   ],
+   "t": "Phân tích AI đọc dashboard",
+   "d": "Bản dịch: \"Tổng giá trị pipeline đạt 193,9 tỷ trên 18 deal, một chủ sở hữu nắm 70,8 tỷ cơ hội bán chéo.\" · Một Sales duy nhất nắm 70,8 tỷ bán chéo · 18 deal trải 5 giai đoạn, giai đoạn lớn nhất 5 deal · 12 deal bán chéo thuộc 4 nguồn, lớn nhất 5, nhỏ nhất 1.",
+   "act": "Xem lại từ đầu"
+  }
+ ],
+ "uc3": [
+  {
+   "img": 14,
+   "f": [
+    178,
+    116,
+    817,
+    153
+   ],
+   "c": [
+    383,
+    238,
+    189,
+    21
+   ],
+   "t": "Folder Kinh doanh Kênh Đại lý",
+   "d": "2 trợ lý trên AgentHub: Trợ lý Chăm sóc Đại lý SME (trả lời đại lý 24/7, chuyển cơ hội lớn cho Sales trong 4 giờ) và Trợ lý Điều phối Chăm sóc SME (cho Trưởng kênh).",
+   "act": "Bấm Chat của Trợ lý Chăm sóc Đại lý SME"
+  },
+  {
+   "img": 15,
+   "f": [
+    688,
+    278,
+    374,
+    150
+   ],
+   "c": [
+    691,
+    401,
+    131,
+    20
+   ],
+   "t": "Màn hình chào",
+   "d": "\"Chào anh/chị, em là trợ lý chăm sóc đại lý Synnex FPT. Anh/chị cần hỏi về chính sách, công nợ, đặt hàng hay bảo hành ạ?\" · Trả lời 24/7 · Chuyển nhân viên kinh doanh trong 4 giờ.",
+   "act": "Bấm câu gợi ý Thưởng mở ngành mới"
+  },
+  {
+   "img": 16,
+   "f": [
+    586,
+    85,
+    572,
+    224
+   ],
+   "m": [
+    [
+     586,
+     161,
+     152,
+     14
+    ]
+   ],
+   "r": [
+    586,
+    186,
+    572,
+    123
+   ],
+   "t": "Câu 1 · Thưởng mở ngành mới",
+   "d": "Đơn đầu 60 triệu Thiết bị mạng: chiết khấu 4% = 2.400.000đ + thưởng mở ngành 1% = 600.000đ, tổng 3.000.000đ, căn cứ SFD-CS-01.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 16,
+   "f": [
+    586,
+    312,
+    572,
+    110
+   ],
+   "c": [
+    1191,
+    361,
+    224,
+    15
+   ],
+   "t": "Cộng dồn chương trình Hãng",
+   "d": "Hàng Cisco từ 30 triệu được tặng 1 bộ phát Wifi văn phòng và 1 buổi đào tạo (SFD-CS-06); từ 20 triệu miễn phí giao, Quảng Ngãi 48–72 giờ (SFD-CS-03). Trợ lý hỏi lại hãng và thời điểm nhập.",
+   "act": "Bấm câu 2 ở thanh bên phải"
+  },
+  {
+   "img": 17,
+   "f": [
+    586,
+    245,
+    572,
+    190
+   ],
+   "t": "Câu 2 · Hạn mức và công nợ",
+   "d": "Ran 2 calculations: 700 triệu + 450 triệu = 1,15 tỷ, vượt hạn mức 1 tỷ đúng 150 triệu (SFD-CS-02). Hai hướng: thanh toán bớt 150 triệu, hoặc xin tăng hạn mức tạm thời tối đa 30% = 300 triệu.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 17,
+   "f": [
+    586,
+    466,
+    572,
+    245
+   ],
+   "m": [
+    [
+     600,
+     578,
+     280,
+     15
+    ]
+   ],
+   "c": [
+    1191,
+    383,
+    224,
+    15
+   ],
+   "t": "Phiếu chuyển Sales B2",
+   "d": "Trợ lý không tự duyệt hạn mức, lập PHIẾU CHUYỂN SALES: nhu cầu nhập hàng Tết 450 triệu, điểm B2 (đơn 100–500 triệu, cần trong 30 ngày), hạn xử lý 4 giờ làm việc.",
+   "act": "Bấm câu 3"
+  },
+  {
+   "img": 18,
+   "f": [
+    586,
+    318,
+    572,
+    244
+   ],
+   "t": "Câu 3 · Báo giá 50 Dell Vostro",
+   "d": "50 × 13,6 triệu = 680 triệu (SFD-CS-04). Dell Back to School giảm thêm 3% đến 30/11. Cảnh báo 2 rủi ro: 700 triệu nợ + 680 triệu = 1,38 tỷ vượt cả mức tạm thời 1,3 tỷ; chưa xác nhận được tồn kho và ngày giao.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 19,
+   "f": [
+    586,
+    70,
+    572,
+    170
+   ],
+   "m": [
+    [
+     600,
+     88,
+     345,
+     15
+    ]
+   ],
+   "c": [
+    1191,
+    404,
+    224,
+    15
+   ],
+   "t": "Phiếu chuyển Sales A1",
+   "d": "Điểm A1: đơn trên 500 triệu và cần báo giá/giao hàng trong 7 ngày. Việc Sales cần làm: kiểm tra tồn kho 50 Vostro 14, so sánh giá dự án trường học, phối hợp xử lý vượt hạn mức. Hạn 4 giờ làm việc.",
+   "act": "Bấm câu 4"
+  },
+  {
+   "img": 20,
+   "f": [
+    586,
+    176,
+    572,
+    212
+   ],
+   "c": [
+    1191,
+    425,
+    224,
+    15
+   ],
+   "t": "Câu 4 · Bảo hành Xiaomi",
+   "d": "10 ngày vẫn trong hạn đổi mới 15 ngày của Xiaomi (SFD-CS-05). Hướng dẫn chuẩn bị hoá đơn bán lẻ, ảnh tem, serial và tạo phiếu RMA. Trợ lý không tự kết luận lỗi.",
+   "act": "Bấm câu 5"
+  },
+  {
+   "img": 21,
+   "f": [
+    586,
+    200,
+    572,
+    445
+   ],
+   "t": "Câu 5 · Xin thêm 2% chiết khấu",
+   "d": "Trợ lý từ chối lịch sự: mức ngoài SFD-CS-01 phải do Trưởng kênh Đại lý duyệt bằng văn bản. Gợi ý mức cộng dồn khoảng 6% trong chính sách và lập phiếu chuyển Sales A1 kèm đề nghị giá đặc biệt.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 22,
+   "f": [
+    790,
+    120,
+    570,
+    580
+   ],
+   "t": "Trợ lý Điều phối Chăm sóc SME",
+   "d": "Trưởng kênh yêu cầu: \"Soạn kịch bản chăm sóc 30 ngày cho nhóm đại lý SME chưa mua thiết bị mạng\". Trợ lý nêu mục tiêu, khung D0 = 20/10 → D30 = 19/11/2026, cơ sở chính sách và 2 combo 30 triệu / 51,2 triệu.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 23,
+   "f": [
+    790,
+    112,
+    568,
+    268
+   ],
+   "t": "Lịch chạm 8 mốc",
+   "d": "D0 Zalo OA · D3 Email · D7 Gọi điện · D12 Zalo OA · D18 Email · D22 Gọi điện · D26 Zalo OA · D30 Gọi điện + Email, mỗi mốc có người làm và mục tiêu. Bên dưới là nội dung tin D0 (286 ký tự).",
+   "act": "Tiếp"
+  },
+  {
+   "img": 24,
+   "f": [
+    790,
+    115,
+    568,
+    580
+   ],
+   "t": "Email D3 và khung gọi D7",
+   "d": "Email combo thiết bị mạng: 4% chiết khấu, tặng Wifi từ đơn 30 triệu, bảng combo A/B. Khung gọi D7 5–7 phút với 3 câu hỏi dò nhu cầu bắt buộc và cách xử lý từ chối.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 25,
+   "f": [
+    790,
+    130,
+    568,
+    520
+   ],
+   "t": "Chốt D26, D30 và lưu ý triển khai",
+   "d": "D26 Zalo nhắc hạn (265 ký tự); D30 gọi chốt một trong ba kết quả. Lưu ý: tin dưới 400 ký tự, không tự thêm chiết khấu, nội dung là bản nháp để Trưởng kênh duyệt.",
+   "act": "Xem lại từ đầu"
+  }
+ ],
+ "gov": [
+  {
+   "img": 26,
+   "f": [
+    334,
+    80,
+    384,
+    670
+   ],
+   "t": "Cấu hình Trợ lý Chăm sóc Đại lý SME",
+   "d": "Model claude-opus-5 · Instruction mô tả vai trò, việc được làm, giới hạn · Skill \"Chấm điểm tín hiệu mua\" · Tool group \"Tính toán chính sách\".",
+   "act": "Tiếp"
+  },
+  {
+   "img": 27,
+   "f": [
+    372,
+    372,
+    1006,
+    172
+   ],
+   "t": "Sơ đồ luồng của agent",
+   "d": "Chat input → Memory và skill Chấm điểm tín hiệu mua → Agent (claude-opus-5, Toolsets 1 attached, Skills 1 enabled, 3 starters) → Reply.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 28,
+   "f": [
+    348,
+    66,
+    592,
+    548
+   ],
+   "t": "Skill Chấm điểm tín hiệu mua và chuyển Sales",
+   "d": "Trục chữ theo giá trị đơn: A từ 500 triệu, B 100–500, C 30–100, D dưới 30. Trục số theo mức khẩn: 1 trong 7 ngày, 2 trong 30 ngày, 3 trong quý, 4 chưa có thời điểm. A1, A2, B1, B2: lập phiếu ngay, hạn 4 giờ.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 29,
+   "f": [
+    340,
+    84,
+    1064,
+    140
+   ],
+   "t": "Monitoring 30 ngày",
+   "d": "5 tin nhắn · 1 cuộc trò chuyện · 10,1k token · 17s phản hồi trung bình · 100% Helpful (5/5) · 100% Tool success (6 bước) · 76,2% prompt cache · 0% lỗi.",
+   "act": "Tiếp"
+  },
+  {
+   "img": 30,
+   "f": [
+    325,
+    105,
+    1100,
+    250
+   ],
+   "t": "Logs từng câu hỏi",
+   "d": "5 câu hỏi của đại lý, model claude-opus-5, nguồn CONSOLE, cả 5 đều được đánh giá tốt, có token và độ trễ từng lượt.",
+   "act": "Xem lại từ đầu"
+  }
+ ]
+}
