@@ -1,0 +1,1057 @@
+<title>Synnex FPT Agentic Sales</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: sân khấu 1280×720 co giãn theo khung, nền mực xanh của trung tâm phân phối; màn hình ứng dụng sáng nổi lên như cửa sổ thật. Một màu nhấn xanh Base, hổ phách cho cảnh báo SLA. */
+:root{
+  --ink:#0a1322; --ink-2:#0f1b30; --panel:#14223b; --line:#24365a; --fg:#eaf0fa; --muted:#94a5c3;
+  --blue:#2f7bf6; --blue-soft:#1d3d73; --amber:#f5a524; --ok:#21b37f; --bad:#ef4a5a; --violet:#8b7cf6;
+  --paper:#ffffff; --paper-2:#f5f7fb; --paper-ink:#1b2333; --paper-muted:#687389; --paper-line:#e4e8ef;
+  --f-display:"Be Vietnam Pro",system-ui,"Segoe UI",sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+html,body{height:100%}
+[hidden]{display:none!important}
+body{background:var(--ink);color:var(--fg);font-family:var(--f-body);overflow:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0;box-sizing:border-box}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ---------- stage ---------- */
+#viewport{position:relative;width:100%;height:100%;overflow:hidden}
+#stage{position:absolute;left:50%;top:calc(50% - 27px);width:1280px;height:720px;transform-origin:center center}
+.slide{position:absolute;inset:0;padding:54px 64px 70px;display:none;flex-direction:column;gap:22px;overflow:hidden}
+.slide.active{display:flex}
+.eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;gap:10px;align-items:center}
+.eyebrow b{color:var(--blue);font-weight:700}
+h1,h2{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.02em}
+h2{font-size:38px;font-weight:800;line-height:1.12;max-width:980px}
+h2 em{font-style:normal;color:var(--blue)}
+.lede{color:var(--muted);font-size:17px;line-height:1.55;max-width:760px;margin:0}
+.row{display:flex;gap:22px;min-height:0}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.grow{flex:1;min-width:0;min-height:0}
+
+/* entrance */
+.slide.active .a{animation:rise .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d,0)*90ms)}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,74,90,.55)}100%{box-shadow:0 0 0 14px rgba(239,74,90,0)}}
+@keyframes dash{to{stroke-dashoffset:0}}
+@keyframes flowdot{from{offset-distance:0%}to{offset-distance:100%}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0ms!important;transition:none!important}}
+
+/* ---------- chrome ---------- */
+#bar{position:fixed;left:0;right:0;bottom:0;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;gap:14px;z-index:20;background:linear-gradient(transparent,rgba(10,19,34,.92) 40%)}
+#prog{flex:1;height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+#prog i{display:block;height:100%;width:0;background:var(--blue);transition:width .4s}
+.navb{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px}
+.navb:hover{border-color:var(--blue)}
+#count{font-family:var(--f-mono);font-size:13px;color:var(--muted);min-width:56px;text-align:center}
+#dots{display:flex;gap:6px}
+#dots button{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:var(--line)}
+#dots button.on{background:var(--blue);transform:scale(1.25)}
+@media (max-width:760px){#dots{display:none}}
+
+/* ---------- app window (light) ---------- */
+.win{background:var(--paper);color:var(--paper-ink);border-radius:12px;box-shadow:0 30px 70px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06);overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.win-top{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--paper-line);font-size:12px;color:var(--paper-muted);background:var(--paper-2)}
+.win-top .logo{display:flex;align-items:center;gap:6px;font-weight:700;color:var(--paper-ink)}
+.win-top .logo i{width:16px;height:16px;border-radius:4px;background:var(--blue);display:inline-block}
+.win-top .crumb{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot{font-size:11.5px;border:1px solid var(--paper-line);background:var(--paper);color:var(--blue);border-radius:6px;padding:3px 9px;font-weight:600}
+.shot:hover{background:#eef4ff}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;padding:3px 8px;border-radius:6px;background:#eef1f6;color:#3a4458;font-weight:500;white-space:nowrap}
+.chip.blue{background:#e5efff;color:#1959c9}.chip.amber{background:#fff3dd;color:#97600a}.chip.green{background:#e2f6ee;color:#11734f}.chip.red{background:#fde6e8;color:#b3263a}.chip.violet{background:#efecff;color:#5644c9}
+.pbtn{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:8px 14px;font-weight:600;font-size:13px}
+.pbtn:hover{filter:brightness(1.08)}
+.gbtn{background:var(--paper);border:1px solid var(--paper-line);color:var(--paper-ink);border-radius:8px;padding:7px 12px;font-size:12.5px;font-weight:500}
+.gbtn:hover{border-color:var(--blue);color:var(--blue)}
+
+/* ---------- cover ---------- */
+#s0{justify-content:center}
+#net{position:absolute;inset:0;width:100%;height:100%;opacity:.9}
+.cover-in{position:relative;display:flex;flex-direction:column;gap:22px;max-width:760px}
+.cover-in h1{font-size:68px;font-weight:800;line-height:1.02}
+.cover-in h1 span{color:var(--blue)}
+.kpis{display:flex;gap:36px;margin-top:10px}
+.kpi b{display:block;font-family:var(--f-mono);font-size:40px;font-weight:700;color:var(--fg)}
+.kpi span{font-size:13px;color:var(--muted)}
+.cover-meta{font-size:13px;color:var(--muted);display:flex;gap:18px}
+
+/* ---------- context ---------- */
+.split{display:flex;height:78px;border-radius:12px;overflow:hidden;font-weight:700}
+.split div{display:flex;flex-direction:column;justify-content:center;padding:0 22px;transition:flex .9s cubic-bezier(.2,.8,.2,1)}
+.split .ch{background:var(--blue);flex:70}.split .pj{background:var(--blue-soft);flex:30}
+.split small{font-weight:500;font-size:13px;opacity:.85}
+.split b{font-size:26px;font-family:var(--f-mono)}
+.pains{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.pain{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.pain .k{font-family:var(--f-mono);font-size:28px;font-weight:700;color:var(--amber)}
+.pain p{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+.pain h3{margin:0;font-size:16px}
+
+/* ---------- value chain ---------- */
+.vc{display:flex;gap:10px;align-items:stretch}
+.vc button{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 14px;text-align:left;display:flex;flex-direction:column;gap:6px;position:relative;transition:transform .2s,border-color .2s,background .2s}
+.vc button:hover{transform:translateY(-3px)}
+.vc button.on{border-color:var(--blue);background:#132a52}
+.vc button small{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.vc button b{font-size:15px;line-height:1.3}
+.vc button span{font-size:12px;color:var(--muted)}
+.vc button:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:8px;height:2px;background:var(--line)}
+.vc-detail{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;min-height:190px}
+.vc-detail h4{margin:0 0 8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.vc-detail p,.vc-detail li{font-size:15px;line-height:1.55;margin:0}
+.vc-detail ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.vc-detail .mod{display:flex;flex-wrap:wrap;gap:8px}
+.vc-detail .mod span{background:#1b3563;border:1px solid #2c4f8c;border-radius:8px;padding:6px 10px;font-size:13px}
+#vcTrack{position:relative;height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+#vcTrack i{position:absolute;top:0;height:100%;width:18%;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:sweep 3.2s linear infinite}
+@keyframes sweep{from{left:-20%}to{left:100%}}
+
+/* ---------- architecture ---------- */
+.layers{display:flex;flex-direction:column;gap:12px}
+.layer{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;transition:border-color .25s,transform .25s}
+.layer:hover{border-color:var(--blue);transform:translateX(6px)}
+.layer h4{margin:0;font-size:15px}
+.layer h4 small{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-top:2px}
+.layer .items{display:flex;gap:10px;flex-wrap:wrap}
+.layer .items span{background:var(--ink-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13.5px}
+.layer.ai .items span{border-color:#2c4f8c;background:#132a52}
+.layer.data .items span.po{border-style:dashed;color:var(--muted)}
+.note{font-size:13px;color:var(--muted)}
+
+/* ---------- account 360 ---------- */
+.acc-wrap{display:grid;grid-template-columns:330px 1fr;flex:1;min-height:0}
+.acc-list{border-right:1px solid var(--paper-line);display:flex;flex-direction:column;min-height:0}
+.acc-filter{display:flex;gap:6px;padding:10px;border-bottom:1px solid var(--paper-line);flex-wrap:wrap}
+.acc-filter button{border:1px solid var(--paper-line);background:var(--paper);border-radius:20px;padding:4px 10px;font-size:12px}
+.acc-filter button.on{background:var(--paper-ink);color:#fff;border-color:var(--paper-ink)}
+.acc-items{overflow:auto;flex:1}
+.acc-item{display:flex;gap:10px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--paper-line);width:100%;text-align:left;background:none;border-left:3px solid transparent;border-top:0;border-right:0}
+.acc-item:hover{background:var(--paper-2)}
+.acc-item.on{background:#eef4ff;border-left-color:var(--blue)}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;flex:none}
+.acc-item b{font-size:13px;display:block}
+.acc-item small{font-size:11.5px;color:var(--paper-muted)}
+.acc-detail{padding:16px 20px;display:flex;flex-direction:column;gap:12px;min-width:0;overflow:auto}
+.acc-head{display:flex;align-items:center;gap:12px}
+.acc-head h3{margin:0;font-size:20px}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fact{background:var(--paper-2);border-radius:10px;padding:10px 12px}
+.fact small{font-size:11px;color:var(--paper-muted);display:block}
+.fact b{font-family:var(--f-mono);font-size:17px}
+.meter{height:6px;background:var(--paper-line);border-radius:6px;margin-top:6px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--ok);width:0;transition:width .8s}
+.matrix{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.cell{border-radius:8px;padding:10px 8px;font-size:11.5px;min-height:64px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid transparent;text-align:left}
+.cell b{font-family:var(--f-mono);font-size:14px}
+.cell.has{background:#e5efff;color:#163f88}
+.cell.gap{background:repeating-linear-gradient(135deg,#fff7e8,#fff7e8 6px,#fff1d6 6px,#fff1d6 12px);border:1px dashed #e1a540;color:#7a4e06}
+.cell.gap:hover{border-style:solid;transform:translateY(-2px)}
+.cell.made{background:#e2f6ee;border-color:#21b37f;color:#11734f}
+.toast{position:absolute;right:22px;bottom:22px;background:var(--paper-ink);color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.3);animation:pop .4s both;max-width:360px}
+
+/* ---------- copilot ---------- */
+.deal{display:grid;grid-template-columns:1fr 360px;flex:1;min-height:0}
+.deal-main{padding:16px 20px;display:flex;flex-direction:column;gap:12px;overflow:hidden;min-width:0}
+.stages{display:flex;gap:3px}
+.stages span{flex:1;font-size:10px;text-transform:uppercase;letter-spacing:.06em;text-align:center;padding:6px 4px;background:#e9edf3;color:#7d879a;font-weight:700;clip-path:polygon(0 0,94% 0,100% 50%,94% 100%,0 100%,4% 50%)}
+.stages span.done{background:var(--ok);color:#fff}.stages span.cur{background:var(--blue);color:#fff}
+.big-val{font-family:var(--f-mono);font-size:30px;font-weight:700;color:#0f8a5f}
+.stream{display:flex;flex-direction:column;gap:8px}
+.ev{border:1px solid var(--paper-line);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.5}
+.ev small{display:block;color:var(--paper-muted);font-size:11px;margin-top:4px}
+.ev.ai{border-color:#c9dbff;background:#f4f8ff}
+.slide.active .ev{animation:rise .6s both;animation-delay:calc(var(--d,0)*220ms + 300ms)}
+.cop{border-left:1px solid var(--paper-line);display:flex;flex-direction:column;min-height:0;background:#fbfcfe}
+.cop-h{padding:10px 14px;border-bottom:1px solid var(--paper-line);font-weight:700;font-size:13px;display:flex;gap:8px;align-items:center}
+.cop-h .beta{font-size:10px;background:#efecff;color:#5644c9;padding:2px 6px;border-radius:4px}
+.cop-body{flex:1;overflow:auto;padding:14px;font-size:12.8px;line-height:1.55;display:flex;flex-direction:column;gap:10px}
+.cop-body ul,.cop-body ol{margin:4px 0;padding-left:18px}
+.cop-body li{margin:3px 0}
+.ubub{align-self:flex-end;background:#eef1f6;border-radius:10px;padding:7px 11px}
+.steps{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--paper-muted)}
+.steps div{display:flex;gap:7px;align-items:center;opacity:.35;transition:opacity .3s}
+.steps div.ok{opacity:1;color:var(--paper-ink)}
+.steps div i{width:14px;height:14px;border-radius:50%;border:2px solid #c6cdd8;display:inline-block;flex:none}
+.steps div.ok i{border-color:var(--ok);background:var(--ok);box-shadow:inset 0 0 0 2px #fff}
+.sugg{display:flex;flex-direction:column;gap:6px}
+.sugg button{text-align:left;font-size:12px;border:1px solid var(--paper-line);background:#fff;border-radius:16px;padding:6px 10px;animation:pop .35s both}
+.cop-in{padding:10px;border-top:1px solid var(--paper-line);display:flex;gap:8px}
+.cop-in .fake{flex:1;border:1px solid var(--paper-line);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--paper-muted);background:#fff}
+.caret::after{content:"▍";animation:blink 1s infinite;color:var(--blue)}
+
+/* ---------- kanban ---------- */
+.kb-head{display:flex;align-items:center;gap:16px;padding:10px 14px;border-bottom:1px solid var(--paper-line);font-size:13px}
+.kb-head .num{font-weight:700}
+.kb{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:10px;flex:1;min-height:0;background:var(--paper-2)}
+.kcol{display:flex;flex-direction:column;gap:7px;min-height:0;border-radius:10px;padding:4px;transition:background .2s}
+.kcol.over{background:#e5efff}
+.kcol h5{margin:0;font-size:12.5px;display:flex;justify-content:space-between;gap:6px;padding:4px 4px 0}
+.kcol h5 small{color:var(--paper-muted);font-weight:500}
+.kcol .sum{font-family:var(--f-mono);font-size:11.5px;color:var(--paper-muted);padding:0 4px 4px;border-bottom:2px solid var(--blue)}
+.kcards{display:flex;flex-direction:column;gap:7px;overflow:auto;flex:1;padding-bottom:4px}
+.kcard{background:#fff;border:1px solid var(--paper-line);border-radius:8px;padding:8px 9px;font-size:11.8px;line-height:1.35;cursor:grab;position:relative;text-align:left;width:100%}
+.kcard:hover{border-color:#9dbcf7}
+.kcard b{display:block;font-weight:600}
+.kcard small{color:var(--paper-muted);display:block;margin:3px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kcard .v{font-family:var(--f-mono);font-weight:700;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.kcard.fly{animation:rise .55s both}
+.kcard.hot{border-color:var(--bad);animation:pulse 1.6s infinite}
+.kcard .mv{display:none;gap:4px}
+.kcard:hover .mv,.kcard:focus-within .mv{display:flex}
+.kcard .mv button{border:1px solid var(--paper-line);background:#fff;border-radius:5px;font-size:11px;padding:0 6px;line-height:18px}
+.kcard.dragging{opacity:.4}
+
+/* ---------- IOC detail ---------- */
+.ioc{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:12px;padding:14px;flex:1;min-height:0;background:var(--paper-2)}
+.card{background:#fff;border:1px solid var(--paper-line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:12.8px;min-height:0}
+.card h6{margin:0;font-size:13px}
+.task{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--paper-line)}
+.task i{width:14px;height:14px;border:1.5px solid #b9c1ce;border-radius:50%;flex:none}
+.task span{flex:1}
+.late{color:var(--bad);font-weight:700;animation:blink 1.2s infinite}
+.today{color:#c27a06;font-weight:600}
+.sla{display:flex;flex-direction:column;gap:6px}
+.sla-bar{height:10px;border-radius:6px;background:var(--paper-line);overflow:hidden;position:relative}
+.sla-bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--ok),var(--amber) 70%,var(--bad));width:0;transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+.kv{display:grid;grid-template-columns:118px 1fr;gap:5px 10px;font-size:12.3px}
+.kv span:nth-child(odd){color:var(--paper-muted)}
+
+/* ---------- dashboard ---------- */
+.dash{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;padding:10px;flex:1;min-height:0;background:var(--paper-2);position:relative}
+.dash .card{position:relative}
+.aiPanel{position:absolute;top:0;right:0;bottom:0;width:340px;background:#fff;border-left:1px solid var(--paper-line);box-shadow:-20px 0 40px rgba(20,30,60,.12);padding:14px 16px;display:flex;flex-direction:column;gap:10px;font-size:12.8px;line-height:1.5;transform:translateX(105%);transition:transform .55s cubic-bezier(.2,.8,.2,1);overflow:auto}
+.aiPanel.open{transform:none}
+.aiPanel h6{margin:0;font-size:14px}
+.ins{display:flex;gap:8px;opacity:0;transform:translateY(8px);transition:all .45s}
+.ins.on{opacity:1;transform:none}
+.ins i{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700}
+svg text{font-family:var(--f-body)}
+
+/* ---------- chatbot ---------- */
+.hub{display:grid;grid-template-columns:200px 1fr 230px;flex:1;min-height:0}
+.hub-side{border-right:1px solid var(--paper-line);padding:12px;display:flex;flex-direction:column;gap:6px;font-size:12.5px;background:var(--paper-2)}
+.hub-side .it{padding:6px 8px;border-radius:6px}
+.hub-side .it.on{background:#e5efff;color:#1959c9;font-weight:600}
+.chat{display:flex;flex-direction:column;min-height:0;min-width:0}
+.chat-body{flex:1;overflow:auto;padding:16px 22px;display:flex;flex-direction:column;gap:12px;font-size:13px;line-height:1.55;scroll-behavior:smooth}
+.chat-body table{border-collapse:collapse;width:100%;font-size:12.3px}
+.chat-body td,.chat-body th{border:1px solid var(--paper-line);padding:5px 8px;text-align:left}
+.chat-body th{background:var(--paper-2);font-weight:600}
+.chat-body tr.r{opacity:0;animation:rise .4s both}
+.welcome{margin:auto;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;max-width:460px}
+.welcome .bot{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#1f9e8f,#2f7bf6);display:grid;place-items:center;color:#fff;font-weight:800;font-size:20px}
+.welcome h4{margin:0;font-size:18px}
+.welcome p{margin:0;color:var(--paper-muted);font-size:13px}
+.ask{display:flex;flex-direction:column;gap:6px;padding:10px;border-left:1px solid var(--paper-line);background:#fbfcfe;font-size:12px}
+.ask h6{margin:0 0 4px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted)}
+.ask button{text-align:left;border:1px solid var(--paper-line);background:#fff;border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.4}
+.ask button:hover{border-color:var(--blue)}
+.ask button.done{background:#eef4ff;border-color:#bcd3ff}
+.ask button b{display:block;font-size:11px;color:var(--blue);margin-bottom:2px}
+.ran{font-size:11.5px;color:var(--paper-muted);display:flex;gap:6px;align-items:center}
+.ran i{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:blink .8s infinite}
+.ran.ok i{background:var(--ok);animation:none}
+.phieu{border:1.5px solid var(--paper-ink);border-radius:10px;padding:12px 14px;position:relative;background:#fffdf7;font-size:12.5px}
+.phieu h5{margin:0 0 6px;font-size:13px;letter-spacing:.08em}
+.phieu ul{margin:0;padding-left:16px}
+.stamp{position:absolute;right:14px;top:10px;border:3px solid var(--bad);color:var(--bad);font-family:var(--f-mono);font-weight:700;font-size:22px;padding:2px 10px;border-radius:8px;transform:rotate(-10deg);animation:stamp .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:.4s}
+.stamp small{display:block;font-size:9px;letter-spacing:.06em;text-align:center}
+@keyframes stamp{from{transform:rotate(-10deg) scale(2.6);opacity:0}to{transform:rotate(-10deg) scale(1);opacity:1}}
+.chat-in{padding:10px 22px 14px;display:flex;gap:8px}
+.chat-in .fake{flex:1;border:1px solid var(--paper-line);border-radius:10px;padding:10px 12px;color:var(--paper-muted);font-size:12.5px}
+
+/* ---------- scoring ---------- */
+.score{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;flex:1;min-height:0}
+.ctrl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:16px}
+.ctrl label{font-size:13px;color:var(--muted);display:flex;justify-content:space-between}
+.ctrl label b{color:var(--fg);font-family:var(--f-mono)}
+.ctrl input[type=range]{width:100%;accent-color:var(--blue)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;background:var(--ink-2);border:1px solid var(--line);border-radius:8px;padding:8px 6px;font-size:12.5px}
+.seg button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.flags{display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.flags label{color:var(--fg);justify-content:flex-start;gap:8px;align-items:center}
+.grid4{display:grid;grid-template-columns:28px repeat(4,1fr);gap:4px;font-family:var(--f-mono);font-size:12px}
+.grid4 div{display:grid;place-items:center;height:30px;border-radius:6px}
+.grid4 .h{color:var(--muted)}
+.grid4 .c{background:var(--ink-2);border:1px solid var(--line);color:var(--muted);transition:all .25s}
+.grid4 .c.f4{background:#3a1f26;border-color:#6a2a35;color:#ffb3bd}
+.grid4 .c.f1{background:#3a2e14;border-color:#6d5420;color:#ffd58a}
+.grid4 .c.sel{background:var(--amber);color:#1a1205;border-color:var(--amber);transform:scale(1.12);font-weight:700}
+.result{display:flex;flex-direction:column;gap:14px}
+.res-card{background:var(--paper);color:var(--paper-ink);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;position:relative}
+.res-big{font-family:var(--f-mono);font-size:56px;font-weight:700;line-height:1}
+.handoff{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.handoff .node{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px;color:var(--fg);font-size:12.5px}
+.handoff .wire{flex:1;height:2px;background:var(--line);position:relative;overflow:hidden}
+.handoff .wire i{position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--amber);animation:sweep 1.6s linear infinite}
+.timer{font-family:var(--f-mono);font-size:22px;font-weight:700;color:#c27a06}
+
+/* ---------- timeline ---------- */
+.tl{position:relative;display:flex;justify-content:space-between;padding:26px 10px 0}
+.tl::before{content:"";position:absolute;left:22px;right:22px;top:46px;height:3px;background:var(--line)}
+.tl .fill{position:absolute;left:22px;top:46px;height:3px;background:var(--blue);width:0;transition:width .6s}
+.tl button{position:relative;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:8px;width:110px;z-index:1}
+.tl button i{width:42px;height:42px;border-radius:50%;background:var(--panel);border:2px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;transition:all .25s;font-family:var(--f-mono)}
+.tl button.on i{background:var(--blue);border-color:var(--blue);transform:scale(1.12)}
+.tl button span{font-size:12px;color:var(--muted)}
+.tl button.on span{color:var(--fg)}
+.msg{display:grid;grid-template-columns:1fr 1.15fr;gap:20px;flex:1;min-height:0}
+.phone{background:var(--paper);color:var(--paper-ink);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:10px;font-size:13.2px;line-height:1.55}
+.phone .who{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--paper-muted)}
+.phone .bubble{background:#eef4ff;border-radius:4px 14px 14px 14px;padding:10px 12px;animation:rise .45s both}
+.combo{width:100%;border-collapse:collapse;font-size:13px}
+.combo td,.combo th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+.combo th{color:var(--muted);font-weight:600;font-size:12px}
+
+/* ---------- governance ---------- */
+.gov{display:grid;grid-template-columns:1.25fr 1fr;gap:22px;flex:1;min-height:0}
+.map{background:var(--panel);border:1px solid var(--line);border-radius:14px;position:relative;min-height:300px;background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:16px 16px}
+.mnode{position:absolute;background:var(--paper);color:var(--paper-ink);border-radius:10px;padding:9px 12px;font-size:12.5px;box-shadow:0 8px 20px rgba(0,0,0,.25);min-width:130px}
+.mnode small{display:block;color:var(--paper-muted);font-size:11px}
+.mnode.core{min-width:200px;border:2px solid var(--blue)}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map path{fill:none;stroke:var(--blue);stroke-width:2;stroke-dasharray:6 6}
+.slide.active .map path{animation:march 1s linear infinite}
+@keyframes march{to{stroke-dashoffset:-24}}
+.mon{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mon div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.mon b{font-family:var(--f-mono);font-size:30px;display:block}
+.mon span{font-size:12.5px;color:var(--muted)}
+.guard{display:flex;flex-direction:column;gap:8px;font-size:13.5px}
+.guard div{display:flex;gap:10px;align-items:flex-start}
+.guard i{flex:none;width:20px;height:20px;border-radius:6px;background:#3a1f26;color:#ffb3bd;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;margin-top:1px}
+
+/* ---------- gantt ---------- */
+.gantt{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.g-row{display:grid;grid-template-columns:230px 1fr;align-items:center;gap:12px;font-size:13px}
+.g-row .lane{position:relative;height:22px}
+.g-row .lane i{position:absolute;top:3px;height:16px;border-radius:5px;background:var(--blue);transform-origin:left;transform:scaleX(0);transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.g-row.ph{color:var(--muted);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:6px}
+.g-axis{display:grid;grid-template-columns:230px 1fr;gap:12px;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.g-axis div:last-child{display:flex;justify-content:space-between}
+
+/* ---------- poc ---------- */
+.poc{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.poc div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+.poc b{font-family:var(--f-mono);font-size:44px;display:block;color:var(--fg)}
+.poc span{color:var(--muted);font-size:14px}
+.crit{display:grid;grid-template-columns:1fr 1fr;gap:10px 28px;font-size:15px}
+.crit div{display:flex;gap:10px}
+.crit i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--ok);display:grid;place-items:center;font-style:normal;color:#04140d;font-weight:800;font-size:12px}
+.quote{font-size:24px;font-weight:700;line-height:1.35;max-width:980px;text-wrap:balance;border-top:1px solid var(--line);padding-top:20px}
+
+/* ---------- lightbox ---------- */
+#lb{position:fixed;inset:0;background:rgba(5,10,20,.92);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:calc(20px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+#lb img{max-width:min(1200px,100%);max-height:calc(100% - 110px);border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6);background:#fff}
+#lb .cap{font-size:14px;color:var(--fg);text-align:center;max-width:900px}
+#lb .cap small{display:block;color:var(--muted);font-family:var(--f-mono);margin-top:4px}
+#lb .ctl{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#lb .thumbs{display:flex;gap:6px;overflow-x:auto;max-width:100%;padding:4px}
+#lb .thumbs button{border:2px solid transparent;padding:0;border-radius:6px;background:none;flex:none}
+#lb .thumbs button.on{border-color:var(--blue)}
+#lb .thumbs img{width:72px;height:48px;object-fit:cover;object-position:top;border-radius:4px;max-height:none;box-shadow:none}
+</style>
+
+<div id="viewport"><div id="stage">
+
+<!-- 0 COVER -->
+<section class="slide" id="s0" data-title="Mở đầu">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="cover-in">
+    <div class="eyebrow a" style="--d:0"><b>Synnex FPT</b> × Base Agentic Sales OS</div>
+    <h1 class="a" style="--d:1">Để <span>300 Sales</span> chạm đúng <span>1.000 đại lý</span>, đúng lúc, đúng ngành hàng</h1>
+    <p class="lede a" style="--d:2">Một lớp vận hành đứng cạnh hệ thống PO/ERP hiện có: quản trị Account, bán chéo, pipeline dự án B2G và trợ lý AI chăm sóc đại lý SME 24/7.</p>
+    <div class="kpis a" style="--d:3">
+      <div class="kpi"><b class="num" data-count="300">0</b><span>Sales kênh và dự án</span></div>
+      <div class="kpi"><b class="num" data-count="1000" data-fmt="dot">0</b><span>Account đại lý</span></div>
+      <div class="kpi"><b class="num" data-count="70" data-suf="%">0</b><span>doanh thu từ kênh Đại lý</span></div>
+    </div>
+    <div class="cover-meta a" style="--d:4"><span>Demo trên tenant thật · 15/10/2026</span><span>Phím ← → để chuyển slide · G để xem màn hình thật</span></div>
+  </div>
+</section>
+
+<!-- 1 CONTEXT -->
+<section class="slide" id="s1" data-title="Bối cảnh">
+  <div class="eyebrow a" style="--d:0"><b>01</b> Bối cảnh</div>
+  <h2 class="a" style="--d:1">Hai mảng kinh doanh, hai cách quản trị, <em>một đội Sales</em> đang quá tải</h2>
+  <div class="split a" style="--d:2">
+    <div class="ch"><small>Kênh Đại lý · ~250 Sales · ~1.000 Account</small><b class="num">70%</b></div>
+    <div class="pj"><small>Dự án B2G và Enterprise · ~50 Sales</small><b class="num">30%</b></div>
+  </div>
+  <div class="pains">
+    <div class="pain a" style="--d:3"><div class="k num">SME</div><h3>Đại lý SME không ai chăm</h3><p>Doanh thu nhỏ, không có Sales phụ trách. Câu hỏi chính sách lặp lại hằng ngày qua Zalo cá nhân.</p></div>
+    <div class="pain a" style="--d:4"><div class="k num">6 ngành</div><h3>Không thấy khoảng trống ngành hàng</h3><p>Không biết đại lý đã mua gì, chưa mua gì, nên bỏ lỡ cơ hội bán chéo trên tệp khách sẵn có.</p></div>
+    <div class="pain a" style="--d:5"><div class="k num">B2G</div><h3>Deal dự án ngâm trong thầu</h3><p>Duyệt giá đặc biệt qua email. Quản lý chỉ biết khi deal đã trễ ngày mở thầu.</p></div>
+    <div class="pain a" style="--d:6"><div class="k num">PO</div><h3>Dữ liệu nằm rải rác</h3><p>Doanh số nằm trong PO/ERP, lịch sử chăm sóc nằm trong Excel và điện thoại của từng Sales.</p></div>
+  </div>
+</section>
+
+<!-- 2 VALUE CHAIN -->
+<section class="slide" id="s2" data-title="Chuỗi giá trị">
+  <div class="eyebrow a" style="--d:0"><b>02</b> Chuỗi giá trị vận hành</div>
+  <h2 class="a" style="--d:1">Bấm từng chặng để xem <em>điểm nghẽn</em> và nơi Agentic Sales OS nhập cuộc</h2>
+  <div class="vc a" style="--d:2" id="vc" role="tablist"></div>
+  <div id="vcTrack" class="a" style="--d:3"><i></i></div>
+  <div class="vc-detail a" style="--d:3" id="vcDetail" role="tabpanel"></div>
+</section>
+
+<!-- 3 ARCHITECTURE -->
+<section class="slide" id="s3" data-title="Kiến trúc">
+  <div class="eyebrow a" style="--d:0"><b>03</b> Kiến trúc đề xuất</div>
+  <h2 class="a" style="--d:1">Base đứng ở <em>Front-Office</em>, PO/ERP giữ nguyên ở Back-Office</h2>
+  <div class="layers">
+    <div class="layer a" style="--d:2"><h4>Điểm chạm<small>ai dùng, ở đâu</small></h4><div class="items"><span>Zalo OA · Web cho đại lý</span><span>Sales mobile đi thị sát</span><span>Dashboard cho Trưởng kênh</span></div></div>
+    <div class="layer ai a" style="--d:3"><h4>Tầng Agent<small>Base AgentHub + Copilot</small></h4><div class="items"><span>Trợ lý Chăm sóc Đại lý SME</span><span>Trợ lý Điều phối Chăm sóc SME</span><span>Copilot Account và Deal</span><span>Phân tích AI dashboard</span></div></div>
+    <div class="layer a" style="--d:4"><h4>Tầng ứng dụng<small>quy trình bán hàng</small></h4><div class="items"><span>Base Sales · 2 pipeline</span><span>Danh bạ Đại lý và Khách hàng</span><span>Báo giá · Commerce</span><span>Duyệt giá đặc biệt · BPM</span></div></div>
+    <div class="layer data a" style="--d:5"><h4>Tầng dữ liệu<small>một nguồn sự thật</small></h4><div class="items"><span>Base Dataset · ma trận ngành hàng</span><span class="po">Hệ thống PO / ERP Synnex FPT → doanh thu, công nợ, hạn mức</span></div></div>
+  </div>
+  <p class="note a" style="--d:6">Không tạo đơn trên CRM để tránh trùng với hệ thống PO. Doanh thu và công nợ chảy một chiều từ PO vào Base để mọi agent và báo cáo đọc số thật.</p>
+</section>
+
+<!-- 4 ACCOUNT 360 -->
+<section class="slide" id="s4" data-title="Account 360">
+  <div class="eyebrow a" style="--d:0"><b>Use case 1</b> Account Care và Bán chéo · Base Sales</div>
+  <h2 class="a" style="--d:1">Chọn một đại lý, thấy ngay <em>ngành hàng chưa khai thác</em></h2>
+  <div class="win grow a" style="--d:2">
+    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Đại lý và Khách hàng › Công ty</span><button class="shot" data-shots="4,5,6">Xem màn hình thật</button></div>
+    <div class="acc-wrap">
+      <div class="acc-list">
+        <div class="acc-filter" id="accFilter"></div>
+        <div class="acc-items" id="accItems"></div>
+      </div>
+      <div class="acc-detail" id="accDetail" style="position:relative"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 COPILOT -->
+<section class="slide" id="s5" data-title="Copilot">
+  <div class="eyebrow a" style="--d:0"><b>Use case 1</b> Deal bán chéo + Copilot</div>
+  <h2 class="a" style="--d:1">Từ tín hiệu trong dữ liệu PO đến <em>3 việc cần làm</em> trong 18 giây</h2>
+  <div class="win grow a" style="--d:2">
+    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Phát triển Đại lý và Bán chéo › Chuỗi Điện máy Sao Việt – Mở ngành Thiết bị mạng Cisco</span><button class="shot" data-shots="7,8,9,10">Xem màn hình thật</button></div>
+    <div class="deal">
+      <div class="deal-main">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div><div style="font-size:18px;font-weight:700">Chuỗi Điện máy Sao Việt – Mở ngành Thiết bị mạng Cisco</div><div style="font-size:12px;color:var(--paper-muted);margin-top:3px">Ngô Quốc Quân · Giám đốc ngành hàng · Dự kiến chốt 28/12/2026</div></div>
+          <div style="text-align:right"><div class="big-val num" data-count="10800000000" data-fmt="dot">0</div><div style="font-size:11px;color:var(--paper-muted)">VND · cam kết 6 tháng · xác suất 15%</div></div>
+        </div>
+        <div class="stages"><span class="cur">Phát hiện cơ hội</span><span>Tư vấn ngành hàng</span><span>Đại lý đặt thử</span><span>Đặt hàng định kỳ</span></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="chip violet">Nguồn: AI gợi ý từ dữ liệu PO</span><span class="chip blue">Ngành: Thiết bị mạng</span><span class="chip">Hãng: Cisco</span><span class="chip">1,8 tỷ / tháng</span></div>
+        <div style="font-size:12px;font-weight:700;margin-top:4px">Dòng công việc</div>
+        <div class="stream">
+          <div class="ev ai" style="--d:0"><b>AI phát hiện:</b> Sao Việt mua Máy tính đều 12 tháng nhưng chưa phát sinh PO Thiết bị mạng. 34 cửa hàng đang dùng router dân dụng.<small>Ghi chú · 02:16 15/10/2026</small></div>
+          <div class="ev" style="--d:1">Anh Huy (CNTT) xác nhận 34 cửa hàng cần thay router; muốn chạy thử 5 cửa hàng trước khi triển khai toàn chuỗi. Chị Mai Anh (Kế toán) đề nghị kỳ hạn Net 30 như ngành Máy tính.<small>Ghi chú · 02:31 15/10/2026</small></div>
+          <div class="ev" style="--d:2"><span class="chip blue">QUOTE SFO-0001</span> Báo giá trial Cisco SMB cho 5 cửa hàng Sao Việt · <b class="num">204.500.000</b> · hết hạn 14/11/2026<small>Báo giá · 02:43 15/10/2026</small></div>
+        </div>
+      </div>
+      <div class="cop">
+        <div class="cop-h">✦ Copilot <span class="beta">BETA</span></div>
+        <div class="cop-body" id="copBody">
+          <div style="margin:auto;text-align:center;color:var(--paper-muted);display:flex;flex-direction:column;gap:10px;align-items:center">
+            <div>Copilot đọc toàn bộ deal, công ty, liên hệ và hoạt động.</div>
+            <button class="pbtn" id="copGo">Tóm tắt deal và 3 việc cần làm</button>
+          </div>
+        </div>
+        <div class="cop-in"><div class="fake">Hỏi tiếp…</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 KANBAN B2G -->
+<section class="slide" id="s6" data-title="Pipeline B2G">
+  <div class="eyebrow a" style="--d:0"><b>Use case 2</b> Pipeline Dự án B2G và HĐ 3 bên</div>
+  <h2 class="a" style="--d:1">Kéo thử một deal sang giai đoạn sau: <em>dự báo cập nhật ngay</em></h2>
+  <div class="win grow a" style="--d:2">
+    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Dự án B2G và Enterprise › Pipeline</span><button class="gbtn" id="kbReset" style="padding:3px 9px;font-size:11.5px">Đặt lại</button><button class="shot" data-shots="2,3">Xem màn hình thật</button></div>
+    <div class="kb-head"><span><b class="num" id="kbN">18</b> thương vụ</span><span>Tổng <b class="num" id="kbT">₫0</b></span><span>Dự kiến <b class="num" id="kbF" style="color:#0f8a5f">₫0</b></span><span style="margin-left:auto;font-size:12px;color:var(--paper-muted)">Kéo thả thẻ, hoặc rê chuột lên thẻ và bấm ◀ ▶</span></div>
+    <div class="kb" id="kb"></div>
+  </div>
+</section>
+
+<!-- 7 IOC -->
+<section class="slide" id="s7" data-title="Deal chủ lực IOC">
+  <div class="eyebrow a" style="--d:0"><b>Use case 2</b> Deal chủ lực quá SLA</div>
+  <h2 class="a" style="--d:1">42 tỷ đang chờ Dell duyệt giá. Hệ thống <em>báo trước</em> khi ngày mở thầu tới</h2>
+  <div class="win grow a" style="--d:2">
+    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">[FPT Synnex] Dự án B2G và Enterprise › Ban QLDA Chuyển đổi số tỉnh Đông Hải – Trung tâm IOC tỉnh giai đoạn 2</span><button class="shot" data-shots="11">Xem màn hình thật</button></div>
+    <div style="padding:12px 16px 0;display:flex;flex-direction:column;gap:8px">
+      <div class="stages"><span class="done">Lead dự án</span><span class="done">Khảo sát &amp; Tư vấn</span><span class="done">Đăng ký Deal Hãng</span><span class="cur">Báo giá &amp; Hồ sơ thầu</span><span>Đàm phán HĐ 3 bên</span></div>
+    </div>
+    <div class="ioc">
+      <div class="card">
+        <h6>Tổng quan</h6>
+        <div class="big-val num" data-count="42000000000" data-fmt="dot">0</div>
+        <div class="kv"><span>Xác suất</span><span>60% · trọng số <b class="num">25,2 tỷ</b></span><span>Hãng chính</span><span>Dell</span><span>SI triển khai</span><span>Thăng Long Tech</span><span>Nguồn vốn</span><span>Ngân sách nhà nước</span><span>Bảo vệ dự án</span><span><span class="chip green">Đã được bảo vệ</span></span><span>Giá đặc biệt</span><span><span class="chip amber">Đang chờ duyệt</span></span></div>
+      </div>
+      <div class="card">
+        <h6>Kế hoạch hành động</h6>
+        <div class="task"><i></i><span>Gửi tờ trình giá đặc biệt cho Dell</span><span class="late">quá hạn 1 ngày</span></div>
+        <div class="task"><i></i><span>Hoàn thiện hồ sơ năng lực</span><span class="today">Hôm nay</span></div>
+        <h6 style="margin-top:6px">SLA giai đoạn Báo giá và Hồ sơ thầu</h6>
+        <div class="sla"><div class="sla-bar"><i id="slaBar"></i></div><div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--paper-muted)"><span>Vào giai đoạn</span><span id="slaTxt" class="num">0 / 1 ngày</span><span>Ngày mở thầu 26/10</span></div></div>
+        <h6 style="margin-top:6px">Dòng công việc</h6>
+        <div class="ev" style="--d:0">Họp với Trưởng ban QLDA: hồ sơ mời thầu phát hành, yêu cầu bảo hành 5 năm tại chỗ, Dell cần duyệt giá đặc biệt trước ngày mở thầu.</div>
+        <div class="ev" style="--d:1">Thăng Long Tech đề nghị Synnex FPT hỗ trợ bảo lãnh dự thầu 2% giá trị.</div>
+      </div>
+      <div class="card">
+        <h6>Thảo luận</h6>
+        <div class="ev" style="--d:2"><b>Long Nguyễn</b> · 12 giờ trước<br><span style="color:#1959c9">@Trưởng kênh</span> cần anh/chị hỗ trợ đẩy Dell duyệt giá tuần này.</div>
+        <h6 style="margin-top:6px">Vì sao quản lý thấy được</h6>
+        <ul style="margin:0;padding-left:16px;line-height:1.55;font-size:12.5px"><li>Mỗi giai đoạn có ngưỡng ngày, quá ngưỡng là thẻ đỏ trên kanban</li><li>Trường bắt buộc theo giai đoạn: chưa có giá duyệt thì chưa sang Đàm phán</li><li>Copilot cảnh báo deal thiếu người quyết định hoặc ngày mở thầu đã qua</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 DASHBOARD -->
+<section class="slide" id="s8" data-title="Dashboard">
+  <div class="eyebrow a" style="--d:0"><b>Quản trị</b> Dashboard và Phân tích AI</div>
+  <h2 class="a" style="--d:1">Trưởng kênh mở dashboard, <em>AI đọc số</em> và chỉ ra chỗ cần hành động</h2>
+  <div class="win grow a" style="--d:2">
+    <div class="win-top"><span class="logo"><i></i>Base.vn</span><span class="crumb">Báo cáo › [FPT Synnex] Tổng quan kinh doanh · 4 biểu đồ</span><button class="gbtn" id="aiGo" style="padding:3px 10px;font-size:11.5px">✦ Phân tích AI</button><button class="shot" data-shots="12,13">Xem màn hình thật</button></div>
+    <div class="dash" id="dash">
+      <div class="card"><h6># Tổng quan pipeline dự án</h6><div style="display:flex;align-items:center;justify-content:center;gap:28px;flex:1"><div style="text-align:center"><div class="num" style="font-size:52px;font-weight:700" data-count="18">0</div><small style="color:var(--paper-muted)">Deals</small></div><div style="width:1px;height:60px;background:var(--paper-line)"></div><div style="text-align:center"><div class="num" style="font-size:40px;font-weight:700" data-count="193900000000" data-fmt="dot">0</div><small style="color:var(--paper-muted)">Deal value · VND</small></div></div></div>
+      <div class="card"><h6>Phễu dự án theo giai đoạn</h6><svg id="funnel" viewBox="0 0 520 170" style="flex:1;width:100%"></svg></div>
+      <div class="card"><h6>Cơ hội bán chéo theo giai đoạn (tỷ VND)</h6><svg id="bars" viewBox="0 0 520 170" style="flex:1;width:100%"></svg></div>
+      <div class="card"><h6>Cơ hội bán chéo theo nguồn</h6><svg id="pie" viewBox="0 0 520 170" style="flex:1;width:100%"></svg></div>
+      <div class="aiPanel" id="aiPanel">
+        <h6>✦ Phân tích AI</h6>
+        <div style="font-size:11.5px;color:var(--paper-muted)">Đọc 4 biểu đồ · không có bộ lọc</div>
+        <div style="font-weight:700;font-size:14px;line-height:1.45">Pipeline dự án 193,9 tỷ trên 18 deal; 32% giá trị đang dồn ở Báo giá và Hồ sơ thầu.</div>
+        <div class="ins"><i style="background:#fff3dd;color:#97600a">!</i><span>5 deal ở Báo giá và Hồ sơ thầu (62,8 tỷ), trong đó deal IOC 42 tỷ đang chờ giá đặc biệt Dell. Đây là điểm nghẽn lớn nhất.</span></div>
+        <div class="ins"><i style="background:#e5efff;color:#1959c9">↗</i><span>Dự báo có trọng số 91,5 tỷ. Nếu IOC sang Đàm phán HĐ 3 bên, dự báo tăng thêm 10,5 tỷ.</span></div>
+        <div class="ins"><i style="background:#e2f6ee;color:#11734f">↗</i><span>Bán chéo 70,8 tỷ trên 12 deal; 5/12 cơ hội đến từ AI gợi ý trên dữ liệu PO.</span></div>
+        <div class="ins"><i style="background:#fde6e8;color:#b3263a">!</i><span>Toàn bộ pipeline bán chéo đang do một Sales nắm. Nên chia lại theo khu vực trước khi mở rộng.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 CHATBOT -->
+<section class="slide" id="s9" data-title="Chatbot đại lý SME">
+  <div class="eyebrow a" style="--d:0"><b>Use case 3</b> AI Chatbot chăm sóc đại lý SME · Base AgentHub</div>
+  <h2 class="a" style="--d:1">Đóng vai đại lý: bấm một câu hỏi bên phải và <em>xem trợ lý trả lời</em></h2>
+  <div class="win grow a" style="--d:2">
+    <div class="win-top"><span class="logo"><i></i>AgentHub</span><span class="crumb">Kinh doanh Kênh Đại lý › Trợ lý Chăm sóc Đại lý SME</span><button class="gbtn" id="chatReset" style="padding:3px 9px;font-size:11.5px">Cuộc trò chuyện mới</button><button class="shot" data-shots="15,16,17,18,19,20,21">Xem màn hình thật</button></div>
+    <div class="hub">
+      <div class="hub-side"><div class="it">New chat</div><div class="it">Agents</div><div class="it">Knowledge</div><div style="font-size:10.5px;letter-spacing:.1em;color:var(--paper-muted);margin-top:8px">FOLDERS</div><div class="it on">Kinh doanh Kênh Đại lý</div><div style="font-size:11.5px;color:var(--paper-muted);line-height:1.5;margin-top:auto">Kho chính sách: SFD-CS-01 đến SFD-CS-06<br>Kỹ năng: Chấm điểm tín hiệu mua<br>Công cụ: Tính toán chính sách</div></div>
+      <div class="chat">
+        <div class="chat-body" id="chatBody"></div>
+        <div class="chat-in"><div class="fake" id="chatFake">Hỏi bất cứ điều gì…</div></div>
+      </div>
+      <div class="ask" id="ask"><h6>Đại lý hỏi</h6></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 SCORING -->
+<section class="slide" id="s10" data-title="Chấm điểm và chuyển Sales">
+  <div class="eyebrow a" style="--d:0"><b>Use case 3</b> Chấm điểm tín hiệu mua → Phiếu chuyển Sales</div>
+  <h2 class="a" style="--d:1">Kéo thanh trượt: trợ lý <em>quyết định khi nào gọi Sales</em>, theo đúng quy tắc của Synnex FPT</h2>
+  <div class="score">
+    <div class="ctrl a" style="--d:2">
+      <div><label for="scVal">Giá trị đơn ước tính <b id="scValT">680 triệu</b></label><input id="scVal" type="range" min="5" max="1200" step="5" value="680"></div>
+      <div><label>Mức khẩn</label><div class="seg" id="scUrg"><button data-u="1" class="on">Trong 7 ngày</button><button data-u="2">Trong 30 ngày</button><button data-u="3">Trong quý</button><button data-u="4">Chưa rõ</button></div></div>
+      <div class="flags"><label><input type="checkbox" id="fPrice"> Đại lý xin giá đặc biệt</label><label><input type="checkbox" id="fCredit"> Xin tăng hạn mức</label><label><input type="checkbox" id="fCompl"> Khiếu nại giao hàng</label></div>
+      <div class="grid4" id="scGrid" aria-label="Ma trận điểm"></div>
+      <div class="note">A ≥ 500 triệu · B 100–500 · C 30–100 · D dưới 30. Ô vàng: lập phiếu, hạn 4 giờ. Ô cam: lập phiếu, hạn 1 ngày.</div>
+    </div>
+    <div class="result a" style="--d:3">
+      <div class="res-card" id="scCard"></div>
+      <div class="handoff"><span class="node">AgentHub · Phiếu chuyển</span><span class="wire"><i></i></span><span class="node">Base Sales · Deal + Task</span><span class="wire"><i></i></span><span class="node">Sales khu vực</span></div>
+      <div class="note">AgentHub hiện chưa ghi thẳng vào Base Sales. Trong demo, Sales tạo deal từ phiếu; khi app Sales mở công cụ cho AgentHub, bước này chạy tự động.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 COORDINATOR -->
+<section class="slide" id="s11" data-title="Trợ lý điều phối">
+  <div class="eyebrow a" style="--d:0"><b>Use case 3</b> Trợ lý Điều phối Chăm sóc SME · cho Trưởng kênh</div>
+  <h2 class="a" style="--d:1">Một kịch bản nuôi dưỡng 30 ngày cho nhóm SME <em>chưa mua Thiết bị mạng</em></h2>
+  <div class="tl a" style="--d:2" id="tl"><div class="fill" id="tlFill"></div></div>
+  <div class="msg">
+    <div class="phone a" style="--d:3" id="tlMsg"></div>
+    <div class="col a" style="--d:4">
+      <table class="combo"><thead><tr><th>Combo gợi ý</th><th>Cấu hình</th><th>Giá trị</th><th>Quyền lợi</th></tr></thead>
+        <tbody><tr><td><b>A · Khởi động</b></td><td>2 switch 24 cổng + 3 switch 8 cổng + 1 Wifi văn phòng</td><td class="num">30 triệu</td><td>4% + tặng 1 Wifi</td></tr>
+        <tr><td><b>B · Tối ưu</b></td><td>4 switch 24 cổng + 5 switch 8 cổng</td><td class="num">51,2 triệu</td><td>4% + 1% mở ngành = 2,56 triệu + Wifi</td></tr></tbody></table>
+      <div class="note">Mỗi tin dưới 400 ký tự, có một lời kêu gọi hành động. Trợ lý chỉ soạn nội dung, Trưởng kênh duyệt trước khi gửi.</div>
+      <button class="shot" data-shots="22,23,24,25" style="align-self:flex-start">Xem màn hình thật</button>
+    </div>
+  </div>
+</section>
+
+<!-- 12 GOVERNANCE -->
+<section class="slide" id="s12" data-title="Quản trị AI">
+  <div class="eyebrow a" style="--d:0"><b>Quản trị AI</b> Cấu hình, giới hạn và đo lường</div>
+  <h2 class="a" style="--d:1">AI làm theo <em>chính sách của Synnex FPT</em>, có giới hạn và có số đo</h2>
+  <div class="gov">
+    <div class="col">
+      <div class="map a" style="--d:2" id="map">
+        <svg viewBox="0 0 640 300" preserveAspectRatio="none"><path d="M150 150 C 220 150, 220 90, 270 90"/><path d="M150 150 C 220 150, 220 210, 270 210"/><path d="M410 90 C 440 90, 440 150, 450 150"/><path d="M410 210 C 440 210, 440 150, 450 150"/></svg>
+        <div class="mnode" style="left:2%;top:42%">Chat input<small>Đại lý hỏi</small></div>
+        <div class="mnode" style="left:42%;top:22%">Memory<small>Nhớ qua các cuộc chat</small></div>
+        <div class="mnode" style="left:42%;top:62%">Chấm điểm tín hiệu mua<small>Kỹ năng tự viết</small></div>
+        <div class="mnode core" style="left:70%;top:34%"><b>Agent · CORE</b><small>Kho chính sách 6 tài liệu · công cụ tính · 3 câu gợi ý</small></div>
+      </div>
+      <div class="guard a" style="--d:3">
+        <div><i>✕</i>Không tự hứa giá đặc biệt hay chiết khấu ngoài chính sách</div>
+        <div><i>✕</i>Không xác nhận tăng hạn mức, tồn kho hay ngày giao chính xác</div>
+        <div><i>✕</i>Không kết luận lỗi bảo hành thay Trung tâm bảo hành</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="mon a" style="--d:4">
+        <div><b data-count="100" data-suf="%">0</b><span>câu trả lời được chấm Helpful</span></div>
+        <div><b data-count="100" data-suf="%">0</b><span>lần gọi công cụ tính thành công</span></div>
+        <div><b data-count="17" data-suf=" giây">0</b><span>thời gian phản hồi trung bình</span></div>
+        <div><b data-count="0" data-suf="%">0</b><span>lỗi trong 30 ngày</span></div>
+      </div>
+      <p class="note a" style="--d:5">Số liệu từ màn Monitoring của Trợ lý Chăm sóc Đại lý SME trên tenant demo, 5 câu hỏi thử nghiệm. Mỗi câu trả lời ghi mã tài liệu chính sách để kiểm tra lại.</p>
+      <div class="a" style="--d:6;display:flex;gap:8px"><button class="shot" data-shots="26,27,28">Cấu hình agent</button><button class="shot" data-shots="29,30">Monitoring và Logs</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13 ROADMAP -->
+<section class="slide" id="s13" data-title="Lộ trình">
+  <div class="eyebrow a" style="--d:0"><b>04</b> Lộ trình triển khai</div>
+  <h2 class="a" style="--d:1">Chứng minh giá trị trên <em>1 vùng, 20 Sales</em> trước khi phủ toàn kênh</h2>
+  <div class="gantt a" style="--d:2" id="gantt"></div>
+</section>
+
+<!-- 14 POC -->
+<section class="slide" id="s14" data-title="Đề xuất PoC">
+  <div class="eyebrow a" style="--d:0"><b>05</b> Bước tiếp theo</div>
+  <h2 class="a" style="--d:1">Đề xuất PoC 45 ngày</h2>
+  <div class="poc">
+    <div class="a" style="--d:2"><b data-count="1">0</b><span>vùng thí điểm, đề xuất Miền Trung</span></div>
+    <div class="a" style="--d:3"><b data-count="20">0</b><span>Sales kênh và 1 Trưởng kênh</span></div>
+    <div class="a" style="--d:4"><b data-count="45">0</b><span>ngày, có buổi đánh giá giữa kỳ</span></div>
+  </div>
+  <div class="crit a" style="--d:5">
+    <div><i>✓</i>100% Account trong vùng có tier và ma trận ngành hàng từ dữ liệu PO</div>
+    <div><i>✓</i>Phiếu chuyển A1–B2 được Sales nhận trong 4 giờ làm việc</div>
+    <div><i>✓</i>Chatbot trả lời đúng chính sách, có mã tài liệu, ≥ 90% Helpful</div>
+    <div><i>✓</i>Không deal dự án nào quá SLA mà quản lý không biết</div>
+  </div>
+  <div class="quote a" style="--d:6">Synnex FPT không thiếu hệ thống đơn hàng. Cái đang thiếu là một lớp vận hành giúp 300 Sales chạm đúng 1.000 Account vào đúng lúc, với đúng ngành hàng.</div>
+</section>
+
+</div></div>
+
+<div id="bar">
+  <button class="navb" id="prev" aria-label="Slide trước">←</button>
+  <span id="count">1 / 15</span>
+  <button class="navb" id="next" aria-label="Slide sau">→</button>
+  <div id="dots"></div>
+  <div id="prog"><i></i></div>
+  <button class="navb" id="galBtn">Màn hình thật (G)</button>
+</div>
+
+<div id="lb" hidden role="dialog" aria-modal="true" aria-label="Màn hình thật">
+  <img id="lbImg" alt="">
+  <div class="cap" id="lbCap"></div>
+  <div class="ctl"><button class="navb" id="lbPrev">← Trước</button><button class="navb" id="lbNext">Sau →</button><button class="navb" id="lbAll">Tất cả 30 màn hình</button><button class="navb" id="lbClose">Đóng (Esc)</button></div>
+  <div class="thumbs" id="lbThumbs"></div>
+</div>
+
+<script>
+const DATA = {"b2g": [{"n": "Máy trạm điều tra viên 120 bộ", "a": "Cục Thống kê tỉnh Bắc Sơn", "c": "Nguyễn Thanh Mai", "s": 0, "v": 2.4, "h": "HP"}, {"n": "Switch truy nhập 300 trạm", "a": "Sao Mai Telecom", "c": "Bùi Ngọc Đạt", "s": 0, "v": 6.8, "h": "Cisco"}, {"n": "Bản quyền Microsoft 365 1.500 user", "a": "Tập đoàn Bảo hiểm An Bình Thịnh", "c": "Bùi Bảo Linh", "s": 0, "v": 9.5, "h": "Microsoft"}, {"n": "Phòng lab AI 60 máy trạm GPU", "a": "Đại học Kỹ thuật Hồng Lam", "c": "Bùi Thu Dũng", "s": 1, "v": 11.2, "h": "Dell"}, {"n": "Hạ tầng máy chủ HIS/PACS", "a": "Bệnh viện Đa khoa Quốc tế Tâm Đức", "c": "Trần Thu Tuấn", "s": 1, "v": 14.6, "h": "HP"}, {"n": "Wifi kho bãi 5 trung tâm", "a": "Công ty CP Logistics Đông Dương", "c": "Bùi Thanh Nam", "s": 1, "v": 3.9, "h": "Cisco"}, {"n": "Máy tính trạm y tế xã 220 bộ", "a": "Sở Y tế tỉnh Đông Hải", "c": "Đỗ Minh Lan", "s": 1, "v": 4.4, "h": "Lenovo"}, {"n": "Máy chủ & SAN cho DR site", "a": "Ngân hàng TMCP Sao Bắc Á", "c": "Trần Ngọc Quân", "s": 2, "v": 28.5, "h": "Dell"}, {"n": "Firewall & SOC cảng", "a": "Tổng Công ty Cảng biển Đông Hải", "c": "Trần Thị Hùng", "s": 2, "v": 7.2, "h": "Cisco"}, {"n": "Laptop cho đại lý bảo hiểm 800 máy", "a": "Tập đoàn Bảo hiểm An Bình Thịnh", "c": "Bùi Bảo Linh", "s": 2, "v": 15.6, "h": "Lenovo"}, {"n": "Trung tâm IOC tỉnh giai đoạn 2", "a": "Ban QLDA Chuyển đổi số tỉnh Đông Hải", "c": "Đỗ Hoàng Phong", "s": 3, "v": 42.0, "h": "Dell"}, {"n": "Hạ tầng mạng ký túc xá", "a": "Đại học Kỹ thuật Hồng Lam", "c": "Bùi Thu Dũng", "s": 3, "v": 5.3, "h": "Cisco"}, {"n": "Máy chủ bệnh án điện tử tuyến tỉnh", "a": "Sở Y tế tỉnh Đông Hải", "c": "Đỗ Minh Lan", "s": 3, "v": 9.8, "h": "HP"}, {"n": "Thiết bị cầm tay & máy in nhãn", "a": "Công ty CP Logistics Đông Dương", "c": "Bùi Thanh Nam", "s": 3, "v": 2.1, "h": "HP"}, {"n": "Máy tính phòng khám 150 bộ", "a": "Bệnh viện Đa khoa Quốc tế Tâm Đức", "c": "Trần Thu Tuấn", "s": 3, "v": 3.6, "h": "Dell"}, {"n": "Máy tính giao dịch viên 600 bộ", "a": "Ngân hàng TMCP Sao Bắc Á", "c": "Trần Ngọc Quân", "s": 4, "v": 13.4, "h": "HP"}, {"n": "Máy chủ hệ thống điều hành cảng", "a": "Tổng Công ty Cảng biển Đông Hải", "c": "Trần Thị Hùng", "s": 4, "v": 8.7, "h": "Dell"}, {"n": "Bản quyền ảo hoá trung tâm dữ liệu", "a": "Sao Mai Telecom", "c": "Bùi Ngọc Đạt", "s": 4, "v": 4.9, "h": "Microsoft"}], "xs": [{"n": "Mở ngành Thiết bị mạng Cisco", "a": "Chuỗi Điện máy Sao Việt", "s": 0, "v": 10.8, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Máy tính Dell", "a": "Tin học Đức Trí", "s": 0, "v": 3.9, "src": "Đại lý hỏi qua Zalo OA"}, {"n": "Mở ngành Máy tính HP", "a": "Máy tính Hồng Phát", "s": 0, "v": 1.8, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Smart Device Xiaomi", "a": "Chuỗi Laptop An Phát Digital", "s": 1, "v": 7.2, "src": "Chương trình của Hãng"}, {"n": "Mở ngành Linh kiện & Ngoại vi Intel", "a": "Siêu thị Điện tử Hoàng Long", "s": 1, "v": 5.4, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Phần mềm & Cloud Microsoft", "a": "Công ty TNHH Tin học Thành Đạt", "s": 1, "v": 1.5, "src": "Sales phát hiện khi thăm"}, {"n": "Mở ngành Thiết bị mạng Cisco", "a": "Tin học Hải Âu", "s": 1, "v": 2.4, "src": "Sales phát hiện khi thăm"}, {"n": "Mở ngành Máy tính Apple", "a": "Chuỗi Di động Thế Hệ Mới", "s": 2, "v": 19.2, "src": "Chương trình của Hãng"}, {"n": "Mở ngành Thiết bị mạng Cisco", "a": "Tin học Ngọc Thịnh", "s": 2, "v": 3.12, "src": "AI gợi ý từ dữ liệu PO"}, {"n": "Mở ngành Smart Device Xiaomi", "a": "Máy tính Trường Sơn", "s": 2, "v": 2.28, "src": "Sales phát hiện khi thăm"}, {"n": "Mở ngành Phần mềm & Cloud Microsoft", "a": "Hệ thống Bán lẻ Công nghệ Nhật Minh", "s": 3, "v": 9.0, "src": "Chương trình của Hãng"}, {"n": "Mở ngành Linh kiện & Ngoại vi Intel", "a": "Laptop Tâm An", "s": 3, "v": 4.2, "src": "AI gợi ý từ dữ liệu PO"}], "acc": [{"n": "Chuỗi Điện máy Sao Việt", "t": "Key Account", "r": "TP. Hồ Chí Minh", "ds": 276.4, "g": 13.8, "hm": 27.0, "cn": 18.78, "h": "Ổn định", "m": [86.4, 104.3, 0.0, 85.8, 0.0, 0.0]}, {"n": "Hệ thống Bán lẻ Công nghệ Nhật Minh", "t": "Key Account", "r": "Hà Nội", "ds": 96.2, "g": 17.5, "hm": 53.5, "cn": 35.7, "h": "Ổn định", "m": [14.3, 38.4, 15.8, 27.7, 0.0, 0.0]}, {"n": "Chuỗi Laptop An Phát Digital", "t": "Key Account", "r": "Hà Nội", "ds": 106.4, "g": 2.1, "hm": 54.0, "cn": 20.07, "h": "Ổn định", "m": [32.8, 73.6, 0.0, 0.0, 0.0, 0.0]}, {"n": "Siêu thị Điện tử Hoàng Long", "t": "Key Account", "r": "Đà Nẵng", "ds": 220.1, "g": 1.9, "hm": 20.0, "cn": 15.94, "h": "Ổn định", "m": [81.7, 0.0, 0.0, 138.5, 0.0, 0.0]}, {"n": "Chuỗi Di động Thế Hệ Mới", "t": "Key Account", "r": "TP. Hồ Chí Minh", "ds": 137.7, "g": 8.2, "hm": 53.5, "cn": 22.74, "h": "Ổn định", "m": [0.0, 88.3, 0.0, 49.4, 0.0, 0.0]}, {"n": "Tin học Minh Khang", "t": "Gold", "r": "Cần Thơ", "ds": 19.3, "g": 13.6, "hm": 8.5, "cn": 8.16, "h": "Cần theo dõi", "m": [6.5, 12.8, 0.0, 0.0, 0.0, 0.0]}, {"n": "Công ty TNHH Tin học Thành Đạt", "t": "Gold", "r": "Nghệ An", "ds": 19.8, "g": 8.2, "hm": 6.0, "cn": 2.3, "h": "Ổn định", "m": [9.4, 0.0, 0.0, 10.4, 0.0, 0.0]}, {"n": "Tin học Ngọc Thịnh", "t": "Gold", "r": "Đồng Nai", "ds": 43.4, "g": 9.8, "hm": 5.5, "cn": 2.11, "h": "Ổn định", "m": [15.4, 28.0, 0.0, 0.0, 0.0, 0.0]}, {"n": "Máy tính Trường Sơn", "t": "Gold", "r": "Thừa Thiên Huế", "ds": 30.3, "g": 7.3, "hm": 3.5, "cn": 1.92, "h": "Ổn định", "m": [13.5, 16.8, 0.0, 0.0, 0.0, 0.0]}, {"n": "Tin học Hải Âu", "t": "Gold", "r": "Khánh Hòa", "ds": 41.6, "g": -2.8, "hm": 4.0, "cn": 1.81, "h": "Ổn định", "m": [12.4, 0.0, 0.0, 29.1, 0.0, 0.0]}, {"n": "Laptop Tâm An", "t": "Gold", "r": "Hà Nội", "ds": 33.9, "g": 7.4, "hm": 6.0, "cn": 2.48, "h": "Ổn định", "m": [18.4, 15.5, 0.0, 0.0, 0.0, 0.0]}, {"n": "Vi tính Bảo An", "t": "SME", "r": "Vĩnh Long", "ds": 1.8, "g": -25.7, "hm": 1.0, "cn": 0.47, "h": "Rủi ro sụt doanh số", "m": [1.8, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"n": "Tin học Đức Trí", "t": "SME", "r": "Đắk Lắk", "ds": 3.6, "g": 12.5, "hm": 1.0, "cn": 0.4, "h": "Ổn định", "m": [1.4, 0.0, 0.0, 2.2, 0.0, 0.0]}, {"n": "Tin học Ánh Dương", "t": "SME", "r": "Quảng Ngãi", "ds": 3.1, "g": -22.5, "hm": 1.0, "cn": 0.7, "h": "Rủi ro sụt doanh số", "m": [3.1, 0.0, 0.0, 0.0, 0.0, 0.0]}, {"n": "Máy tính Hồng Phát", "t": "SME", "r": "Bắc Giang", "ds": 5.9, "g": -35.8, "hm": 1.0, "cn": 0.53, "h": "Rủi ro sụt doanh số", "m": [2.8, 0.0, 0.0, 3.2, 0.0, 0.0]}], "nganh": ["Máy tính", "Linh kiện & Ngoại vi", "Thiết bị mạng", "Smart Device", "Phần mềm & Cloud", "Giải pháp CNTT"]};
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const dot = n => Math.round(n).toLocaleString('vi-VN');
+const ty = n => (Math.round(n * 10) / 10).toLocaleString('vi-VN') + ' tỷ';
+const sleep = ms => new Promise(r => setTimeout(r, RM ? 0 : ms));
+
+/* ---------- screenshots ---------- */
+const SHOTS = [
+ ['01_sales_trang_chu_thuong_vu','Trang chủ Base Sales: 31 thương vụ, 2 pipeline FPT Synnex'],
+ ['02_sales_pipeline_du_an_B2G','Kanban Dự án B2G và Enterprise: 18 deal, 193,9 tỷ'],
+ ['03_sales_pipeline_ban_cheo_dai_ly','Kanban Phát triển Đại lý và Bán chéo: 12 deal, 70,8 tỷ'],
+ ['04_sales_danh_sach_dai_ly_khach_hang','Danh bạ 25 đại lý và khách hàng, lọc theo phân hạng'],
+ ['05_sales_account_saoviet_tong_quan','Account Chuỗi Điện máy Sao Việt: tổng quan, nhật ký thị sát'],
+ ['06_sales_account_saoviet_truong_du_lieu','Sao Việt: ngành đang mua, ngành chưa khai thác, hạn mức, doanh số 12 tháng'],
+ ['07_sales_deal_saoviet_chi_tiet','Deal Sao Việt mở ngành Thiết bị mạng Cisco: ghi chú AI, task, báo giá SFO-0001'],
+ ['08_sales_deal_saoviet_copilot_dang_nghi','Copilot đang tra cứu deal, công ty, liên hệ, hoạt động'],
+ ['09_sales_deal_saoviet_copilot_tom_tat','Copilot tóm tắt deal'],
+ ['10_sales_deal_saoviet_copilot_3_viec','Copilot đề xuất 3 việc cần làm và câu hỏi gợi ý'],
+ ['11_sales_deal_IOC_chu_luc_qua_han','Deal IOC 42 tỷ: task quá hạn, thảo luận @Trưởng kênh'],
+ ['12_sales_dashboard_tong_quan','Dashboard Tổng quan kinh doanh'],
+ ['13_sales_dashboard_phan_tich_AI','Panel Phân tích AI đọc dashboard'],
+ ['14_agenthub_folder_kenh_dai_ly','AgentHub: folder Kinh doanh Kênh Đại lý với 2 agent'],
+ ['15_agenthub_agent1_man_hinh_chao','Màn hình chào Trợ lý Chăm sóc Đại lý SME'],
+ ['16_agenthub_agent1_hoi1_thuong_mo_nganh','Hỏi thưởng mở ngành: 2,4 triệu + 0,6 triệu, quà Wifi Cisco'],
+ ['17_agenthub_agent1_hoi2_han_muc_cong_no','Hạn mức và công nợ: vượt 150 triệu, Phiếu chuyển Sales B2'],
+ ['18_agenthub_agent1_hoi3_bao_gia_50_vostro','Báo giá 50 Dell Vostro: 680 triệu'],
+ ['19_agenthub_agent1_hoi3_phieu_chuyen_sales','Phiếu chuyển Sales điểm A1, hạn 4 giờ'],
+ ['20_agenthub_agent1_hoi4_bao_hanh_xiaomi','Bảo hành Xiaomi: còn hạn đổi mới 15 ngày'],
+ ['21_agenthub_agent1_hoi5_tu_choi_chiet_khau','Từ chối xin thêm 2% chiết khấu, lập phiếu xin giá đặc biệt'],
+ ['22_agenthub_agent2_kichban_dau','Trợ lý Điều phối: mở đầu kịch bản 30 ngày'],
+ ['23_agenthub_agent2_kichban_lichcham','Lịch chăm sóc D0 đến D30 và nội dung từng mốc'],
+ ['24_agenthub_agent2_kichban_email','Email D3: combo thiết bị mạng'],
+ ['25_agenthub_agent2_kichban_cuoi','Phần cuối kịch bản và đo lường'],
+ ['26_agenthub_agent1_cau_hinh','Cấu hình agent: model, instruction, skill, tool group'],
+ ['27_agenthub_agent1_map_luong','Sơ đồ luồng agent: Chat input → Memory + Skill → Agent → Reply'],
+ ['28_agenthub_skill_cham_diem_tin_hieu_mua','Kỹ năng chấm điểm A1–D4 và quy tắc lập phiếu'],
+ ['29_agenthub_agent1_monitoring','Monitoring: 100% Helpful, 100% tool success, 17 giây'],
+ ['30_agenthub_agent1_logs','Logs 5 câu hỏi, đều được đánh giá tốt']];
+let lbSet = [], lbI = 0;
+function openLB(set, i = 0) { lbSet = set; lbI = i; $('#lb').hidden = false; drawLB(); $('#lbClose').focus(); }
+function drawLB() {
+  const k = lbSet[lbI], [f, c] = SHOTS[k - 1];
+  $('#lbImg').src = 'screens/' + f + '.jpg'; $('#lbImg').alt = c;
+  $('#lbCap').innerHTML = c + '<small>' + String(k).padStart(2, '0') + ' · ' + (lbI + 1) + ' / ' + lbSet.length + '</small>';
+  $('#lbThumbs').innerHTML = lbSet.map((n, j) => `<button class="${j === lbI ? 'on' : ''}" data-j="${j}" aria-label="Ảnh ${n}"><img src="screens/${SHOTS[n - 1][0]}.jpg" alt=""></button>`).join('');
+}
+$('#lbThumbs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { lbI = +b.dataset.j; drawLB(); } });
+$('#lbPrev').onclick = () => { lbI = (lbI - 1 + lbSet.length) % lbSet.length; drawLB(); };
+$('#lbNext').onclick = () => { lbI = (lbI + 1) % lbSet.length; drawLB(); };
+$('#lbAll').onclick = () => openLB(SHOTS.map((_, i) => i + 1), 0);
+$('#lbClose').onclick = () => { $('#lb').hidden = true; };
+$('#galBtn').onclick = () => openLB(SHOTS.map((_, i) => i + 1), 0);
+document.addEventListener('click', e => { const b = e.target.closest('[data-shots]'); if (b) openLB(b.dataset.shots.split(',').map(Number)); });
+
+/* ---------- deck ---------- */
+const slides = $$('.slide'); let cur = 0; const entered = {};
+const dots = $('#dots');
+slides.forEach((s, i) => { const b = document.createElement('button'); b.title = s.dataset.title; b.setAttribute('aria-label', s.dataset.title); b.onclick = () => go(i); dots.appendChild(b); });
+function fit() { const vp = $('#viewport'), w = vp.clientWidth, h = vp.clientHeight - 54; $('#stage').style.transform = `translate(-50%,-50%) scale(${Math.min(w / 1280, h / 720)})`; }
+addEventListener('resize', fit); fit();
+function go(i) {
+  i = Math.max(0, Math.min(slides.length - 1, i));
+  slides[cur].classList.remove('active'); cur = i;
+  const s = slides[cur]; void s.offsetWidth; s.classList.add('active');
+  $('#count').textContent = (cur + 1) + ' / ' + slides.length;
+  $('#prog i').style.width = ((cur + 1) / slides.length * 100) + '%';
+  $$('#dots button').forEach((b, j) => b.classList.toggle('on', j === cur));
+  $$('[data-count]', s).forEach(countUp);
+  (ENTER[s.id] || (() => {}))(!entered[s.id]); entered[s.id] = true;
+  try { localStorage.setItem('sfpt-slide', cur); } catch (e) {}
+  try { if (location.hash !== '#' + s.id) history.replaceState(null, '', '#' + s.id); } catch (e) {}
+}
+$('#prev').onclick = () => go(cur - 1); $('#next').onclick = () => go(cur + 1);
+addEventListener('keydown', e => {
+  if (!$('#lb').hidden) { if (e.key === 'Escape') $('#lb').hidden = true; if (e.key === 'ArrowRight') $('#lbNext').click(); if (e.key === 'ArrowLeft') $('#lbPrev').click(); return; }
+  if (e.target.matches('input,textarea')) return;
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || (e.key === ' ' && !e.target.closest('button'))) { e.preventDefault(); go(cur + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(cur - 1);
+  if (e.key === 'g' || e.key === 'G') $('#galBtn').click();
+});
+let tx = null; $('#stage').addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+$('#stage').addEventListener('touchend', e => { if (tx === null) return; const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 60 && !e.target.closest('.win,.ctrl,.tl')) go(cur + (d < 0 ? 1 : -1)); tx = null; });
+
+function countUp(el) {
+  const end = +el.dataset.count, suf = el.dataset.suf || '', fmt = el.dataset.fmt;
+  const show = v => el.textContent = (fmt === 'dot' ? dot(v) : Math.round(v)) + suf;
+  if (RM) return show(end);
+  const t0 = performance.now(), dur = 1300;
+  (function f(t) { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); show(end * e); if (p < 1) requestAnimationFrame(f); })(t0);
+}
+
+/* ---------- cover network ---------- */
+(function net() {
+  const c = $('#net'), x = c.getContext('2d'); let W, H, nodes = [], pulses = [];
+  function size() { W = c.width = 1280 * 2; H = c.height = 720 * 2; nodes = [];
+    for (let i = 0; i < 140; i++) { const a = Math.random() * Math.PI * 2, r = 220 + Math.random() * 1000; nodes.push({ x: 1900 + Math.cos(a) * r * .9, y: 720 + Math.sin(a) * r * .55, s: Math.random() < .08 ? 5 : 2.4 }); } }
+  size();
+  const hub = { x: 1900, y: 720 };
+  function frame() {
+    x.clearRect(0, 0, W, H);
+    x.strokeStyle = 'rgba(47,123,246,.10)'; x.lineWidth = 1.5;
+    nodes.forEach(n => { x.beginPath(); x.moveTo(hub.x, hub.y); x.lineTo(n.x, n.y); x.stroke(); });
+    nodes.forEach(n => { x.fillStyle = n.s > 3 ? 'rgba(245,165,36,.9)' : 'rgba(148,165,195,.55)'; x.beginPath(); x.arc(n.x, n.y, n.s, 0, 7); x.fill(); });
+    if (!RM && Math.random() < .35) pulses.push({ n: nodes[Math.random() * nodes.length | 0], t: 0 });
+    pulses = pulses.filter(p => p.t <= 1);
+    pulses.forEach(p => { p.t += .012; const px = hub.x + (p.n.x - hub.x) * p.t, py = hub.y + (p.n.y - hub.y) * p.t; x.fillStyle = 'rgba(47,123,246,.95)'; x.beginPath(); x.arc(px, py, 4, 0, 7); x.fill(); });
+    x.fillStyle = '#2f7bf6'; x.beginPath(); x.arc(hub.x, hub.y, 16, 0, 7); x.fill();
+    x.strokeStyle = 'rgba(47,123,246,.4)'; x.lineWidth = 3; x.beginPath(); x.arc(hub.x, hub.y, 30 + (performance.now() / 30 % 40), 0, 7); x.stroke();
+    if (!RM) requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ---------- value chain ---------- */
+const VC = [
+ { k: 'Thượng nguồn', t: 'Hãng và nhập kho', s: 'Dell · HP · Cisco · Microsoft…', pain: ['Đối soát sell-out, Rebate, MDF với Hãng làm thủ công', 'Dự báo nhập hàng tách rời nhu cầu đại lý'], kpi: 'Ngày đối soát mỗi quý', mod: ['Base Dataset', 'Agent đối soát Rebate (GĐ3)'] },
+ { k: 'Kênh Đại lý 70%', t: 'Phân hạng và chăm sóc Account', s: '~1.000 Account · 250 Sales', pain: ['Lịch sử tương tác nằm ở Zalo, Excel cá nhân', 'Phân hạng theo cảm tính, không theo doanh số PO', 'Tệp đại lý SME chưa có Sales phụ trách'], kpi: 'Số tương tác / Account / tháng · % SME được chạm', mod: ['Base Sales · Account 360', 'Copilot Account', 'Trợ lý Chăm sóc Đại lý SME'] },
+ { k: 'Kênh Đại lý 70%', t: 'Bán chéo ngành hàng', s: '6 ngành hàng', pain: ['Không thấy đại lý đã mua gì, chưa mua gì', 'Chương trình Hãng không đến đúng đại lý'], kpi: 'Số ngành hàng / Account', mod: ['Pipeline Bán chéo', 'Ma trận ngành hàng', 'Trợ lý Điều phối Chăm sóc SME'] },
+ { k: 'Kênh Dự án 30%', t: 'Đăng ký Deal Hãng, thầu, HĐ 3 bên', s: 'B2G · Enterprise · SI', pain: ['Deal ngâm lâu ở giai đoạn thầu', 'Duyệt giá đặc biệt qua email, không lưu vết', 'Xung đột kênh khi chưa đăng ký với Hãng'], kpi: 'Số deal quá SLA · thời gian duyệt giá', mod: ['Pipeline Dự án B2G', 'SLA theo giai đoạn', 'Duyệt giá trên Base BPM'] },
+ { k: 'Thực thi', t: 'PO, tín dụng, giao hàng, thu tiền', s: 'Giữ nguyên hệ thống PO/ERP', pain: ['Vượt hạn mức mới biết, đơn bị chặn', 'Sales nhập đơn 2 lần'], kpi: 'Số đơn bị chặn vì công nợ', mod: ['Kết nối PO → Base Dataset', 'Chatbot giải thích công nợ, hạn mức'] },
+ { k: 'Hậu mãi', t: 'Bảo hành và RMA', s: 'Trung tâm bảo hành ủy quyền', pain: ['Khiếu nại không gắn với Account', 'Đại lý hỏi lại chính sách đổi trả nhiều lần'], kpi: 'Thời gian xử lý ticket', mod: ['Chatbot tra cứu SFD-CS-05', 'Base Service (GĐ sau)'] }];
+let vcI = 1;
+function drawVC() {
+  $('#vc').innerHTML = VC.map((v, i) => `<button role="tab" aria-selected="${i === vcI}" class="${i === vcI ? 'on' : ''}" data-i="${i}"><small>${v.k}</small><b>${v.t}</b><span>${v.s}</span></button>`).join('');
+  const v = VC[vcI];
+  $('#vcDetail').innerHTML = `<div><h4>Điểm nghẽn hiện tại</h4><ul>${v.pain.map(p => `<li>${p}</li>`).join('')}</ul></div><div><h4>KPI đo được</h4><p>${v.kpi}</p></div><div><h4>Agentic Sales OS</h4><div class="mod">${v.mod.map(m => `<span>${m}</span>`).join('')}</div></div>`;
+  $$('#vcDetail > div').forEach((d, j) => { d.style.animation = 'none'; void d.offsetWidth; d.style.animation = `rise .45s ${j * 80}ms both`; });
+}
+$('#vc').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { vcI = +b.dataset.i; drawVC(); } });
+drawVC();
+
+/* ---------- account 360 ---------- */
+const COLORS = ['#2f7bf6', '#21b37f', '#e2852b', '#8b7cf6', '#d9468f', '#14a3b8'];
+let accTier = 'Tất cả', accSel = 'Chuỗi Điện máy Sao Việt';
+const made = new Set();
+function drawAccList() {
+  const tiers = ['Tất cả', 'Key Account', 'Gold', 'SME'];
+  $('#accFilter').innerHTML = tiers.map(t => `<button class="${t === accTier ? 'on' : ''}" data-t="${t}">${t}</button>`).join('');
+  const list = DATA.acc.filter(a => accTier === 'Tất cả' || a.t === accTier);
+  $('#accItems').innerHTML = list.map((a, i) => `<button class="acc-item ${a.n === accSel ? 'on' : ''}" data-n="${a.n}"><span class="av" style="background:${COLORS[i % 6]}">${a.n.split(' ').filter(w => w[0] === w[0].toUpperCase()).slice(-2).map(w => w[0]).join('')}</span><span style="min-width:0"><b>${a.n}</b><small>${a.t} · ${a.r} · ${ty(a.ds)}</small></span></button>`).join('');
+}
+function drawAccDetail() {
+  const a = DATA.acc.find(x => x.n === accSel); if (!a) return;
+  const use = a.hm ? Math.round(a.cn / a.hm * 100) : 0;
+  const hc = a.h === 'Ổn định' ? 'green' : a.h === 'Cần theo dõi' ? 'amber' : 'red';
+  const gaps = a.m.filter(v => !v).length;
+  $('#accDetail').innerHTML = `
+   <div class="acc-head"><h3>${a.n}</h3><span class="chip blue">${a.t}</span><span class="chip ${hc}">${a.h}</span><span style="margin-left:auto;font-size:12px;color:var(--paper-muted)">${a.r}</span></div>
+   <div class="facts">
+     <div class="fact"><small>Doanh số 12 tháng</small><b>${ty(a.ds)}</b></div>
+     <div class="fact"><small>Tăng trưởng so cùng kỳ</small><b style="color:${a.g < 0 ? '#b3263a' : '#11734f'}">${a.g > 0 ? '+' : ''}${String(a.g).replace('.', ',')}%</b></div>
+     <div class="fact"><small>Công nợ / hạn mức</small><b>${ty(a.cn)} / ${ty(a.hm)}</b><div class="meter"><i style="background:${use > 90 ? 'var(--bad)' : use > 75 ? 'var(--amber)' : 'var(--ok)'}" data-w="${use}"></i></div></div>
+     <div class="fact"><small>Ngành chưa khai thác</small><b>${gaps} / 6</b></div>
+   </div>
+   <div style="font-size:12px;font-weight:700;display:flex;justify-content:space-between"><span>Ma trận ngành hàng · doanh số 12 tháng từ hệ thống PO</span><span style="color:var(--paper-muted);font-weight:500">Bấm ô sọc để tạo cơ hội bán chéo</span></div>
+   <div class="matrix">${DATA.nganh.map((n, i) => {
+     const v = a.m[i], key = a.n + '|' + n;
+     if (v) return `<div class="cell has"><span>${n}</span><b>${ty(v)}</b></div>`;
+     if (made.has(key)) return `<div class="cell made"><span>${n}</span><b>✓ Đã tạo deal</b></div>`;
+     return `<button class="cell gap" data-k="${key}"><span>${n}</span><b>Chưa mua</b></button>`; }).join('')}</div>
+   <div style="font-size:12.5px;color:var(--paper-muted);line-height:1.5">${a.n === 'Chuỗi Điện máy Sao Việt' ? '<b style="color:var(--paper-ink)">Nhật ký thị sát:</b> Đào tạo nhân viên bán hàng của đại lý về dòng laptop AI PC mới. 34 cửa hàng đang dùng router dân dụng.' : a.t === 'SME' ? '<b style="color:var(--paper-ink)">Chưa có Sales phụ trách.</b> Đại lý thuộc tệp do Trợ lý Chăm sóc Đại lý SME tiếp nhận.' : '<b style="color:var(--paper-ink)">Copilot gợi ý:</b> ưu tiên ngành có biên cao nhất trong số ngành chưa khai thác.'}</div>`;
+  requestAnimationFrame(() => $$('#accDetail .meter i').forEach(m => m.style.width = Math.min(100, m.dataset.w) + '%'));
+}
+$('#accFilter').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; accTier = b.dataset.t; drawAccList(); });
+$('#accItems').addEventListener('click', e => { const b = e.target.closest('.acc-item'); if (!b) return; accSel = b.dataset.n; drawAccList(); drawAccDetail(); });
+$('#accDetail').addEventListener('click', e => {
+  const b = e.target.closest('.cell.gap'); if (!b) return;
+  made.add(b.dataset.k); const [acc, n] = b.dataset.k.split('|'); drawAccDetail();
+  const t = document.createElement('div'); t.className = 'toast';
+  t.innerHTML = `Đã tạo deal <b>${acc} – Mở ngành ${n}</b> ở giai đoạn Phát hiện cơ hội, nguồn "AI gợi ý từ dữ liệu PO".`;
+  $('#accDetail').appendChild(t); setTimeout(() => t.remove(), 3600);
+});
+
+/* ---------- copilot ---------- */
+const COP_STEPS = ['Đọc thương vụ', 'Đọc công ty Chuỗi Điện máy Sao Việt', 'Đọc liên hệ Ngô Quốc Quân', 'Đọc 4 hoạt động trong dòng công việc'];
+const COP_HTML = [
+ '<div><b>1. Tóm tắt deal</b><ul><li><b>Khách hàng:</b> Chuỗi Điện máy Sao Việt, khách hiện hữu mua máy tính đều đặn 12 tháng.</li><li><b>Giá trị:</b> 10.800.000.000 VND, dự kiến 1,8 tỷ/tháng.</li><li><b>Bối cảnh:</b> 34 cửa hàng dùng router dân dụng; CNTT đồng ý chạy thử 5 cửa hàng; Kế toán đề nghị Net 30 như ngành Máy tính.</li><li><b>Đã có:</b> báo giá trial SFO-0001 cho 5 cửa hàng.</li></ul></div>',
+ '<div><b>2. Ba việc cần làm</b><ol><li><b>Phê duyệt công nợ Net 30 cho ngành Cisco:</b> làm việc với Tài chính dựa trên lịch sử thanh toán tốt 12 tháng.</li><li><b>Chốt tiêu chí PoC cho 5 cửa hàng:</b> thời gian chạy thử và điều kiện chuyển sang PO chính thức cho toàn bộ 34 điểm.</li><li><b>Gửi báo giá trial và hẹn demo 3 bên:</b> Synnex FPT, Cisco và Sao Việt, gắn chính sách đối tác Q4.</li></ol></div>'];
+const COP_SUG = ['Soạn email gửi báo giá trial cho anh Quân', 'Tạo task phê duyệt hạn mức Net 30 với phòng Tài chính', 'Báo giá trial 5 cửa hàng gồm những hạng mục nào?'];
+let copRun = false;
+async function copilot() {
+  if (copRun) return; copRun = true;
+  const b = $('#copBody');
+  b.innerHTML = `<div class="ubub">Tóm tắt deal và 3 việc cần làm</div><div style="font-size:12px;font-weight:700">✦ Copilot <span style="color:var(--paper-muted);font-weight:500" id="copT">đang suy nghĩ…</span></div><div class="steps">${COP_STEPS.map(s => `<div><i></i>${s}</div>`).join('')}</div>`;
+  const st = $$('.steps div', b);
+  for (const s of st) { await sleep(520); s.classList.add('ok'); }
+  $('#copT').textContent = 'suy nghĩ trong 18 giây';
+  for (const h of COP_HTML) { await sleep(350); await typeHTML(b, h, 7); }
+  await sleep(200);
+  const sg = document.createElement('div'); sg.className = 'sugg'; sg.innerHTML = COP_SUG.map((s, i) => `<button style="animation-delay:${i * 120}ms">↳ ${s}</button>`).join(''); b.appendChild(sg); b.scrollTop = b.scrollHeight;
+  copRun = false;
+}
+$('#copGo').onclick = copilot;
+
+/* type HTML progressively: reveal text nodes char by char */
+async function typeHTML(container, html, speed = 6) {
+  const wrap = document.createElement('div'); wrap.innerHTML = html; const node = wrap.firstElementChild || wrap;
+  const texts = []; (function walk(n) { n.childNodes.forEach(c => { if (c.nodeType === 3) { texts.push([c, c.textContent]); c.textContent = ''; } else walk(c); }); })(node);
+  container.appendChild(node);
+  if (RM) { texts.forEach(([n, t]) => n.textContent = t); return; }
+  for (const [n, t] of texts) {
+    for (let i = 0; i < t.length; i += 3) { n.textContent = t.slice(0, i + 3); container.scrollTop = container.scrollHeight; if (i % 9 === 0) await new Promise(r => setTimeout(r, speed)); }
+  }
+  container.scrollTop = container.scrollHeight;
+}
+
+/* ---------- kanban ---------- */
+const STG = ['Lead dự án', 'Khảo sát &amp; Tư vấn', 'Đăng ký Deal Hãng', 'Báo giá &amp; Hồ sơ thầu', 'Đàm phán HĐ 3 bên'], PR = [.1, .25, .4, .6, .85];
+let kbDeals = [];
+function kbInit() { kbDeals = DATA.b2g.map((d, i) => ({ ...d, id: i })); }
+function drawKB(fly) {
+  $('#kb').innerHTML = STG.map((s, si) => {
+    const ds = kbDeals.filter(d => d.s === si), sum = ds.reduce((a, d) => a + d.v, 0);
+    return `<div class="kcol" data-s="${si}"><h5>${s}<small>${ds.length}</small></h5><div class="sum">₫${dot(sum * 1e9)} · ${Math.round(PR[si] * 100)}%</div><div class="kcards">${ds.map((d, j) =>
+      `<div class="kcard ${fly ? 'fly' : ''} ${d.n.includes('IOC') ? 'hot' : ''}" draggable="true" data-id="${d.id}" style="animation-delay:${fly ? (si * 120 + j * 70) : 0}ms" tabindex="0"><b>${d.a} – ${d.n}</b><small>${d.c} · ${d.h}</small><div class="v"><span>₫${dot(d.v * 1e9)}</span><span class="mv"><button data-m="-1" aria-label="Lùi giai đoạn">◀</button><button data-m="1" aria-label="Sang giai đoạn sau">▶</button></span></div></div>`).join('')}</div></div>`;
+  }).join('');
+  const tot = kbDeals.reduce((a, d) => a + d.v, 0), fc = kbDeals.reduce((a, d) => a + d.v * PR[d.s], 0);
+  $('#kbT').textContent = '₫' + dot(tot * 1e9); $('#kbF').textContent = '₫' + dot(fc * 1e9);
+}
+function moveDeal(id, s) { const d = kbDeals.find(x => x.id === id); if (!d) return; const old = $('#kbF').textContent; d.s = Math.max(0, Math.min(4, s)); drawKB(false); const f = $('#kbF'); if (f.textContent !== old) { f.animate([{ background: '#d9f5e9' }, { background: 'transparent' }], 900); } const c = $(`.kcard[data-id="${id}"]`); if (c) c.animate([{ transform: 'scale(1.06)' }, { transform: 'none' }], 400); }
+$('#kb').addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return; const id = +b.closest('.kcard').dataset.id; moveDeal(id, kbDeals.find(x => x.id === id).s + +b.dataset.m); });
+$('#kb').addEventListener('dragstart', e => { const c = e.target.closest('.kcard'); if (!c) return; e.dataTransfer.setData('text/plain', c.dataset.id); c.classList.add('dragging'); });
+$('#kb').addEventListener('dragend', e => { $$('.kcol').forEach(c => c.classList.remove('over')); });
+$('#kb').addEventListener('dragover', e => { const c = e.target.closest('.kcol'); if (!c) return; e.preventDefault(); $$('.kcol').forEach(k => k.classList.toggle('over', k === c)); });
+$('#kb').addEventListener('drop', e => { const c = e.target.closest('.kcol'); if (!c) return; e.preventDefault(); moveDeal(+e.dataTransfer.getData('text/plain'), +c.dataset.s); });
+$('#kbReset').onclick = () => { kbInit(); drawKB(true); };
+
+/* ---------- dashboard charts ---------- */
+function drawCharts() {
+  const st = STG.map((s, i) => ({ s, n: DATA.b2g.filter(d => d.s === i).length, v: DATA.b2g.filter(d => d.s === i).reduce((a, d) => a + d.v, 0) }));
+  const order = [...st].sort((a, b) => b.v - a.v), maxV = order[0].v, cols = ['#2f7bf6', '#5b95f8', '#86b1fa', '#a9c6fb', '#cbdcfd'];
+  $('#funnel').innerHTML = order.map((o, i) => { const w = 60 + 240 * o.v / maxV, y = 6 + i * 31; return `<rect x="${170 - w / 2}" y="${y}" width="0" height="27" rx="4" fill="${cols[i]}"><animate attributeName="width" from="0" to="${w}" dur=".8s" begin="${i * .12}s" fill="freeze"/><animate attributeName="x" from="170" to="${170 - w / 2}" dur=".8s" begin="${i * .12}s" fill="freeze"/></rect><text x="330" y="${y + 18}" font-size="12.5" fill="#1b2333">${o.s} · ${o.n} deal · ${ty(o.v)}</text>`; }).join('');
+  const xs = ['Phát hiện cơ hội', 'Tư vấn ngành hàng', 'Đại lý đặt thử', 'Đặt hàng định kỳ'].map((s, i) => ({ s, v: DATA.xs.filter(d => d.s === i).reduce((a, d) => a + d.v, 0) }));
+  const mx = 30; let bars = '';
+  [0, 10, 20, 30].forEach(t => { const y = 140 - t / mx * 120; bars += `<line x1="40" x2="510" y1="${y}" y2="${y}" stroke="#e4e8ef"/><text x="32" y="${y + 4}" font-size="11" fill="#687389" text-anchor="end">${t}</text>`; });
+  xs.forEach((b, i) => { const h = b.v / mx * 120, x = 70 + i * 112; bars += `<rect x="${x}" y="140" width="70" height="0" rx="4" fill="#2f7bf6"><animate attributeName="height" from="0" to="${h}" dur=".8s" begin="${i * .12}s" fill="freeze"/><animate attributeName="y" from="140" to="${140 - h}" dur=".8s" begin="${i * .12}s" fill="freeze"/></rect><text x="${x + 35}" y="${132 - h}" font-size="12" font-weight="700" fill="#1b2333" text-anchor="middle">${String(Math.round(b.v * 10) / 10).replace('.', ',')}</text><text x="${x + 35}" y="158" font-size="11" fill="#687389" text-anchor="middle">${b.s}</text>`; });
+  $('#bars').innerHTML = bars;
+  const src = [['AI gợi ý từ dữ liệu PO', 5, '#2f7bf6'], ['Chương trình của Hãng', 3, '#e2852b'], ['Sales phát hiện khi thăm', 3, '#21b37f'], ['Đại lý hỏi qua Zalo OA', 1, '#8b7cf6']];
+  let a0 = -Math.PI / 2, pie = ''; const tot = 12, cx = 95, cy = 85, r = 70;
+  src.forEach(([l, n, c], i) => { const a1 = a0 + n / tot * Math.PI * 2, large = a1 - a0 > Math.PI ? 1 : 0;
+    pie += `<path d="M${cx} ${cy} L${cx + r * Math.cos(a0)} ${cy + r * Math.sin(a0)} A${r} ${r} 0 ${large} 1 ${cx + r * Math.cos(a1)} ${cy + r * Math.sin(a1)} Z" fill="${c}" stroke="#fff" stroke-width="2" opacity="0"><animate attributeName="opacity" from="0" to="1" dur=".4s" begin="${i * .18}s" fill="freeze"/></path>`;
+    pie += `<rect x="200" y="${30 + i * 30}" width="12" height="12" rx="3" fill="${c}"/><text x="220" y="${41 + i * 30}" font-size="12.5" fill="#1b2333">${l} · <tspan font-weight="700">${n}</tspan></text>`; a0 = a1; });
+  pie += `<circle cx="${cx}" cy="${cy}" r="34" fill="#fff"/><text x="${cx}" y="${cy + 6}" text-anchor="middle" font-size="18" font-weight="700" fill="#1b2333">12</text>`;
+  $('#pie').innerHTML = pie;
+}
+async function aiPanel() { const p = $('#aiPanel'); p.classList.add('open'); const ins = $$('.ins', p); ins.forEach(i => i.classList.remove('on')); for (const i of ins) { await sleep(450); i.classList.add('on'); } }
+$('#aiGo').onclick = () => { const p = $('#aiPanel'); if (p.classList.contains('open')) p.classList.remove('open'); else aiPanel(); };
+
+/* ---------- chatbot ---------- */
+const QA = [
+ { l: 'Thưởng mở ngành mới', q: 'Cửa hàng em ở Quảng Ngãi chưa bán thiết bị mạng bao giờ, nếu nhập đơn đầu 60 triệu thì được thưởng gì?', ran: 'Tính chiết khấu 4% thiết bị mạng',
+   a: ['<div>Dạ đơn đầu 60 triệu ngành Thiết bị mạng của anh/chị được cộng dồn mấy khoản sau:</div>',
+       { table: [['Khoản', 'Căn cứ', 'Số tiền'], ['Chiết khấu trên hoá đơn 4%', 'SFD-CS-01', '60.000.000 × 4% = <b>2.400.000đ</b>'], ['Thưởng mở ngành hàng mới 1%', 'SFD-CS-01', '60.000.000 × 1% = <b>600.000đ</b>'], ['<b>Tổng</b>', '', '<b>3.000.000đ</b>']] },
+       '<div>Nếu là hàng Cisco, đơn từ 30 triệu còn được tặng 1 bộ phát Wifi văn phòng và 1 buổi đào tạo kỹ thuật miễn phí (SFD-CS-06). Đơn từ 20 triệu được miễn phí giao, Quảng Ngãi giao trong 48–72 giờ (SFD-CS-03).</div>',
+       '<div>Anh/chị dự định lấy switch hay Wifi Cisco, và cần hàng trong khoảng thời gian nào để em ước tính giúp đơn cụ thể?</div>'] },
+ { l: 'Công nợ và hạn mức', q: 'Hạn mức của em 1 tỷ, đang nợ 700 triệu, cuối tháng cần nhập thêm 450 triệu hàng Tết thì làm sao?', ran: 'Ran 2 calculations',
+   a: ['<div>Dạ em tính giúp anh/chị: 700 triệu + 450 triệu = 1,15 tỷ, <b>vượt hạn mức 1 tỷ đúng 150 triệu</b> (SFD-CS-02 mục 5).</div>',
+       '<div><b>Hai hướng xử lý:</b><ol><li><b>Thanh toán bớt ít nhất 150 triệu</b> công nợ trước khi đặt đơn.</li><li><b>Xin tăng hạn mức tạm thời:</b> tối đa 30% × 1 tỷ = 300 triệu, hiệu lực 30 ngày, cần 6 tháng gần nhất không quá hạn trên 15 ngày (SFD-CS-02 mục 4).</li></ol></div>',
+       '<div>Em không xác nhận được việc tăng hạn mức, quyền này thuộc Trưởng kênh Đại lý và Kế toán công nợ. Em đã chuyển yêu cầu, anh/chị sẽ được liên hệ trong 4 giờ làm việc.</div>',
+       { phieu: { s: 'B2', h: '4 giờ', rows: ['Nhu cầu: nhập hàng Tết 450 triệu, cuối tháng 10/2026, kèm đề nghị tăng hạn mức tạm thời', 'Giá trị ước tính: 450.000.000đ; 700 + 450 − 1.000 = vượt 150 triệu', 'Điểm: B2, đơn 100–500 triệu, cần trong 30 ngày', 'Việc Sales cần làm: lập đề nghị tăng hạn mức 30%; kiểm tra lịch sử quá hạn 6 tháng; chốt cơ cấu đơn hàng Tết'] } }] },
+ { l: 'Báo giá đơn lớn', q: 'Bên em cần báo giá 50 laptop Dell Vostro cho một trường học, giao trong tuần sau được không?', ran: 'Ran 2 calculations',
+   a: ['<div>Dạ giá tham khảo Dell Vostro 14 khoảng 13,6 triệu/máy (SFD-CS-04, chưa VAT): 50 × 13.600.000 = <b>680.000.000đ</b>.</div>',
+       '<div>Đơn từ 10 máy được giảm thêm 3% theo <b>Dell Back to School mở rộng</b> đến 30/11/2026 (SFD-CS-06), cộng chiết khấu máy tính 2% (SFD-CS-01). Ngày giao chính xác cần kiểm tra tồn kho trên cổng PO, em không hứa thay được.</div>',
+       '<div>Lưu ý: đơn này cộng công nợ hiện tại sẽ vượt hạn mức, Sales sẽ đề xuất tách đơn hoặc thu nợ trước.</div>',
+       { phieu: { s: 'A1', h: '4 giờ', rows: ['Nhu cầu: 50 Dell Vostro 14 cho trường học, giao tuần sau', 'Giá trị ước tính: 50 × 13.600.000 = 680.000.000đ', 'Điểm: A1, đơn trên 500 triệu và cần trong 7 ngày', 'Chương trình: Dell Back to School mở rộng (SFD-CS-06), chiết khấu máy tính 2% (SFD-CS-01)', 'Việc Sales cần làm: kiểm tra tồn kho 50 Vostro; so sánh phương án giá dự án; phối hợp Kế toán công nợ xử lý vượt hạn mức'] } }] },
+ { l: 'Bảo hành Xiaomi', q: 'Máy Xiaomi khách mua 10 ngày bị lỗi màn hình, em đổi mới được không?', ran: 'Tra cứu SFD-CS-05',
+   a: ['<div>Dạ 10 ngày là <b>vẫn còn trong hạn đổi mới của Xiaomi, 15 ngày</b> tính từ ngày anh/chị bán cho người dùng cuối (SFD-CS-05 mục 1). Anh/chị còn khoảng 5 ngày nên làm hồ sơ ngay, Synnex FPT phản hồi phiếu RMA trong 3 ngày làm việc.</div>',
+       '<div><b>Cần chuẩn bị:</b><ul><li>Hoá đơn bán lẻ cho người dùng cuối</li><li>Ảnh tem bảo hành, số serial, ảnh lỗi màn hình</li><li>Tạo phiếu RMA trên cổng đặt hàng PO (mục 3)</li></ul></div>',
+       '<div>Máy sẽ không được đổi nếu có dấu hiệu rơi vỡ, vào nước hoặc mất tem (mục 4). Kết luận lỗi do Trung tâm bảo hành ủy quyền xác định, em không kết luận thay.</div>'] },
+ { l: 'Xin thêm chiết khấu', q: 'Anh chị cho em thêm 2 phần trăm chiết khấu riêng nhé, bên kia đang chào rẻ hơn', ran: 'Đối chiếu SFD-CS-01 mục 4',
+   a: ['<div>Dạ em hiểu áp lực cạnh tranh, nhưng em xin nói thẳng: em không có quyền duyệt thêm 2% ngoài chính sách. Mọi mức khác SFD-CS-01 phải do <b>Trưởng kênh Đại lý phê duyệt bằng văn bản</b> (SFD-CS-01 mục 4).</div>',
+       '<div>Trong khung hiện tại, đơn Vostro của anh/chị đã cộng dồn được: chiết khấu máy tính 2% + Dell Back to School 3% + thưởng doanh số quý 1% nếu tổng thanh toán quý từ 1 tỷ, tức khoảng 6%.</div>',
+       { phieu: { s: 'A1', h: '4 giờ', rows: ['Nhu cầu: xin thêm 2% ngoài chính sách cho đơn 50 Dell Vostro 14, lý do đối thủ chào giá thấp hơn', 'Giá trị ước tính: 680.000.000đ; 2% xin thêm ≈ 13.600.000đ', 'Việc Sales cần làm: thu thập giá đối thủ; trình Trưởng kênh xin duyệt bằng văn bản; so sánh phương án giá dự án Dell'] } },
+       '<div>Anh/chị gửi em mức giá và cấu hình đối thủ đang chào để em bổ sung vào phiếu nhé?</div>'] }];
+let chatBusy = false;
+function chatWelcome() {
+  $('#chatBody').innerHTML = `<div class="welcome"><div class="bot">SF</div><h4>Trợ lý Chăm sóc Đại lý SME</h4><p>Chào anh/chị, em là trợ lý chăm sóc đại lý của Synnex FPT. Anh/chị cần hỏi về chính sách, công nợ, đặt hàng hay bảo hành ạ?</p><p style="font-size:12px">Trả lời 24/7 · Chuyển nhân viên kinh doanh trong 4 giờ</p></div>`;
+  $('#ask').innerHTML = '<h6>Đại lý hỏi</h6>' + QA.map((x, i) => `<button data-i="${i}"><b>${x.l}</b>${x.q}</button>`).join('');
+}
+async function ask(i) {
+  if (chatBusy) return; chatBusy = true;
+  const x = QA[i], b = $('#chatBody'); $(`#ask button[data-i="${i}"]`).classList.add('done');
+  if ($('.welcome', b)) b.innerHTML = '';
+  const fake = $('#chatFake'); fake.textContent = '';
+  for (let k = 0; k < x.q.length; k += 2) { fake.textContent = x.q.slice(0, k + 2); if (!RM) await new Promise(r => setTimeout(r, 8)); }
+  await sleep(200); fake.textContent = 'Hỏi bất cứ điều gì…';
+  const u = document.createElement('div'); u.className = 'ubub'; u.style.maxWidth = '78%'; u.textContent = x.q; b.appendChild(u);
+  const r = document.createElement('div'); r.className = 'ran'; r.innerHTML = `<i></i>${x.ran}`; b.appendChild(r); b.scrollTop = b.scrollHeight;
+  await sleep(1100); r.classList.add('ok');
+  for (const part of x.a) {
+    await sleep(250);
+    if (typeof part === 'string') await typeHTML(b, part, 6);
+    else if (part.table) {
+      const t = document.createElement('table'); t.innerHTML = part.table.map((row, k) => `<tr class="${k ? 'r' : ''}" style="animation-delay:${k * 260}ms">${row.map(c => k ? `<td>${c}</td>` : `<th>${c}</th>`).join('')}</tr>`).join(''); b.appendChild(t); b.scrollTop = b.scrollHeight; await sleep(part.table.length * 260);
+    } else if (part.phieu) {
+      const p = part.phieu, d = document.createElement('div'); d.className = 'phieu';
+      d.innerHTML = `<h5>PHIẾU CHUYỂN SALES</h5><span class="stamp">${p.s}<small>HẠN ${p.h.toUpperCase()}</small></span><ul>${p.rows.map(x => `<li>${x}</li>`).join('')}<li>Hạn xử lý: ${p.h} làm việc · Gợi ý người nhận: Sales kênh Miền Bắc và Miền Trung</li></ul>`;
+      b.appendChild(d); b.scrollTop = b.scrollHeight; await sleep(700);
+    }
+  }
+  b.scrollTop = b.scrollHeight; chatBusy = false;
+}
+$('#ask').addEventListener('click', e => { const bt = e.target.closest('button'); if (bt) ask(+bt.dataset.i); });
+$('#chatReset').onclick = () => { if (!chatBusy) chatWelcome(); };
+
+/* ---------- scoring ---------- */
+let urg = 1;
+function letter(v) { return v >= 500 ? 'A' : v >= 100 ? 'B' : v >= 30 ? 'C' : 'D'; }
+function rule(L, u, flags) {
+  const code = L + u;
+  if (['A1', 'A2', 'B1', 'B2'].includes(code)) return { act: 'Lập Phiếu chuyển Sales ngay', h: '4 giờ làm việc', cls: 'f1' };
+  if (['A3', 'B3', 'C1', 'C2'].includes(code)) return { act: 'Lập Phiếu chuyển Sales', h: '1 ngày làm việc', cls: 'f4' };
+  if (flags) return { act: 'Lập phiếu do có yêu cầu đặc biệt', h: '1 ngày làm việc', cls: 'f4' };
+  return { act: 'Trợ lý tiếp tục tư vấn, chưa lập phiếu', h: '—', cls: '' };
+}
+function drawScore() {
+  const v = +$('#scVal').value, L = letter(v), flags = $('#fPrice').checked || $('#fCredit').checked || $('#fCompl').checked;
+  $('#scValT').textContent = v >= 1000 ? (v / 1000).toLocaleString('vi-VN') + ' tỷ' : v + ' triệu';
+  let g = '<div></div>' + ['7 ngày', '30 ngày', 'Trong quý', 'Chưa rõ'].map(x => `<div class="h">${x}</div>`).join('');
+  ['A', 'B', 'C', 'D'].forEach(l => { g += `<div class="h">${l}</div>`; [1, 2, 3, 4].forEach(u => { const r = rule(l, u, false); g += `<div class="c ${r.cls} ${l === L && u === urg ? 'sel' : ''}">${l}${u}</div>`; }); });
+  $('#scGrid').innerHTML = g;
+  const r = rule(L, urg, flags), go = r.h !== '—';
+  $('#scCard').innerHTML = `<div style="display:flex;align-items:center;gap:18px"><div class="res-big" style="color:${go ? (r.h.startsWith('4') ? '#c27a06' : '#b3263a') : '#687389'}">${L}${urg}</div><div><div style="font-size:18px;font-weight:700">${r.act}</div><div style="color:var(--paper-muted);font-size:13px;margin-top:3px">Hạn xử lý: <b>${r.h}</b></div></div></div>
+   ${go ? `<div style="border-top:1px dashed var(--paper-line);padding-top:10px;display:flex;justify-content:space-between;align-items:center"><div style="font-size:12.5px;color:var(--paper-muted)">Đồng hồ SLA khi phiếu đến Sales</div><div class="timer" id="scTimer">${r.h.startsWith('4') ? '04:00:00' : '08:00:00'}</div></div>` : '<div style="font-size:12.5px;color:var(--paper-muted)">Đại lý vẫn được trả lời đầy đủ theo kho chính sách; khi có thời điểm hoặc số lượng cụ thể, điểm được chấm lại.</div>'}`;
+  startTimer(go ? (r.h.startsWith('4') ? 4 : 8) * 3600 : 0);
+}
+let tmr = null;
+function startTimer(sec) { clearInterval(tmr); if (!sec) return; let s = sec; tmr = setInterval(() => { s -= 1; const el = $('#scTimer'); if (!el || s < 0) return clearInterval(tmr); const h = s / 3600 | 0, m = s % 3600 / 60 | 0, ss = s % 60; el.textContent = [h, m, ss].map(n => String(n).padStart(2, '0')).join(':'); }, 1000); }
+$('#scVal').addEventListener('input', drawScore);
+['#fPrice', '#fCredit', '#fCompl'].forEach(s => $(s).addEventListener('change', drawScore));
+$('#scUrg').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; urg = +b.dataset.u; $$('#scUrg button').forEach(x => x.classList.toggle('on', x === b)); drawScore(); });
+
+/* ---------- timeline ---------- */
+const TL = [
+ ['D0', 'Zalo OA', 'Chào anh/chị, Synnex FPT thông tin tới quý đại lý: ngành Thiết bị mạng quý 4 có chiết khấu 4% trên hoá đơn, cộng chương trình Cisco SMB Partner: đơn Cisco từ 30 triệu được tặng 1 bộ phát Wifi văn phòng, áp dụng đến 31/12/2026. Anh/chị nhắn lại số lượng cửa hàng đang cần, em gửi combo giá trong hôm nay.'],
+ ['D3', 'Email', 'Tiêu đề: Combo thiết bị mạng cho đại lý · 4% chiết khấu, tặng Wifi từ đơn 30 triệu. Theo dữ liệu mua hàng, đại lý mình chưa khai thác ngành Thiết bị mạng, đây là ngành có chiết khấu cao nhất trong nhóm phần cứng quý này. Kèm 2 combo A và B ở bảng bên cạnh.'],
+ ['D7', 'Gọi điện', 'Sales khu vực gọi dò nhu cầu thật: cửa hàng đang có khách hỏi mua router, switch không, đang lấy hàng ở đâu. Chốt lịch khảo sát hoặc gửi hàng mẫu.'],
+ ['D12', 'Zalo OA', 'Anh/chị lo chưa biết lắp đặt? Synnex FPT tặng 1 buổi đào tạo kỹ thuật Cisco miễn phí cho đại lý mới bán Cisco. Nhắn "ĐÀO TẠO" để giữ chỗ buổi gần nhất.'],
+ ['D18', 'Email', 'Câu chuyện bán kèm: khách mua máy tính cho văn phòng thường cần thêm switch và Wifi. Gợi ý cách chào combo ngay tại quầy, kèm bài toán lợi nhuận cho đơn 30 triệu.'],
+ ['D22', 'Gọi điện', 'Chốt đơn thử theo combo A hoặc B, xử lý từ chối thường gặp: vốn nhập hàng, chưa có nhân viên kỹ thuật, sợ tồn kho.'],
+ ['D26', 'Zalo OA', 'Nhắc hạn: combo thiết bị mạng còn hàng và chương trình Cisco SMB Partner kết thúc 31/12/2026. Đơn đặt trước 20/12 được giao trước Tết.'],
+ ['D30', 'Gọi + Email', 'Chốt hoặc phân loại lại: đại lý đã đặt chuyển sang pipeline Bán chéo giai đoạn Đại lý đặt thử; đại lý chưa đặt đưa vào nhóm nuôi dưỡng quý sau.']];
+let tlI = 0, tlAuto = null;
+function drawTL() {
+  $('#tl').innerHTML = '<div class="fill" id="tlFill"></div>' + TL.map((t, i) => `<button class="${i <= tlI ? 'on' : ''}" data-i="${i}"><i>${t[0]}</i><span>${t[1]}</span></button>`).join('');
+  requestAnimationFrame(() => $('#tlFill').style.width = `calc(${tlI / (TL.length - 1)} * (100% - 44px))`);
+  const t = TL[tlI];
+  $('#tlMsg').innerHTML = `<div class="who"><span class="chip ${t[1].includes('Zalo') ? 'blue' : t[1].includes('Email') ? 'violet' : 'green'}">${t[1]}</span><span>${t[0]} · ${t[1].includes('Gọi') ? 'Kịch bản cho Sales khu vực' : 'Gửi nhóm SME chưa mua Thiết bị mạng'}</span></div><div class="bubble">${t[2]}</div><div style="font-size:11.5px;color:var(--paper-muted)">${t[2].length} ký tự</div>`;
+}
+$('#tl').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; clearInterval(tlAuto); tlI = +b.dataset.i; drawTL(); });
+
+/* ---------- gantt ---------- */
+function drawGantt() {
+  const D = s => new Date(s + 'T00:00:00'), add = (d, n) => new Date(d.getTime() + n * 864e5);
+  const p0s = D('2026-11-02'), p0e = add(p0s, 14), p1e = add(p0e, 45), a1e = add(p1e, 45), a2e = add(p1e, 60), a3e = add(a1e, 45), b1e = add(a3e, 30), b2e = add(a3e, 60), b3e = add(b1e, 45), c1e = add(b2e, 60), c2e = add(c1e, 60);
+  const rows = [['GĐ0 · Pitch và PoC'], ['Demo 3 use case', p0s, p0e, '#94a5c3'], ['PoC 1 vùng · 20 Sales', p0e, p1e, '#f5a524'],
+    ['GĐ1 · Nền tảng'], ['Chuẩn hoá Master Data', p1e, a1e], ['Kết nối PO vào Base Dataset', p1e, a2e], ['Base Sales 2 pipeline', a1e, a3e],
+    ['GĐ2 · Agent hoá'], ['Copilot Account và rủi ro Deal', a3e, b1e, '#21b37f'], ['Chatbot SME qua Zalo OA', a3e, b2e, '#21b37f'], ['Duyệt giá đặc biệt trên BPM', b1e, b3e, '#21b37f'],
+    ['GĐ3 · Tối ưu'], ['Agent Bán chéo và cảnh báo sụt doanh số', b2e, c1e, '#8b7cf6'], ['Agent đối soát Rebate, MDF', c1e, c2e, '#8b7cf6']];
+  const t0 = p0s.getTime(), t1 = D('2027-10-01').getTime(), pct = d => ((d.getTime() - t0) / (t1 - t0) * 100).toFixed(2);
+  const months = []; for (let d = new Date(2026, 10, 1); d < D('2027-10-01'); d.setMonth(d.getMonth() + 2)) months.push('T' + (d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(2));
+  $('#gantt').innerHTML = rows.map((r, i) => r.length === 1 ? `<div class="g-row ph"><span>${r[0]}</span><span></span></div>` :
+    `<div class="g-row"><span>${r[0]}</span><div class="lane"><i style="left:${pct(r[1])}%;width:${pct(r[2]) - pct(r[1])}%;background:${r[3] || '#2f7bf6'};transition-delay:${i * 70}ms"></i></div></div>`).join('') +
+    `<div class="g-axis"><div></div><div>${months.map(m => `<span>${m}</span>`).join('')}</div></div>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => $$('#gantt .lane i').forEach(b => b.style.transform = 'scaleX(1)')));
+}
+
+/* ---------- per-slide enter ---------- */
+const ENTER = {
+  s4: () => { drawAccList(); drawAccDetail(); },
+  s6: first => { if (first) kbInit(); drawKB(true); },
+  s7: () => { const b = $('#slaBar'); b.style.width = '0'; $('#slaTxt').textContent = '0 / 1 ngày'; setTimeout(() => { b.style.width = '100%'; $('#slaTxt').textContent = '1 ngày 4 giờ / 1 ngày · QUÁ HẠN'; $('#slaTxt').style.color = 'var(--bad)'; }, RM ? 0 : 500); },
+  s8: () => { drawCharts(); $('#aiPanel').classList.remove('open'); setTimeout(aiPanel, RM ? 0 : 1600); },
+  s9: first => { if (first) chatWelcome(); },
+  s10: () => drawScore(),
+  s11: () => { tlI = 0; drawTL(); clearInterval(tlAuto); if (!RM) tlAuto = setInterval(() => { if (tlI >= TL.length - 1) return clearInterval(tlAuto); tlI++; drawTL(); }, 2600); },
+  s13: () => drawGantt(),
+};
+let start = 0;
+const h = location.hash.slice(1); const hi = slides.findIndex(s => s.id === h);
+if (hi >= 0) start = hi; else { try { start = +localStorage.getItem('sfpt-slide') || 0; } catch (e) {} }
+slides[0].classList.add('active'); cur = 0; if (start) { go(start); } else { go(0); }
+</script>
