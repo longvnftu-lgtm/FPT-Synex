@@ -1,5 +1,3 @@
-# Mục lục
-
 # Thông tin tài liệu
 
 |                    |                                                                                                                 |
