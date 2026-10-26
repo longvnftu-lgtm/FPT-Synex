@@ -1,0 +1,332 @@
+{
+ "ka": [
+  {
+   "img": 4,
+   "f": [
+    190,
+    270,
+    275,
+    205
+   ],
+   "c": [
+    570,
+    248,
+    365,
+    36
+   ],
+   "t": "Một danh bạ đại lý, phân hạng sẵn",
+   "d": "",
+   "act": "Bấm Chuỗi Điện máy Sao Việt",
+   "v": "Phân bổ người chăm sóc theo giá trị từng account.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 5,
+   "f": [
+    742,
+    80,
+    484,
+    182
+   ],
+   "t": "Mọi hoạt động chăm sóc nằm trên một hồ sơ",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Biết Sales đã chăm sóc ai, khi nào, kết quả ra sao.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 6,
+   "f": [
+    222,
+    143,
+    490,
+    386
+   ],
+   "m": [
+    [
+     226,
+     328,
+     484,
+     26
+    ],
+    [
+     226,
+     507,
+     484,
+     20
+    ]
+   ],
+   "t": "Thấy ngay khoảng trống ngành hàng",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Biết account đã mua gì, chưa mua gì để up-sell, cross-sell.",
+   "w": "Sales"
+  },
+  {
+   "img": 10,
+   "f": [
+    908,
+    368,
+    326,
+    532
+   ],
+   "r": [
+    914,
+    400,
+    312,
+    370
+   ],
+   "t": "Copilot gợi ý việc cần làm tiếp theo",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Từ dữ liệu account ra hành động cụ thể để chốt cơ hội.",
+   "w": "Sales"
+  },
+  {
+   "img": 12,
+   "f": [
+    213,
+    327,
+    1017,
+    240
+   ],
+   "t": "Bán chéo đo được trên dashboard",
+   "d": "",
+   "act": "Xem lại từ đầu",
+   "v": "Theo dõi tỷ lệ bán chéo theo Sales, theo nguồn cơ hội.",
+   "w": "Quản lý"
+  }
+ ],
+ "sme": [
+  {
+   "img": 31,
+   "f": [
+    100,
+    140,
+    435,
+    1160
+   ],
+   "m": [
+    [
+     110,
+     150,
+     420,
+     50
+    ]
+   ],
+   "c": [
+    102,
+    375,
+    430,
+    105
+   ],
+   "t": "Mọi kênh chat về một hộp thư",
+   "d": "",
+   "act": "Bấm hội thoại Đặng Minh Khoa",
+   "v": "Không sót khách, kể cả tin nhắn ngoài giờ.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 34,
+   "f": [
+    655,
+    550,
+    735,
+    340
+   ],
+   "m": [
+    [
+     660,
+     555,
+     690,
+     55
+    ]
+   ],
+   "t": "AI tiếp khách và tự ghi hồ sơ",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Khách được trả lời ngay, Sales không phải nhập liệu.",
+   "w": "Sales"
+  },
+  {
+   "img": 31,
+   "f": [
+    620,
+    415,
+    740,
+    215
+   ],
+   "m": [
+    [
+     655,
+     552,
+     700,
+     125
+    ]
+   ],
+   "t": "Có nhu cầu là chuyển đúng người",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Nhận khách kèm đủ ngữ cảnh, khách không phải kể lại.",
+   "w": "Sales"
+  },
+  {
+   "img": 17,
+   "f": [
+    586,
+    466,
+    572,
+    245
+   ],
+   "m": [
+    [
+     600,
+     578,
+     280,
+     15
+    ]
+   ],
+   "t": "AI trả lời chính sách, cơ hội lớn về Sales trong 4 giờ",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Giảm workload mà không bỏ sót đơn lớn.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 23,
+   "f": [
+    790,
+    112,
+    568,
+    268
+   ],
+   "t": "Kịch bản chăm sóc tự động cả tệp SME",
+   "d": "",
+   "act": "Xem lại từ đầu",
+   "v": "Chăm sóc đều đặn mà không cần thêm người.",
+   "w": "Quản lý"
+  }
+ ],
+ "b2g": [
+  {
+   "img": 2,
+   "f": [
+    205,
+    70,
+    1035,
+    32
+   ],
+   "t": "Mọi gói thầu trên một pipeline 5 giai đoạn",
+   "d": "",
+   "act": "Bấm thẻ deal IOC",
+   "v": "Biết ngay deal đang nghẽn ở đâu và dự báo được doanh thu.",
+   "w": "Quản lý",
+   "c": [
+    829,
+    320,
+    198,
+    103
+   ]
+  },
+  {
+   "img": 11,
+   "f": [
+    455,
+    205,
+    515,
+    205
+   ],
+   "m": [
+    [
+     856,
+     262,
+     66,
+     16
+    ]
+   ],
+   "t": "Việc trễ được cảnh báo sớm",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Xử lý trước khi ảnh hưởng tiến độ thầu.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 11,
+   "f": [
+    980,
+    205,
+    246,
+    380
+   ],
+   "t": "Team dự án phối hợp ngay trên deal",
+   "d": "",
+   "act": "Bấm Phân tích AI",
+   "v": "Gọi đúng người hỗ trợ, mọi trao đổi được lưu vết.",
+   "w": "Sales",
+   "c": [
+    991,
+    39,
+    77,
+    21
+   ]
+  },
+  {
+   "img": 13,
+   "f": [
+    1004,
+    70,
+    243,
+    630
+   ],
+   "t": "AI đọc số, chỉ ra điểm nóng",
+   "d": "",
+   "act": "Xem lại từ đầu",
+   "v": "Thấy rủi ro mà không phải tự soi từng báo cáo.",
+   "w": "Quản lý"
+  }
+ ],
+ "gov": [
+  {
+   "img": 26,
+   "f": [
+    334,
+    80,
+    384,
+    670
+   ],
+   "t": "Synnex FPT tự cấu hình AI",
+   "d": "",
+   "act": "Tiếp",
+   "v": "AI nói đúng chính sách và giọng của Synnex FPT.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 28,
+   "f": [
+    348,
+    66,
+    592,
+    548
+   ],
+   "t": "Quy tắc ưu tiên do Synnex FPT đặt",
+   "d": "",
+   "act": "Tiếp",
+   "v": "Mọi khách được xử lý nhất quán theo một chuẩn.",
+   "w": "Quản lý"
+  },
+  {
+   "img": 29,
+   "f": [
+    340,
+    84,
+    1064,
+    140
+   ],
+   "t": "Chất lượng AI đo bằng số",
+   "d": "",
+   "act": "Xem lại từ đầu",
+   "v": "Biết AI làm tốt đến đâu trước khi mở rộng.",
+   "w": "Quản lý"
+  }
+ ]
+}
