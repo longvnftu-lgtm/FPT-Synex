@@ -1,1 +1,14 @@
-{}
+{
+ "flow:ka:2:t": "Mọi thông tin trên một mặt phẳng",
+ "flow:ka:2:v": "Các dữ liệu khách hàng lưu trữ dài hạn, giúp Sale phân loại và quản lý tốt tệp khách của mình",
+ "flow:ka:3:t": "AI gợi ý việc cần làm tiếp theo",
+ "flow:sme:3:t": "AI trả lời chính sách, cơ hội tự động chuyển về Sales",
+ "flow:gov:0:v": "AI được huấn luyện dựa trên chính sách của FPT Synnex, hỗ trợ sale trong quá trình bán hàng",
+ "flow:gov:2:v": "Hiệu quả AI chat được quản lý dựa trên dữ liệu và tỷ lệ chuyển đổi.",
+ "map:1": "Kết nối dữ liệu qua API, <em>Base đóng vai trò trung gian</em>",
+ "ka:1": "Lên kế hoạch chăm sóc, <em>đo lường hiệu suất chăm sóc</em>",
+ "qa:1": "Những câu hỏi <em>đã làm rõ</em>",
+ "z1:0": "<b>05</b>Đề xuất kế hoạch tiếp theo",
+ "qa:11": "Base đang phát triển",
+ "z1:11": "Giữ nguyên hệ thống PO. Thêm lớp vận hành phía trước để ghi lại mọi tương tác, và để AI hỗ trợ phần việc lặp lại."
+}
